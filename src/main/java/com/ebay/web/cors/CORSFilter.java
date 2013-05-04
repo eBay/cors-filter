@@ -16,6 +16,7 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,8 +27,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.ebay.web.cors.handlers.CORSHandler;
-import com.ebay.web.cors.handlers.DefaultPreflightCORSHandler;
 import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
 
 /**
@@ -48,9 +50,6 @@ import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
 public class CORSFilter implements Filter {
 	/** Request handler for a simple CORS request. */
 	private CORSHandler simpleRequestHandler;
-
-	/** Request handler for a pre-flight CORS request. */
-	private CORSHandler preFlightRequestHandler;
 
 	/** Configuration object */
 	private CORSConfiguration corsConfiguration;
@@ -96,7 +95,7 @@ public class CORSFilter implements Filter {
 			this.simpleRequestHandler.handle(request, response, filterChain);
 			break;
 		case PRE_FLIGHT:
-			this.preFlightRequestHandler.handle(request, response, filterChain);
+			this.handlePreflightCORS(request, response, filterChain);
 			break;
 		case NOT_CORS:
 			this.handleNonCORS(request, response, filterChain);
@@ -143,17 +142,6 @@ public class CORSFilter implements Filter {
 	}
 
 	/**
-	 * Set a {@link CORSHandler} to handle pre-flight CORS request.
-	 * 
-	 * @param preFlightRequestHandler
-	 *            A handler implementing {@link CORSHandler}.
-	 */
-	public void setPreFlightRequestHandler(
-			final CORSHandler preFlightRequestHandler) {
-		this.preFlightRequestHandler = preFlightRequestHandler;
-	}
-
-	/**
 	 * Set {@link CORSConfiguration} for the filter.
 	 * 
 	 * @param corsConfiguration
@@ -169,8 +157,61 @@ public class CORSFilter implements Filter {
 	private void assignDefaultHandlers() {
 		this.simpleRequestHandler = new DefaultSimpleCORSHandler(
 				corsConfiguration);
-		this.preFlightRequestHandler = new DefaultPreflightCORSHandler(
-				corsConfiguration);
+	}
+
+	/**
+	 * Handles CORS pre-flight request.
+	 */
+	public void handlePreflightCORS(final HttpServletRequest request,
+			final HttpServletResponse response, final FilterChain filterChain)
+			throws IOException, ServletException {
+		if (CORSRequestType.checkRequestType(request, corsConfiguration) != CORSRequestType.PRE_FLIGHT) {
+			throw new IllegalArgumentException(
+					"Expects a HttpServletRequest object of type "
+							+ CORSRequestType.PRE_FLIGHT.getType());
+		}
+
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+
+		final CORSConfiguration corsConfig = corsConfiguration;
+		final Set<String> allowedHttpMethods = corsConfig
+				.getAllowedHttpMethods();
+		final Set<String> allowedHttpHeaders = corsConfig
+				.getAllowedHttpHeaders();
+		final long preflightMaxAge = corsConfig.getPreflightMaxAge();
+
+		// Must be returned, in order for browser runtime to accept the
+		// response.
+		response.addHeader(
+				CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+
+		// Must be returned, in order for browser to accept the response, as
+		// this request was made with cookies.
+		if (corsConfig.isSupportsCredentials()) {
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+					"true");
+		}
+
+		if ((allowedHttpMethods != null) && (allowedHttpMethods.size() > 0)) {
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
+					StringUtils.join(allowedHttpMethods, ","));
+		}
+
+		if ((allowedHttpHeaders != null) && (allowedHttpHeaders.size() > 0)) {
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
+					StringUtils.join(allowedHttpHeaders, ","));
+		}
+
+		if (preflightMaxAge > 0) {
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
+					String.valueOf(preflightMaxAge));
+		}
+
+		// Don't forward the request down the filter chain.
 	}
 
 	/**
