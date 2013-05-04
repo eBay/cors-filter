@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ebay.web.cors.handlers.CORSHandler;
-import com.ebay.web.cors.handlers.DefaultInvalidCORSHandler;
 import com.ebay.web.cors.handlers.DefaultNonCORSHandler;
 import com.ebay.web.cors.handlers.DefaultPreflightCORSHandler;
 import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
@@ -56,9 +55,6 @@ public class CORSFilter implements Filter {
 
 	/** Request handler for a normal request that's not a CORS request. */
 	private CORSHandler nonCORSRequestHandler;
-
-	/** Request handler for a CORS request, that's not valid. */
-	private CORSHandler invalidCORSRequestHandler;
 
 	/** Configuration object */
 	private CORSConfiguration corsConfiguration;
@@ -110,8 +106,7 @@ public class CORSFilter implements Filter {
 			this.nonCORSRequestHandler.handle(request, response, filterChain);
 			break;
 		default:
-			this.invalidCORSRequestHandler.handle(request, response,
-					filterChain);
+			handleInvalidCORS(request, response, filterChain);
 			break;
 		}
 	}
@@ -174,17 +169,6 @@ public class CORSFilter implements Filter {
 	}
 
 	/**
-	 * Set a {@link CORSHandler} to handle an invalid CORS request.
-	 * 
-	 * @param invalidCORSRequestHandler
-	 *            A handler implementing {@link CORSHandler}.
-	 */
-	public void setInvalidCORSRequestHandler(
-			final CORSHandler invalidCORSRequestHandler) {
-		this.invalidCORSRequestHandler = invalidCORSRequestHandler;
-	}
-
-	/**
 	 * Set {@link CORSConfiguration} for the filter.
 	 * 
 	 * @param corsConfiguration
@@ -203,9 +187,17 @@ public class CORSFilter implements Filter {
 		this.preFlightRequestHandler = new DefaultPreflightCORSHandler(
 				corsConfiguration);
 		this.nonCORSRequestHandler = new DefaultNonCORSHandler();
-		this.invalidCORSRequestHandler = new DefaultInvalidCORSHandler();
 	}
-	
+
+	public void handleInvalidCORS(final HttpServletRequest request,
+			final HttpServletResponse response, final FilterChain filterChain)
+			throws IOException, ServletException {
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+		String method = request.getMethod();
+		String message = "Encountered an invalid CORS request, from Origin: "
+				+ origin + " ; requested with method: " + method;
+		throw new ServletException(message);
+	}
 
 	/**
 	 * Decorates the {@link HttpServletRequest}, with CORS attributes.
@@ -322,15 +314,18 @@ public class CORSFilter implements Filter {
 	/**
 	 * Attribute that contains the origin of the request.
 	 */
-	public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN = HTTP_REQUEST_ATTRIBUTE_PREFIX + "origin";
+	public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN = HTTP_REQUEST_ATTRIBUTE_PREFIX
+			+ "origin";
 
 	/**
 	 * Boolean value, suggesting if the request is a CORS request or not.
 	 */
-	public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST = HTTP_REQUEST_ATTRIBUTE_PREFIX + "isCorsRequest";
+	public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST = HTTP_REQUEST_ATTRIBUTE_PREFIX
+			+ "isCorsRequest";
 
 	/**
 	 * Type of CORS request, of type {@link CORSRequestType}.
 	 */
-	public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = HTTP_REQUEST_ATTRIBUTE_PREFIX + "requestType";
+	public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = HTTP_REQUEST_ATTRIBUTE_PREFIX
+			+ "requestType";
 }
