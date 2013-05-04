@@ -49,12 +49,12 @@ public final class CORSRequestDecorator {
         switch (corsRequestType) {
             case SIMPLE:
                 request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
-                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSRequestHeaders.ORIGIN));
+                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
                 request.setAttribute(CORSRequestProperties.REQUEST_TYPE, corsRequestType.getType());
                 break;
             case PRE_FLIGHT:
                 request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
-                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSRequestHeaders.ORIGIN));
+                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
                 request.setAttribute(CORSRequestProperties.REQUEST_TYPE, corsRequestType.getType());
                 break;
             case NOT_CORS:

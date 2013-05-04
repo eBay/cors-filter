@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ebay.web.cors.CORSConfiguration;
 import com.ebay.web.cors.CORSFilter;
-import com.ebay.web.cors.CORSRequestHeaders;
 import com.ebay.web.cors.CORSRequestType;
 
 /**
@@ -53,7 +52,7 @@ public class DefaultPreflightCORSHandler implements CORSHandler {
 							+ CORSRequestType.PRE_FLIGHT.getType());
 		}
 
-		String origin = request.getHeader(CORSRequestHeaders.ORIGIN);
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
 		final CORSConfiguration corsConfig = corsConfiguration;
 		final Set<String> allowedHttpMethods = corsConfig
@@ -64,31 +63,31 @@ public class DefaultPreflightCORSHandler implements CORSHandler {
 
 		// Must be returned, in order for browser runtime to accept the
 		// response.
-		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
 				origin);
 
 		// Must be returned, in order for browser to accept the response, as
 		// this request was made with cookies.
 		if (corsConfig.isSupportsCredentials()) {
 			response.addHeader(
-					CORSFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS,
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
 					"true");
 		}
 
 		if ((allowedHttpMethods != null) && (allowedHttpMethods.size() > 0)) {
 			response.addHeader(
-					CORSFilter.ACCESS_CONTROL_ALLOW_METHODS,
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
 					StringUtils.join(allowedHttpMethods, ","));
 		}
 
 		if ((allowedHttpHeaders != null) && (allowedHttpHeaders.size() > 0)) {
 			response.addHeader(
-					CORSFilter.ACCESS_CONTROL_ALLOW_HEADERS,
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
 					StringUtils.join(allowedHttpHeaders, ","));
 		}
 
 		if (preflightMaxAge > 0) {
-			response.addHeader(CORSFilter.ACCESS_CONTROL_MAX_AGE,
+			response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
 					String.valueOf(preflightMaxAge));
 		}
 

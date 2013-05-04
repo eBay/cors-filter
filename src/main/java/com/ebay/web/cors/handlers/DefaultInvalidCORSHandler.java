@@ -22,7 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ebay.web.cors.CORSRequestHeaders;
+import com.ebay.web.cors.CORSFilter;
 
 /**
  * Will throw a {@link ServletException}, which ultimately, will lead the
@@ -36,7 +36,7 @@ public class DefaultInvalidCORSHandler implements CORSHandler {
 	public void handle(final HttpServletRequest request,
 			final HttpServletResponse response, final FilterChain filterChain)
 			throws IOException, ServletException {
-		String origin = request.getHeader(CORSRequestHeaders.ORIGIN);
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 		String method = request.getMethod();
 		String message = "Encountered an invalid CORS request, from Origin: "
 				+ origin + " ; requested with method: " + method;

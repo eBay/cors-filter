@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import com.ebay.web.cors.CORSConfiguration;
 import com.ebay.web.cors.CORSFilter;
-import com.ebay.web.cors.CORSRequestHeaders;
 import com.ebay.web.cors.CORSRequestProperties;
 import com.ebay.web.cors.CORSRequestType;
 
@@ -54,7 +53,7 @@ public class DefaultSimpleCORSHandlerTest {
 		HttpServletRequest request = EasyMock
 				.createMock(HttpServletRequest.class);
 
-		EasyMock.expect(request.getHeader(CORSRequestHeaders.ORIGIN))
+		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
@@ -90,7 +89,7 @@ public class DefaultSimpleCORSHandlerTest {
 		HttpServletRequest request = EasyMock
 				.createMock(HttpServletRequest.class);
 
-		EasyMock.expect(request.getHeader(CORSRequestHeaders.ORIGIN))
+		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
@@ -107,10 +106,10 @@ public class DefaultSimpleCORSHandlerTest {
 
 		HttpServletResponse response = EasyMock
 				.createMock(HttpServletResponse.class);
-		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		response.addHeader(CORSFilter.ACCESS_CONTROL_EXPOSE_HEADERS,
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
 				EXPOSED_HEADERS);
 		EasyMock.replay(response);
 
@@ -130,7 +129,7 @@ public class DefaultSimpleCORSHandlerTest {
 		HttpServletRequest request = EasyMock
 				.createMock(HttpServletRequest.class);
 
-		EasyMock.expect(request.getHeader(CORSRequestHeaders.ORIGIN))
+		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
@@ -147,10 +146,10 @@ public class DefaultSimpleCORSHandlerTest {
 
 		HttpServletResponse response = EasyMock
 				.createMock(HttpServletResponse.class);
-		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
 		EasyMock.expectLastCall();
 
 		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -167,14 +166,14 @@ public class DefaultSimpleCORSHandlerTest {
 		HttpServletRequest request = EasyMock
 				.createMock(HttpServletRequest.class);
 
-		EasyMock.expect(request.getHeader(CORSRequestHeaders.ORIGIN))
+		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
 		EasyMock.expect(
-				request.getHeader(CORSRequestHeaders.ACCESS_CONTROL_REQUEST_METHOD))
+				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
 				.andReturn("OPTIONS").anyTimes();
 		EasyMock.expect(
-				request.getHeader(CORSRequestHeaders.ACCESS_CONTROL_REQUEST_HEADERS))
+				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
 				.andReturn("Content-Type").anyTimes();
 		request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
 		EasyMock.expectLastCall();

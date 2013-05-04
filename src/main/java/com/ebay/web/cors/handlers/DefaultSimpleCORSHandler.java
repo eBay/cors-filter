@@ -27,7 +27,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.ebay.web.cors.CORSConfiguration;
 import com.ebay.web.cors.CORSFilter;
-import com.ebay.web.cors.CORSRequestHeaders;
 import com.ebay.web.cors.CORSRequestType;
 
 /**
@@ -57,21 +56,21 @@ public class DefaultSimpleCORSHandler implements CORSHandler {
 			throw new IllegalArgumentException(message);
 		}
 
-		String origin = request.getHeader(CORSRequestHeaders.ORIGIN);
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
 		final CORSConfiguration corsConfig = corsConfiguration;
 		final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
 
 		// Must be returned, in order for browser runtime to accept the
 		// response.
-		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
 				origin);
 
 		// Must be returned, in order for browser to accept the response, as
 		// this request was made with cookies.
 		if (corsConfig.isSupportsCredentials()) {
 			response.addHeader(
-					CORSFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS,
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
 					"true");
 		}
 
@@ -79,7 +78,7 @@ public class DefaultSimpleCORSHandler implements CORSHandler {
 		if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
 			String exposedHeadersString = StringUtils.join(exposedHeaders, ",");
 			response.addHeader(
-					CORSFilter.ACCESS_CONTROL_EXPOSE_HEADERS,
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
 					exposedHeadersString);
 		}
 

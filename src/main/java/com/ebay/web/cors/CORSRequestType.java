@@ -96,7 +96,7 @@ public enum CORSRequestType {
 			return true;
 		}
 		final Set<String> allowedOrigins = corsConfig.getAllowedOrigins();
-		String origin = request.getHeader(CORSRequestHeaders.ORIGIN);
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
 		// If 'Origin' header is a case-sensitive match of any of allowed
 		// origins, then return true, else return false.
@@ -114,13 +114,13 @@ public enum CORSRequestType {
 	 * @return
 	 */
 	private static boolean hasOriginHeader(final HttpServletRequest request) {
-		String originHeader = request.getHeader(CORSRequestHeaders.ORIGIN);
+		String originHeader = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 		return (originHeader != null) && (originHeader.length() > 0);
 	}
 
 	/**
 	 * Checks for the presence of
-	 * CORSRequestHeaders.ACCESS_CONTROL_REQUEST_METHOD header.
+	 * CORSFilter.ACCESS_CONTROL_REQUEST_METHOD header.
 	 * 
 	 * @param request
 	 * @return
@@ -128,13 +128,13 @@ public enum CORSRequestType {
 	private static boolean hasAccessControlRequestMethodHeader(
 			final HttpServletRequest request) {
 		String header = request
-				.getHeader(CORSRequestHeaders.ACCESS_CONTROL_REQUEST_METHOD);
+				.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
 		return (header != null) && (header.length() > 0);
 	}
 
 	/**
 	 * Checks for the presence of
-	 * CORSRequestHeaders.ACCESS_CONTROL_REQUEST_HEADERS header.
+	 * CORSFilter.ACCESS_CONTROL_REQUEST_HEADERS header.
 	 * 
 	 * @param request
 	 * @return
@@ -142,7 +142,7 @@ public enum CORSRequestType {
 	private static boolean hasAccessControlRequestHeadersHeader(
 			final HttpServletRequest request) {
 		String header = request
-				.getHeader(CORSRequestHeaders.ACCESS_CONTROL_REQUEST_HEADERS);
+				.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
 		return (header != null) && (header.length() > 0);
 	}
 
