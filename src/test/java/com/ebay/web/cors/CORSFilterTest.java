@@ -16,8 +16,6 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
-
 public class CORSFilterTest {
 	/**
 	 * The allowed origin for this test.
@@ -240,10 +238,6 @@ public class CORSFilterTest {
 
 		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
 
-		DefaultSimpleCORSHandler defaultSimpleCORSHandler = new DefaultSimpleCORSHandler(
-				corsConfiguration);
-
-		corsFilter.setSimpleRequestHandler(defaultSimpleCORSHandler);
 		corsFilter.setCorsConfiguration(corsConfiguration);
 
 		corsFilter.doFilter(request, response, filterChain);

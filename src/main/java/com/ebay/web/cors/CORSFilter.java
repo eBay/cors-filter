@@ -29,9 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.ebay.web.cors.handlers.CORSHandler;
-import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
-
 /**
  * <p>
  * A servlet filter to support CORS (Cross-Origin Resource Sharing).
@@ -48,9 +45,6 @@ import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
  * 
  */
 public class CORSFilter implements Filter {
-	/** Request handler for a simple CORS request. */
-	private CORSHandler simpleRequestHandler;
-
 	/** Configuration object */
 	private CORSConfiguration corsConfiguration;
 
@@ -67,7 +61,6 @@ public class CORSFilter implements Filter {
 	public CORSFilter(CORSConfiguration corsConfiguration) {
 		super();
 		this.corsConfiguration = corsConfiguration;
-		assignDefaultHandlers();
 	}
 
 	public void doFilter(final ServletRequest servletRequest,
@@ -92,7 +85,7 @@ public class CORSFilter implements Filter {
 
 		switch (requestType) {
 		case SIMPLE:
-			this.simpleRequestHandler.handle(request, response, filterChain);
+			this.handleSimpleCORS(request, response, filterChain);
 			break;
 		case PRE_FLIGHT:
 			this.handlePreflightCORS(request, response, filterChain);
@@ -124,21 +117,10 @@ public class CORSFilter implements Filter {
 						e);
 			}
 		}
-		assignDefaultHandlers();
 	}
 
 	public void destroy() {
 
-	}
-
-	/**
-	 * Set a {@link CORSHandler} to handle Simple CORS request.
-	 * 
-	 * @param simpleRequestHandler
-	 *            A handler implementing {@link CORSHandler}.
-	 */
-	public void setSimpleRequestHandler(final CORSHandler simpleRequestHandler) {
-		this.simpleRequestHandler = simpleRequestHandler;
 	}
 
 	/**
@@ -152,11 +134,48 @@ public class CORSFilter implements Filter {
 	}
 
 	/**
-	 * Assigns default handlers.
+	 * Handles a CORS request of type {@link CORSRequestType}.SIMPLE.
+	 * 
+	 * @see <a href="http://www.w3.org/TR/cors/#resource-requests">Simple
+	 *      Cross-Origin Request, Actual Request, and Redirects</a>
 	 */
-	private void assignDefaultHandlers() {
-		this.simpleRequestHandler = new DefaultSimpleCORSHandler(
-				corsConfiguration);
+	public void handleSimpleCORS(final HttpServletRequest request,
+			final HttpServletResponse response, final FilterChain filterChain)
+			throws IOException, ServletException {
+		if (CORSRequestType.checkRequestType(request, corsConfiguration) != CORSRequestType.SIMPLE) {
+			String message = "Expects a HttpServletRequest object of type "
+					+ CORSRequestType.SIMPLE.getType();
+			throw new IllegalArgumentException(message);
+		}
+
+		String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+
+		final CORSConfiguration corsConfig = corsConfiguration;
+		final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
+
+		// Must be returned, in order for browser runtime to accept the
+		// response.
+		response.addHeader(
+				CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+
+		// Must be returned, in order for browser to accept the response, as
+		// this request was made with cookies.
+		if (corsConfig.isSupportsCredentials()) {
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+					"true");
+		}
+
+		// Expose headers if any.
+		if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
+			String exposedHeadersString = StringUtils.join(exposedHeaders, ",");
+			response.addHeader(
+					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
+					exposedHeadersString);
+		}
+
+		// Forward the request down the filter chain.
+		filterChain.doFilter(request, response);
 	}
 
 	/**
