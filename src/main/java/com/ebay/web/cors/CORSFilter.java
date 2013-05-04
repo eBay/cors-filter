@@ -97,7 +97,7 @@ public class CORSFilter implements Filter {
 				corsConfiguration);
 
 		// Adds CORS specific attributes to request.
-		CORSRequestDecorator.decorateCORSProperties(request, requestType);
+		CORSFilter.decorateCORSProperties(request, requestType);
 
 		switch (requestType) {
 		case SIMPLE:
@@ -204,6 +204,55 @@ public class CORSFilter implements Filter {
 				corsConfiguration);
 		this.nonCORSRequestHandler = new DefaultNonCORSHandler();
 		this.invalidCORSRequestHandler = new DefaultInvalidCORSHandler();
+	}
+	
+
+	/**
+	 * Decorates the {@link HttpServletRequest}, with CORS attributes.
+	 * 
+	 * @param request
+	 *            The {@link HttpServletRequest} object.
+	 * @param corsRequestType
+	 *            The {@link CORSRequestType} object.
+	 */
+	public static void decorateCORSProperties(final HttpServletRequest request,
+			final CORSRequestType corsRequestType) {
+		if (request == null) {
+			throw new IllegalArgumentException(
+					"HttpServletRequest object is null");
+		}
+
+		if (corsRequestType == null) {
+			throw new IllegalArgumentException("CORSRequestType object is null");
+		}
+
+		switch (corsRequestType) {
+		case SIMPLE:
+			request.setAttribute(
+					CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
+			request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+					request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
+			request.setAttribute(
+					CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+					corsRequestType.getType());
+			break;
+		case PRE_FLIGHT:
+			request.setAttribute(
+					CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
+			request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+					request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
+			request.setAttribute(
+					CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+					corsRequestType.getType());
+			break;
+		case NOT_CORS:
+			request.setAttribute(
+					CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, false);
+			break;
+		default:
+			// Don't set any attributes
+			break;
+		}
 	}
 
 	/**
