@@ -14,10 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ebay.web.cors.CORSConfiguration;
+import com.ebay.web.cors.CORSFilter;
 import com.ebay.web.cors.CORSRequestHeaders;
 import com.ebay.web.cors.CORSRequestProperties;
 import com.ebay.web.cors.CORSRequestType;
-import com.ebay.web.cors.CORSResponseHeaders;
 
 public class DefaultSimpleCORSHandlerTest {
 
@@ -107,10 +107,10 @@ public class DefaultSimpleCORSHandlerTest {
 
 		HttpServletResponse response = EasyMock
 				.createMock(HttpServletResponse.class);
-		response.addHeader(CORSResponseHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		response.addHeader(CORSResponseHeaders.ACCESS_CONTROL_EXPOSE_HEADERS,
+		response.addHeader(CORSFilter.ACCESS_CONTROL_EXPOSE_HEADERS,
 				EXPOSED_HEADERS);
 		EasyMock.replay(response);
 
@@ -147,11 +147,10 @@ public class DefaultSimpleCORSHandlerTest {
 
 		HttpServletResponse response = EasyMock
 				.createMock(HttpServletResponse.class);
-		response.addHeader(CORSResponseHeaders.ACCESS_CONTROL_ALLOW_ORIGIN,
+		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		response.addHeader(
-				CORSResponseHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+		response.addHeader(CORSFilter.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
 		EasyMock.expectLastCall();
 
 		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);

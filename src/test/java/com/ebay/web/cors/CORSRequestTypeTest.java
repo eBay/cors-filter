@@ -279,6 +279,7 @@ public class CORSRequestTypeTest {
 				.andReturn("www.google.com").anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 		EasyMock.replay(request);
+		CORSConfiguration corsConfiguration = CORSConfiguration.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
 		CORSRequestType requestType = CORSRequestType.checkRequestType(request,
 				corsConfiguration);
 
@@ -298,6 +299,7 @@ public class CORSRequestTypeTest {
 				.andReturn("https://foo.ebay.com:8443").anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 		EasyMock.replay(request);
+		CORSConfiguration corsConfiguration = CORSConfiguration.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
 		CORSRequestType requestType = CORSRequestType.checkRequestType(request,
 				corsConfiguration);
 
@@ -333,6 +335,7 @@ public class CORSRequestTypeTest {
 				.andReturn("http://localhost.ebay.com:8443").anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 		EasyMock.replay(request);
+		CORSConfiguration corsConfiguration = CORSConfiguration.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
 		CORSRequestType requestType = CORSRequestType.checkRequestType(request,
 				corsConfiguration);
 
@@ -351,6 +354,7 @@ public class CORSRequestTypeTest {
 				.andReturn("https://localhost.ebay.com:8080").anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 		EasyMock.replay(request);
+		CORSConfiguration corsConfiguration = CORSConfiguration.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
 		CORSRequestType requestType = CORSRequestType.checkRequestType(request,
 				corsConfiguration);
 

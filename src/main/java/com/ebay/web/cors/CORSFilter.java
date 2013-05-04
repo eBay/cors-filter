@@ -204,4 +204,45 @@ public class CORSFilter implements Filter {
 		this.nonCORSRequestHandler = new DefaultNonCORSHandler();
 		this.invalidCORSRequestHandler = new DefaultInvalidCORSHandler();
 	}
+	
+	/**
+	 * The Access-Control-Allow-Origin header indicates whether a resource can
+	 * be shared based by returning the value of the Origin request header in
+	 * the response.
+	 */
+	public static final String ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+
+	/**
+	 * The Access-Control-Allow-Credentials header indicates whether the
+	 * response to request can be exposed when the omit credentials flag is
+	 * unset. When part of the response to a preflight request it indicates that
+	 * the actual request can include user credentials.
+	 */
+	public static final String ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
+
+	/**
+	 * The Access-Control-Expose-Headers header indicates which headers are safe
+	 * to expose to the API of a CORS API specification
+	 */
+	public static final String ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
+
+	/**
+	 * The Access-Control-Max-Age header indicates how long the results of a
+	 * preflight request can be cached in a preflight result cache.
+	 */
+	public static final String ACCESS_CONTROL_MAX_AGE = "Access-Control-Max-Age";
+
+	/**
+	 * The Access-Control-Allow-Methods header indicates, as part of the
+	 * response to a preflight request, which methods can be used during the
+	 * actual request.
+	 */
+	public static final String ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
+
+	/**
+	 * The Access-Control-Allow-Headers header indicates, as part of the
+	 * response to a preflight request, which header field names can be used
+	 * during the actual request.
+	 */
+	public static final String ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
 }

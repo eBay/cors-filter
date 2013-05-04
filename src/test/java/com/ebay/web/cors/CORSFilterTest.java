@@ -172,7 +172,8 @@ public class CORSFilterTest {
 		EasyMock.replay(response);
 
 		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
+		CORSConfiguration corsConfiguration = CORSConfiguration
+				.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
 		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
 		corsFilter.doFilter(request, response, filterChain);
 		// If we don't get an exception at this point, then all mocked objects
@@ -313,7 +314,7 @@ public class CORSFilterTest {
 				return null;
 			}
 		};
-		
+
 		HttpServletRequest request = EasyMock
 				.createMock(HttpServletRequest.class);
 
