@@ -264,4 +264,24 @@ public class CORSFilter implements Filter {
 	 * used in the actual request as part of the preflight request.
 	 */
 	public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
+
+	/**
+	 * The prefix to a CORS request attribute.
+	 */
+	public static final String HTTP_REQUEST_ATTRIBUTE_PREFIX = "cors.";
+
+	/**
+	 * Attribute that contains the origin of the request.
+	 */
+	public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN = HTTP_REQUEST_ATTRIBUTE_PREFIX + "origin";
+
+	/**
+	 * Boolean value, suggesting if the request is a CORS request or not.
+	 */
+	public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST = HTTP_REQUEST_ATTRIBUTE_PREFIX + "isCorsRequest";
+
+	/**
+	 * Type of CORS request, of type {@link CORSRequestType}.
+	 */
+	public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = HTTP_REQUEST_ATTRIBUTE_PREFIX + "requestType";
 }

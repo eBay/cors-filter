@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import com.ebay.web.cors.CORSConfiguration;
 import com.ebay.web.cors.CORSFilter;
-import com.ebay.web.cors.CORSRequestProperties;
 import com.ebay.web.cors.CORSRequestType;
 
 public class DefaultSimpleCORSHandlerTest {
@@ -57,12 +56,12 @@ public class DefaultSimpleCORSHandlerTest {
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
-		request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.ORIGIN,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.REQUEST_TYPE,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
 				CORSRequestType.SIMPLE.getType());
 		EasyMock.expectLastCall();
 
@@ -93,12 +92,12 @@ public class DefaultSimpleCORSHandlerTest {
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
-		request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.ORIGIN,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.REQUEST_TYPE,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
 				CORSRequestType.SIMPLE.getType());
 		EasyMock.expectLastCall();
 
@@ -133,12 +132,12 @@ public class DefaultSimpleCORSHandlerTest {
 				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
 		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
-		request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.ORIGIN,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.REQUEST_TYPE,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
 				CORSRequestType.SIMPLE.getType());
 		EasyMock.expectLastCall();
 
@@ -175,12 +174,12 @@ public class DefaultSimpleCORSHandlerTest {
 		EasyMock.expect(
 				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
 				.andReturn("Content-Type").anyTimes();
-		request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.ORIGIN,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
 				HTTPS_LOCALHOST_EBAY_COM_8443);
 		EasyMock.expectLastCall();
-		request.setAttribute(CORSRequestProperties.REQUEST_TYPE,
+		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
 				CORSRequestType.PRE_FLIGHT.getType());
 		EasyMock.expectLastCall();
 

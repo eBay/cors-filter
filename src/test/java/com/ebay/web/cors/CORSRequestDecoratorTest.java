@@ -33,11 +33,11 @@ public class CORSRequestDecoratorTest {
         HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN)).andReturn(HTTPS_LOCALHOST_EBAY_COM_8443)
                 .anyTimes();
-        request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
         EasyMock.expectLastCall();
-        request.setAttribute(CORSRequestProperties.ORIGIN, HTTPS_LOCALHOST_EBAY_COM_8443);
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN, HTTPS_LOCALHOST_EBAY_COM_8443);
         EasyMock.expectLastCall();
-        request.setAttribute(CORSRequestProperties.REQUEST_TYPE, CORSRequestType.SIMPLE.getType());
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE, CORSRequestType.SIMPLE.getType());
         EasyMock.expectLastCall();
         EasyMock.replay(request);
         CORSRequestDecorator.decorateCORSProperties(request, CORSRequestType.SIMPLE);
@@ -48,11 +48,11 @@ public class CORSRequestDecoratorTest {
         HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN)).andReturn(HTTPS_LOCALHOST_EBAY_COM_8443)
                 .anyTimes();
-        request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
         EasyMock.expectLastCall();
-        request.setAttribute(CORSRequestProperties.ORIGIN, HTTPS_LOCALHOST_EBAY_COM_8443);
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN, HTTPS_LOCALHOST_EBAY_COM_8443);
         EasyMock.expectLastCall();
-        request.setAttribute(CORSRequestProperties.REQUEST_TYPE, CORSRequestType.PRE_FLIGHT.getType());
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE, CORSRequestType.PRE_FLIGHT.getType());
         EasyMock.expectLastCall();
         EasyMock.replay(request);
         CORSRequestDecorator.decorateCORSProperties(request, CORSRequestType.PRE_FLIGHT);
@@ -61,7 +61,7 @@ public class CORSRequestDecoratorTest {
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeNotCORS() {
         HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
-        request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, false);
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, false);
         EasyMock.expectLastCall();
         EasyMock.replay(request);
         CORSRequestDecorator.decorateCORSProperties(request, CORSRequestType.NOT_CORS);

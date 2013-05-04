@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Decorates a {@link HttpServletRequest} with CORS specific attributes. The
- * request attributes added are listed in {@link CORSRequestProperties}.
+ * request attributes added are listed in {@link CORSFilter}.
  *
  * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
  *
@@ -48,17 +48,17 @@ public final class CORSRequestDecorator {
 
         switch (corsRequestType) {
             case SIMPLE:
-                request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
-                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
-                request.setAttribute(CORSRequestProperties.REQUEST_TYPE, corsRequestType.getType());
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE, corsRequestType.getType());
                 break;
             case PRE_FLIGHT:
-                request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, true);
-                request.setAttribute(CORSRequestProperties.ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
-                request.setAttribute(CORSRequestProperties.REQUEST_TYPE, corsRequestType.getType());
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN, request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
+                request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE, corsRequestType.getType());
                 break;
             case NOT_CORS:
-                request.setAttribute(CORSRequestProperties.IS_CORS_REQUEST, false);
+			request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, false);
                 break;
             default:
                 // Don't set any attributes
