@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ebay.web.cors.handlers.CORSHandler;
-import com.ebay.web.cors.handlers.DefaultNonCORSHandler;
 import com.ebay.web.cors.handlers.DefaultPreflightCORSHandler;
 import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
 
@@ -52,9 +51,6 @@ public class CORSFilter implements Filter {
 
 	/** Request handler for a pre-flight CORS request. */
 	private CORSHandler preFlightRequestHandler;
-
-	/** Request handler for a normal request that's not a CORS request. */
-	private CORSHandler nonCORSRequestHandler;
 
 	/** Configuration object */
 	private CORSConfiguration corsConfiguration;
@@ -103,10 +99,10 @@ public class CORSFilter implements Filter {
 			this.preFlightRequestHandler.handle(request, response, filterChain);
 			break;
 		case NOT_CORS:
-			this.nonCORSRequestHandler.handle(request, response, filterChain);
+			this.handleNonCORS(request, response, filterChain);
 			break;
 		default:
-			handleInvalidCORS(request, response, filterChain);
+			this.handleInvalidCORS(request, response, filterChain);
 			break;
 		}
 	}
@@ -158,17 +154,6 @@ public class CORSFilter implements Filter {
 	}
 
 	/**
-	 * Set a {@link CORSHandler} to handle a normal request that's not a CORS
-	 * request.
-	 * 
-	 * @param nonCORSRequestHandler
-	 *            A handler implementing {@link CORSHandler}.
-	 */
-	public void setNonCORSRequestHandler(final CORSHandler nonCORSRequestHandler) {
-		this.nonCORSRequestHandler = nonCORSRequestHandler;
-	}
-
-	/**
 	 * Set {@link CORSConfiguration} for the filter.
 	 * 
 	 * @param corsConfiguration
@@ -186,9 +171,23 @@ public class CORSFilter implements Filter {
 				corsConfiguration);
 		this.preFlightRequestHandler = new DefaultPreflightCORSHandler(
 				corsConfiguration);
-		this.nonCORSRequestHandler = new DefaultNonCORSHandler();
 	}
 
+	/**
+	 * Handles a request, that's not a CORS request, but is a valid request.
+	 * This implementation, just forwards the request down the filter chain.
+	 */
+	public void handleNonCORS(final HttpServletRequest request,
+			final HttpServletResponse response, final FilterChain filterChain)
+			throws IOException, ServletException {
+		// Let request pass.
+		filterChain.doFilter(request, response);
+	}
+
+	/**
+	 * Will throw a {@link ServletException}, which ultimately, will lead the
+	 * request to a {@link AbortServlet}.
+	 */
 	public void handleInvalidCORS(final HttpServletRequest request,
 			final HttpServletResponse response, final FilterChain filterChain)
 			throws IOException, ServletException {

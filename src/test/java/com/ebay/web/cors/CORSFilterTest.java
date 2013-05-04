@@ -16,7 +16,6 @@ import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ebay.web.cors.handlers.DefaultNonCORSHandler;
 import com.ebay.web.cors.handlers.DefaultPreflightCORSHandler;
 import com.ebay.web.cors.handlers.DefaultSimpleCORSHandler;
 
@@ -241,13 +240,11 @@ public class CORSFilterTest {
 		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
 		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		DefaultNonCORSHandler defaultNonCORSHandler = new DefaultNonCORSHandler();
 		DefaultPreflightCORSHandler defaultPreflightCORSHandler = new DefaultPreflightCORSHandler(
 				corsConfiguration);
 		DefaultSimpleCORSHandler defaultSimpleCORSHandler = new DefaultSimpleCORSHandler(
 				corsConfiguration);
 
-		corsFilter.setNonCORSRequestHandler(defaultNonCORSHandler);
 		corsFilter.setPreFlightRequestHandler(defaultPreflightCORSHandler);
 		corsFilter.setSimpleRequestHandler(defaultSimpleCORSHandler);
 		corsFilter.setCorsConfiguration(corsConfiguration);

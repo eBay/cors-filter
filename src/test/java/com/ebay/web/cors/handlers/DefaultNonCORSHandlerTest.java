@@ -10,22 +10,24 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.ebay.web.cors.handlers.DefaultNonCORSHandler;
+import com.ebay.web.cors.CORSFilter;
 
 public class DefaultNonCORSHandlerTest {
 
-    @Test
-    public void test() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
-        HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
-        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-        filterChain.doFilter(request, response);
-        EasyMock.expectLastCall();
-        EasyMock.replay(request);
-        EasyMock.replay(response);
-        EasyMock.replay(filterChain);
+	@Test
+	public void test() throws IOException, ServletException {
+		HttpServletRequest request = EasyMock
+				.createMock(HttpServletRequest.class);
+		HttpServletResponse response = EasyMock
+				.createNiceMock(HttpServletResponse.class);
+		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+		filterChain.doFilter(request, response);
+		EasyMock.expectLastCall();
+		EasyMock.replay(request);
+		EasyMock.replay(response);
+		EasyMock.replay(filterChain);
 
-        DefaultNonCORSHandler handler = new DefaultNonCORSHandler();
-        handler.handle(request, response, filterChain);
-    }
+		CORSFilter corsFilter = new CORSFilter();
+		corsFilter.handleNonCORS(request, response, filterChain);
+	}
 }
