@@ -134,8 +134,14 @@ public class CORSFilter implements Filter {
 
         // Must be returned, in order for browser runtime to accept the
         // response.
-        response.addHeader(
-                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+        if (corsConfig.isAnyOriginAllowed()) {
+            response.addHeader(
+                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        } else {
+            response.addHeader(
+                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                    origin);
+        }
 
         // Must be returned, in order for browser to accept the response, as
         // this request was made with cookies.

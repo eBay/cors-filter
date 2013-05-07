@@ -38,14 +38,18 @@ public class CORSFilterTest {
 
         HttpServletResponse response = EasyMock
                 .createNiceMock(HttpServletResponse.class);
+        response.addHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        EasyMock.expectLastCall();
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
         CORSFilter corsFilter = new CORSFilter();
-        corsFilter.init(TestConfigs.getSpecificOriginFilterConfig());
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
+        EasyMock.verify(request, response);
         // If we don't get an exception at this point, then all mocked objects
         // worked as expected.
     }
