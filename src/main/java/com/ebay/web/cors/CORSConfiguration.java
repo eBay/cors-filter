@@ -224,8 +224,11 @@ public final class CORSConfiguration {
         this.supportsCredentials = isSupportsCredentials;
 
         try {
-            this.preflightMaxAge = (preflightMaxAge != null && preflightMaxAge
-                    .isEmpty() == false) ? Long.parseLong(preflightMaxAge) : 0;
+            if (preflightMaxAge != null && preflightMaxAge.isEmpty() == false) {
+                this.preflightMaxAge = Long.parseLong(preflightMaxAge);
+            } else {
+                this.preflightMaxAge = 0L;
+            }
         } catch (NumberFormatException e) {
             throw new ServletException("Unable to parse preflightMaxAge", e);
         }
