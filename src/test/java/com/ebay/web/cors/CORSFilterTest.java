@@ -288,6 +288,15 @@ public class CORSFilterTest {
         // worked as expected.
     }
 
+    @Test(expected = ServletException.class)
+    public void testInitInvalidFilterConfig() throws IOException,
+            ServletException {
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getFilterConfigInvalidMaxPreflightAge());
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
     @Test
     public void testDestroy() {
         // Nothing to test.
