@@ -87,7 +87,7 @@ public class CORSConfigurationTest {
                 allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
                 exposedHeaders, supportCredentials, preflightMaxAge);
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 0);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
+        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 0);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsConfiguration.isSupportsCredentials());
@@ -106,7 +106,7 @@ public class CORSConfigurationTest {
                 allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
                 exposedHeaders, supportCredentials, preflightMaxAge);
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 0);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
+        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 0);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsConfiguration.isSupportsCredentials());
