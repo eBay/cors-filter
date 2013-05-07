@@ -49,6 +49,13 @@ public class CORSConfigurationTest {
         Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 1000);
     }
 
+    @Test(expected = ServletException.class)
+    public void testWithFilterConfigInvalidPreflightAge()
+            throws ServletException {
+        CORSConfiguration.loadFromFilterConfig(TestConfigs
+                .getFilterConfigInvalidMaxPreflightAge());
+    }
+
     @Test
     public void testWithStringParser() throws ServletException {
         String allowedHttpHeaders = "Content-Type";
