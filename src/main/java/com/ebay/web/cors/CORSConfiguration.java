@@ -54,16 +54,65 @@ import javax.servlet.ServletException;
  * 
  */
 public final class CORSConfiguration {
-    public static final String CORS_SUPPORT_CREDENTIALS = "cors.support.credentials";
+    /**
+     * By default, time duration to cache pre-flight response is 30 mins.
+     */
+    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
 
-    public static final String CORS_EXPOSED_HEADERS = "cors.exposed.headers";
+    /**
+     * By default, cookie based auth is turned off.
+     */
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
 
-    public static final String CORS_ALLOWED_HEADERS = "cors.allowed.headers";
+    /**
+     * By default, all origins are allowed to make requests.
+     */
+    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
 
-    public static final String CORS_ALLOWED_METHODS = "cors.allowed.methods";
+    /**
+     * By default, following methods are supported: GET, POST, HEAD and OPTIONS.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_METHODS = "GET,POST,HEAD,OPTIONS";
 
+    /**
+     * By default, following headers are supported:
+     * Origin,Accept,X-Requested-With, and Content-Type.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_HEADERS = "Origin,Accept,X-Requested-With,Content-Type";
+
+    /**
+     * By default, none of the headers are exposed in response.
+     */
+    public static final String DEFAULT_EXPOSED_HEADERS = "";
+
+    /**
+     * Key to retrieve allowed origins from {@link FilterConfig}.
+     */
     public static final String CORS_ALLOWED_ORIGINS = "cors.allowed.origins";
 
+    /**
+     * Key to retrieve support credentials from {@link FilterConfig}.
+     */
+    public static final String CORS_SUPPORT_CREDENTIALS = "cors.support.credentials";
+
+    /**
+     * Key to retrieve exposed headers from {@link FilterConfig}.
+     */
+    public static final String CORS_EXPOSED_HEADERS = "cors.exposed.headers";
+
+    /**
+     * Key to retrieve allowed headers from {@link FilterConfig}.
+     */
+    public static final String CORS_ALLOWED_HEADERS = "cors.allowed.headers";
+
+    /**
+     * Key to retrieve allowed methods from {@link FilterConfig}.
+     */
+    public static final String CORS_ALLOWED_METHODS = "cors.allowed.methods";
+
+    /**
+     * Key to retrieve preflight max age from {@link FilterConfig}.
+     */
     public static final String CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
 
     /**
@@ -169,6 +218,7 @@ public final class CORSConfiguration {
         Set<String> setExposedHeaders = parseStringToSet(exposedHeaders);
         setExposedHeaders(setExposedHeaders);
 
+        // For any value other then 'true' this will be false.
         boolean isSupportsCredentials = Boolean
                 .parseBoolean(supportsCredentials);
         this.supportsCredentials = isSupportsCredentials;
@@ -355,11 +405,4 @@ public final class CORSConfiguration {
 
         return corsConfiguration;
     }
-
-    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
-    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
-    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
-    public static final String DEFAULT_ALLOWED_HTTP_METHODS = "GET,POST,HEAD,OPTIONS";
-    public static final String DEFAULT_ALLOWED_HTTP_HEADERS = "Origin,Accept,X-Requested-With,Content-Type";
-    public static final String DEFAULT_EXPOSED_HEADERS = "";
 }
