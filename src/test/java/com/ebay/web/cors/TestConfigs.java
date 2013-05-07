@@ -9,6 +9,10 @@ public class TestConfigs {
     public static final String HTTPS_WWW_APACHE_ORG = "https://www.apache.org";
     public static final String HTTP_TOMCAT_APACHE_ORG = "http://tomcat.apache.org";
     public static final String EXPOSED_HEADERS = "X-CUSTOM-HEADER";
+    /**
+     * Any origin
+     */
+    public static final String ANY_ORIGIN = "*";
 
     public static FilterConfig getDefaultFilterConfig() {
         final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
@@ -22,7 +26,7 @@ public class TestConfigs {
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
     }
-    
+
     public static FilterConfig getFilterConfigAnyOriginAndSupportsCredentials() {
         final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
