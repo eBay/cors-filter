@@ -10,14 +10,15 @@ public class TestConfigs {
     public static final String HTTP_TOMCAT_APACHE_ORG = "http://tomcat.apache.org";
     public static final String EXPOSED_HEADERS = "Content-Type";
 
-    public static FilterConfig getFilterConfig() {
-        final String allowedHttpHeaders = "Content-Type";
-        final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
+    public static FilterConfig getSpecificOriginFilterConfig() {
         final String allowedOrigins = HTTPS_WWW_APACHE_ORG + ","
                 + HTTP_TOMCAT_APACHE_ORG;
-        final String exposedHeaders = "Content-Encoding";
-        final String supportCredentials = "true";
-        final String preflightMaxAge = "1000";
+
+        final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+        final String preflightMaxAge = CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,

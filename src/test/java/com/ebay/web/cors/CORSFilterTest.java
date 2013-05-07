@@ -66,7 +66,7 @@ public class CORSFilterTest {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
         CORSFilter corsFilter = new CORSFilter();
-        corsFilter.init(TestConfigs.getFilterConfig());
+        corsFilter.init(TestConfigs.getSpecificOriginFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
         // If we don't get an exception at this point, then all mocked objects
@@ -169,7 +169,7 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
         CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestConfigs.getFilterConfig());
+                .loadFromFilterConfig(TestConfigs.getSpecificOriginFilterConfig());
         CORSFilter corsFilter = new CORSFilter(corsConfiguration);
         corsFilter.doFilter(request, response, filterChain);
         // If we don't get an exception at this point, then all mocked objects
@@ -281,7 +281,7 @@ public class CORSFilterTest {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
         CORSFilter corsFilter = new CORSFilter();
-        corsFilter.init(TestConfigs.getFilterConfig());
+        corsFilter.init(TestConfigs.getSpecificOriginFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
         // If we don't get an exception at this point, then all mocked objects
