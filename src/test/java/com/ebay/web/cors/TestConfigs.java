@@ -8,6 +8,7 @@ import javax.servlet.ServletContext;
 public class TestConfigs {
     public static final String HTTPS_WWW_APACHE_ORG = "https://www.apache.org";
     public static final String HTTP_TOMCAT_APACHE_ORG = "http://tomcat.apache.org";
+    public static final String EXPOSED_HEADERS = "Content-Type";
 
     public static FilterConfig getFilterConfig() {
         final String allowedHttpHeaders = "Content-Type";
