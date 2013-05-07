@@ -35,6 +35,20 @@ public class TestConfigs {
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
     }
+    
+    public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
+        final String allowedHttpHeaders = "Content-Type";
+        final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
+        final String allowedOrigins = HTTPS_WWW_APACHE_ORG + ","
+                + HTTP_TOMCAT_APACHE_ORG;
+        final String exposedHeaders = "Content-Encoding";
+        final String supportCredentials = "true";
+        final String preflightMaxAge = "abc";
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
 
     private static FilterConfig generateFilterConfig(
             final String allowedHttpHeaders, final String allowedHttpMethods,
