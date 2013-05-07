@@ -1,14 +1,11 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CORSFilterTest {
-    /**
-     * The allowed origin for this test.
-     */
-    private static final String HTTPS_LOCALHOST_EBAY_COM_8443 = "https://localhost.ebay.com:8443";
-
     private CORSConfiguration corsConfiguration;
 
     /**
@@ -36,7 +28,7 @@ public class CORSFilterTest {
         corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
 
         Set<String> allowedOrigins = new HashSet<String>();
-        allowedOrigins.add(HTTPS_LOCALHOST_EBAY_COM_8443);
+        allowedOrigins.add(TestConfigs.HTTPS_WWW_APACHE_ORG);
         corsConfiguration.setAllowedOrigins(allowedOrigins);
 
         Set<String> exposedHeaders = new HashSet<String>();
@@ -50,14 +42,14 @@ public class CORSFilterTest {
                 .createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
         EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
                 true);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-                HTTPS_LOCALHOST_EBAY_COM_8443);
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.SIMPLE.getType());
@@ -71,7 +63,8 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
         // If we don't get an exception at this point, then all mocked objects
@@ -84,7 +77,7 @@ public class CORSFilterTest {
                 .createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
 
         EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
         EasyMock.expect(
@@ -97,7 +90,7 @@ public class CORSFilterTest {
                 true);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-                HTTPS_LOCALHOST_EBAY_COM_8443);
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.PRE_FLIGHT.getType());
@@ -160,7 +153,7 @@ public class CORSFilterTest {
                 true);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-                HTTPS_LOCALHOST_EBAY_COM_8443);
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.INVALID_CORS.getType());
@@ -217,14 +210,14 @@ public class CORSFilterTest {
                 .createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
         EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
                 true);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-                HTTPS_LOCALHOST_EBAY_COM_8443);
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.SIMPLE.getType());
@@ -260,65 +253,18 @@ public class CORSFilterTest {
 
     @Test
     public void testInit() throws IOException, ServletException {
-        final String allowedHttpHeaders = "Content-Type";
-        final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
-        final String allowedOrigins = "https://localhost.ebay.com:8443,https://deals.ebay.com";
-        final String exposedHeaders = "Content-Encoding";
-        final String supportCredentials = "true";
-        final String preflightMaxAge = "1000";
-
-        FilterConfig filterConfig = new FilterConfig() {
-
-            public String getFilterName() {
-                // TODO Auto-generated method stub
-                return "cors-filter";
-            }
-
-            public ServletContext getServletContext() {
-                return null;
-            }
-
-            public String getInitParameter(String name) {
-                if (CORSConfiguration.CORS_ALLOWED_HEADERS
-                        .equalsIgnoreCase(name)) {
-                    return allowedHttpHeaders;
-                } else if (CORSConfiguration.CORS_ALLOWED_METHODS
-                        .equalsIgnoreCase(name)) {
-                    return allowedHttpMethods;
-                } else if (CORSConfiguration.CORS_ALLOWED_ORIGINS
-                        .equalsIgnoreCase(name)) {
-                    return allowedOrigins;
-                } else if (CORSConfiguration.CORS_EXPOSED_HEADERS
-                        .equalsIgnoreCase(name)) {
-                    return exposedHeaders;
-                } else if (CORSConfiguration.CORS_SUPPORT_CREDENTIALS
-                        .equalsIgnoreCase(name)) {
-                    return supportCredentials;
-                } else if (CORSConfiguration.CORS_PREFLIGHT_MAXAGE
-                        .equalsIgnoreCase(name)) {
-                    return preflightMaxAge;
-                }
-                return null;
-            }
-
-            @SuppressWarnings("rawtypes")
-            public Enumeration getInitParameterNames() {
-                return null;
-            }
-        };
-
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
         EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
 
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
                 true);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-                HTTPS_LOCALHOST_EBAY_COM_8443);
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.SIMPLE.getType());
@@ -333,7 +279,7 @@ public class CORSFilterTest {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
         CORSFilter corsFilter = new CORSFilter();
-        corsFilter.init(filterConfig);
+        corsFilter.init(TestConfigs.getFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
         // If we don't get an exception at this point, then all mocked objects

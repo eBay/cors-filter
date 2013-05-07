@@ -6,10 +6,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 
 public class TestConfigs {
+    public static final String HTTPS_WWW_APACHE_ORG = "https://www.apache.org";
+    public static final String HTTP_TOMCAT_APACHE_ORG = "http://tomcat.apache.org";
+
     public static FilterConfig getFilterConfig() {
         final String allowedHttpHeaders = "Content-Type";
         final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
-        final String allowedOrigins = "https://www.apache.org,http://tomcat.apache.com";
+        final String allowedOrigins = HTTPS_WWW_APACHE_ORG + ","
+                + HTTP_TOMCAT_APACHE_ORG;
         final String exposedHeaders = "Content-Encoding";
         final String supportCredentials = "true";
         final String preflightMaxAge = "1000";
