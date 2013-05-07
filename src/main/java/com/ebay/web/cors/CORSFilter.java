@@ -134,7 +134,7 @@ public class CORSFilter implements Filter {
 
         // Must be returned, in order for browser runtime to accept the
         // response.
-        if (corsConfig.isAnyOriginAllowed()) {
+        if (corsConfig.isAnyOriginAllowed() && !corsConfig.isSupportsCredentials()) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         } else {

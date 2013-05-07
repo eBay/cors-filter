@@ -23,7 +23,7 @@ public class TestConfigs {
                 preflightMaxAge);
     }
     
-    public static FilterConfig getInvalidFilterConfigAnyOriginAndSupportsCredentials() {
+    public static FilterConfig getFilterConfigAnyOriginAndSupportsCredentials() {
         final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
         final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;

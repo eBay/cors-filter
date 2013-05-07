@@ -33,13 +33,6 @@ public class CORSConfigurationTest {
                 .getFilterConfigInvalidMaxPreflightAge());
     }
 
-    @Test(expected = ServletException.class)
-    public void testInvalidConfigAnyOriginAndSupportCredentials()
-            throws ServletException {
-        CORSConfiguration.loadFromFilterConfig(TestConfigs
-                .getInvalidFilterConfigAnyOriginAndSupportsCredentials());
-    }
-
     @Test
     public void testWithStringParserEmpty() throws ServletException {
         CORSConfiguration corsConfiguration = CORSConfiguration
