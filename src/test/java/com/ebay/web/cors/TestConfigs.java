@@ -39,12 +39,11 @@ public class TestConfigs {
     }
 
     public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
-        final String allowedHttpHeaders = "Content-Type";
-        final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
-        final String allowedOrigins = HTTPS_WWW_APACHE_ORG + ","
-                + HTTP_TOMCAT_APACHE_ORG;
-        final String exposedHeaders = "Content-Encoding";
-        final String supportCredentials = "true";
+        final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge = "abc";
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
