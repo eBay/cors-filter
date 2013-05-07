@@ -54,8 +54,6 @@ import javax.servlet.ServletException;
  * 
  */
 public final class CORSConfiguration {
-    private static final int DEFAULT_PREFLIGHT_MAXAGE = 1800;
-
     public static final String CORS_SUPPORT_CREDENTIALS = "cors.support.credentials";
 
     public static final String CORS_EXPOSED_HEADERS = "cors.exposed.headers";
@@ -112,8 +110,10 @@ public final class CORSConfiguration {
         this.allowedHttpMethods = new HashSet<String>();
         this.allowedHttpHeaders = new HashSet<String>();
         this.exposedHeaders = new HashSet<String>();
-        this.anyOriginAllowed = false;
-        initDefaults();
+
+        parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
+                DEFAULT_ALLOWED_HTTP_HEADERS, DEFAULT_EXPOSED_HEADERS,
+                DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE);
     }
 
     /**
@@ -137,7 +137,10 @@ public final class CORSConfiguration {
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
             final String preflightMaxAge) throws ServletException {
-        this();
+        this.allowedOrigins = new HashSet<String>();
+        this.allowedHttpMethods = new HashSet<String>();
+        this.allowedHttpHeaders = new HashSet<String>();
+        this.exposedHeaders = new HashSet<String>();
 
         parseAndStore(allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
                 exposedHeaders, supportsCredentials, preflightMaxAge);
@@ -176,20 +179,6 @@ public final class CORSConfiguration {
         } catch (NumberFormatException e) {
             throw new ServletException("Unable to parse preflightMaxAge", e);
         }
-    }
-
-    private void initDefaults() {
-        this.supportsCredentials = false;
-        this.anyOriginAllowed = true;
-        this.preflightMaxAge = DEFAULT_PREFLIGHT_MAXAGE;
-        initDefaultAllowedHttpMethods();
-    }
-
-    private void initDefaultAllowedHttpMethods() {
-        this.allowedHttpMethods.add("GET");
-        this.allowedHttpMethods.add("POST");
-        this.allowedHttpMethods.add("OPTIONS");
-        this.allowedHttpMethods.add("HEAD");
     }
 
     /**
@@ -366,4 +355,11 @@ public final class CORSConfiguration {
 
         return corsConfiguration;
     }
+
+    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
+    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
+    public static final String DEFAULT_ALLOWED_HTTP_METHODS = "GET,POST,HEAD,OPTIONS";
+    public static final String DEFAULT_ALLOWED_HTTP_HEADERS = "Origin,Accept,X-Requested-With,Content-Type";
+    public static final String DEFAULT_EXPOSED_HEADERS = "";
 }
