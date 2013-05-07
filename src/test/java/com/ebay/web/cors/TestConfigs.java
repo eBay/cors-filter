@@ -51,6 +51,19 @@ public class TestConfigs {
                 preflightMaxAge);
     }
 
+    public static FilterConfig getEmptyFilterConfig() {
+        final String allowedHttpHeaders = "";
+        final String allowedHttpMethods = "";
+        final String allowedOrigins = "";
+        final String exposedHeaders = "";
+        final String supportCredentials = "";
+        final String preflightMaxAge = "";
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
+
     private static FilterConfig generateFilterConfig(
             final String allowedHttpHeaders, final String allowedHttpMethods,
             final String allowedOrigins, final String exposedHeaders,

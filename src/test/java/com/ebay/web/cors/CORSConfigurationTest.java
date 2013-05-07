@@ -44,35 +44,9 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithStringParser() throws ServletException {
-        String allowedHttpHeaders = "Content-Type";
-        String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
-        String allowedOrigins = "https://www.ebay.com,https://deals.ebay.com";
-        String exposedHeaders = "Content-Encoding";
-        String supportCredentials = "true";
-        String preflightMaxAge = "1000";
-        CORSConfiguration corsConfiguration = new CORSConfiguration(
-                allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
-                exposedHeaders, supportCredentials, preflightMaxAge);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
-        Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 2);
-        Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 1);
-        Assert.assertTrue(corsConfiguration.isSupportsCredentials());
-        Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 1000);
-    }
-
-    @Test
     public void testWithStringParserEmpty() throws ServletException {
-        String allowedHttpHeaders = "";
-        String allowedHttpMethods = "";
-        String allowedOrigins = "";
-        String exposedHeaders = "";
-        String supportCredentials = "";
-        String preflightMaxAge = "";
-        CORSConfiguration corsConfiguration = new CORSConfiguration(
-                allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
-                exposedHeaders, supportCredentials, preflightMaxAge);
+        CORSConfiguration corsConfiguration = CORSConfiguration
+                .loadFromFilterConfig(TestConfigs.getEmptyFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 0);
         Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 0);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
