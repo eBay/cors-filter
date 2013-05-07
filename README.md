@@ -45,6 +45,13 @@ Include cors-filter jar in your classpath. And, add filter configuration to your
   </filter-mapping>
 ```
 
+### Adding information about the CORS in HttpServletRequest
+CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
+
+* **cors.isCorsRequest**: Flag to determine if a request is a CORS request
+* **cors.origin**: Origin URL
+* **cors.requestType**: simple or preflight or not_cors or invalid_cors
+
 ### Background
 [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a URL that's different from the origin URL.
 
@@ -107,45 +114,11 @@ Here's what a CORS request filter will do:
    1. throw ServletException
    1. Request will be redirected to AbortServlet
 
-### CORS Configuration
-CORS filter can be configured from an application via following properties:
-
-```python
-# CORS Configuration
-# A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.
-cors.allowed.origins=https://localhost.ebay.com:8443,https://deals.ebay.com:8443
-
-# A comma separated list of HTTP verbs, using which a CORS request can be made.
-cors.allowed.methods=GET,POST,HEAD,OPTIONS
-
-# A comma separated list of allowed headers when making a non simple CORS request.
-cors.allowed.headers=Content-Type
- 
-# A comma separated list non-standard response headers that will be exposed to XHR2 object.
-cors.exposed.headers=
-
-# A flag that suggests if CORS is supported with cookies
-cors.support.credentials=true
-
-# Indicates how long the results of a preflight request can be cached in a preflight result cache.
-cors.preflight.maxage=100
-```
-
-### Adding information about the CORS in HttpServletRequest
-CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
-
-* **cors.isCorsRequest**: Flag to determine if a request is a CORS request
-* **cors.origin**: Origin URL
-* **cors.requestType**: simple or preflight or not_cors or invalid_cors
-
 ### Notes
 * For authenticated CORS request, we cannot use * in the Allowed Origin header. A valid URL for an authenticated CORS resource should not contain '*'.
 * When specifying an allowed origin, for authenticated resources, specifying protocol (http / https) is must, while returning an "Access-Control-Allow-Origin" header.
 * In CORS configuration's allowed origin list, filter all the URLs that contains '*' and log at WARN that an invalid URL was requested to be added to allowed origin list - TODO
 * When cookies are sent with request for a resource that requires authentication, returning a "Access-Control-Allow-Credentials" header is a must. Otherwise, browser will drop the request.
-
-## CORS Class Diagram
-![CORS Class Diagram](https://github.scm.corp.ebay.com/mosoni/cors/wiki/images/cors_filter_class_diagram.png)
 
 ## References
 Here's a list of good resources to start with CORS:
