@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 
-public class TestFilterConfigs {
+public class TestConfigs {
     public static FilterConfig getFilterConfig() {
         final String allowedHttpHeaders = "Content-Type";
         final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";

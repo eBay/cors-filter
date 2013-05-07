@@ -17,7 +17,7 @@ public class CORSConfigurationTest {
     @Test
     public void testWithFilterConfig() {
         CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
+                .loadFromFilterConfig(TestConfigs.getFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
         Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 2);
@@ -30,7 +30,7 @@ public class CORSConfigurationTest {
     @Test
     public void testWithFilterConfigAnyOrigin() {
         CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestFilterConfigs
+                .loadFromFilterConfig(TestConfigs
                         .getAnyOriginFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
         Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
