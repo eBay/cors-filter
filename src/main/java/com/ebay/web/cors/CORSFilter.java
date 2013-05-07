@@ -118,16 +118,6 @@ public class CORSFilter implements Filter {
     }
 
     /**
-     * Set {@link CORSConfiguration} for the filter.
-     * 
-     * @param corsConfiguration
-     *            The configuration object.
-     */
-    public void setCorsConfiguration(CORSConfiguration corsConfiguration) {
-        this.corsConfiguration = corsConfiguration;
-    }
-
-    /**
      * Handles a CORS request of type {@link CORSRequestType}.SIMPLE.
      * 
      * @see <a href="http://www.w3.org/TR/cors/#resource-requests">Simple
