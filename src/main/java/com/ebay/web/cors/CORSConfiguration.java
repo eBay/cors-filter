@@ -15,11 +15,8 @@
  */
 package com.ebay.web.cors;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.FilterConfig;
@@ -71,11 +68,6 @@ public final class CORSConfiguration {
     public static final String CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
 
     /**
-     * Default file on classpath to load properties from.
-     */
-    private static final String DEFAULT_CONFIG_LOCATION = "/cors-configuration.properties";
-
-    /**
      * Set of origin URL that are allowed to make a CORS request.
      */
     private final Set<String> allowedOrigins;
@@ -121,28 +113,6 @@ public final class CORSConfiguration {
         this.exposedHeaders = new HashSet<String>();
         this.anyOriginAllowed = false;
         initDefaults();
-    }
-
-    public CORSConfiguration(Properties properties) {
-        this();
-        String allowedOriginsFromProperties = (String) properties
-                .get(CORS_ALLOWED_ORIGINS);
-        String allowedHttpMethodsFromProperties = (String) properties
-                .get(CORS_ALLOWED_METHODS);
-        String allowedHttpHeadersFromProperties = (String) properties
-                .get(CORS_ALLOWED_HEADERS);
-        String exposedHeadersFromProperties = (String) properties
-                .get(CORS_EXPOSED_HEADERS);
-        String supportsCredentialsFromProperties = (String) properties
-                .get(CORS_SUPPORT_CREDENTIALS);
-        String preflightMaxAgeFromProperties = (String) properties
-                .get(CORS_PREFLIGHT_MAXAGE);
-
-        parseAndStore(allowedOriginsFromProperties,
-                allowedHttpMethodsFromProperties,
-                allowedHttpHeadersFromProperties, exposedHeadersFromProperties,
-                supportsCredentialsFromProperties,
-                preflightMaxAgeFromProperties);
     }
 
     /**
@@ -355,34 +325,6 @@ public final class CORSConfiguration {
      */
     public void setPreflightMaxAge(long preflightMaxAge) {
         this.preflightMaxAge = preflightMaxAge;
-    }
-
-    /**
-     * Loads configuration from cors-configuration.properties file on classpath,
-     * and returns a created {@link CORSConfiguration}Configuration object.
-     * 
-     * @return
-     * @throws IOException
-     */
-    public static CORSConfiguration loadDefault() throws IOException {
-        InputStream stream = null;
-        CORSConfiguration corsConfiguration = null;
-        try {
-            stream = CORSConfiguration.class
-                    .getResourceAsStream(DEFAULT_CONFIG_LOCATION);
-            Properties properties = new Properties();
-            properties.load(stream);
-            corsConfiguration = new CORSConfiguration(properties);
-        } finally {
-            try {
-                if (stream != null) {
-                    stream.close();
-                }
-            } catch (IOException e) {
-
-            }
-        }
-        return corsConfiguration;
     }
 
     public static CORSConfiguration loadFromFilterConfig(
