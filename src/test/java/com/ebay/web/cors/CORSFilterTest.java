@@ -19,408 +19,408 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class CORSFilterTest {
-	/**
-	 * The allowed origin for this test.
-	 */
-	private static final String HTTPS_LOCALHOST_EBAY_COM_8443 = "https://localhost.ebay.com:8443";
-
-	private CORSConfiguration corsConfiguration;
-
-	/**
-	 * Setup the intial configuration mock.
-	 */
-	@Before
-	public void setup() {
-		corsConfiguration = new CORSConfiguration();
-		Set<String> allowedHttpHeaders = new HashSet<String>();
-		corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
-
-		Set<String> allowedOrigins = new HashSet<String>();
-		allowedOrigins.add(HTTPS_LOCALHOST_EBAY_COM_8443);
-		corsConfiguration.setAllowedOrigins(allowedOrigins);
-
-		Set<String> exposedHeaders = new HashSet<String>();
-		corsConfiguration.setExposedHeaders(exposedHeaders);
-		corsConfiguration.setSupportsCredentials(true);
-	}
-
-	@Test
-	public void testDoFilterSimple() throws IOException, ServletException {
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
-		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				true);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-				HTTPS_LOCALHOST_EBAY_COM_8443);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-				CORSRequestType.SIMPLE.getType());
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(request, response, filterChain);
-		corsFilter.destroy();
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	@Test
-	public void testDoFilterPreflight() throws IOException, ServletException {
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
-
-		EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-		EasyMock.expect(
-				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-				.andReturn("OPTIONS").anyTimes();
-		EasyMock.expect(
-				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-				.andReturn("Content-Type").anyTimes();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				true);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-				HTTPS_LOCALHOST_EBAY_COM_8443);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-				CORSRequestType.PRE_FLIGHT.getType());
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(request, response, filterChain);
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	@Test
-	public void testDoFilterNotCORS() throws IOException, ServletException {
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn(null).anyTimes();
-		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				false);
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(request, response, filterChain);
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	@Test(expected = ServletException.class)
-	public void testDoFilterInvalidCORSOriginNotAllowed() throws IOException,
-			ServletException {
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn("www.google.com").anyTimes();
-		EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-		EasyMock.expect(
-				request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-				.andReturn("OPTIONS").anyTimes();
-
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				true);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-				HTTPS_LOCALHOST_EBAY_COM_8443);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-				CORSRequestType.INVALID_CORS.getType());
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-		CORSConfiguration corsConfiguration = CORSConfiguration
-				.loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(request, response, filterChain);
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	@Test(expected = ServletException.class)
-	public void testDoFilterNullRequestNullResponse() throws IOException,
-			ServletException {
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(null, null, filterChain);
-	}
-
-	@Test(expected = ServletException.class)
-	public void testDoFilterNullRequestResponse() throws IOException,
-			ServletException {
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-		HttpServletResponse response = EasyMock
-				.createMock(HttpServletResponse.class);
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(null, response, filterChain);
-	}
-
-	@Test(expected = ServletException.class)
-	public void testDoFilterRequestNullResponse() throws IOException,
-			ServletException {
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-		corsFilter.doFilter(request, null, filterChain);
-	}
-
-	@Test
-	public void testDoFilterSimpleCustomHandlers() throws IOException,
-			ServletException {
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
-		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				true);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-				HTTPS_LOCALHOST_EBAY_COM_8443);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-				CORSRequestType.SIMPLE.getType());
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-
-		corsFilter.setCorsConfiguration(corsConfiguration);
-
-		corsFilter.doFilter(request, response, filterChain);
-		corsFilter.destroy();
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	/**
-	 * Should load the default config and configure default handlers. And, not
-	 * throw IOException.
-	 * 
-	 * @throws IOException
-	 */
-	public void testDefaultConstructor() throws IOException {
-		new CORSFilter();
-	}
-
-	@Test
-	public void testInit() throws IOException, ServletException {
-		final String allowedHttpHeaders = "Content-Type";
-		final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
-		final String allowedOrigins = "https://localhost.ebay.com:8443,https://deals.ebay.com";
-		final String exposedHeaders = "Content-Encoding";
-		final String supportCredentials = "true";
-		final String preflightMaxAge = "1000";
-
-		FilterConfig filterConfig = new FilterConfig() {
-
-			public String getFilterName() {
-				// TODO Auto-generated method stub
-				return "cors-filter";
-			}
-
-			public ServletContext getServletContext() {
-				return null;
-			}
-
-			public String getInitParameter(String name) {
-				if (CORSConfiguration.CORS_ALLOWED_HEADERS
-						.equalsIgnoreCase(name)) {
-					return allowedHttpHeaders;
-				} else if (CORSConfiguration.CORS_ALLOWED_METHODS
-						.equalsIgnoreCase(name)) {
-					return allowedHttpMethods;
-				} else if (CORSConfiguration.CORS_ALLOWED_ORIGINS
-						.equalsIgnoreCase(name)) {
-					return allowedOrigins;
-				} else if (CORSConfiguration.CORS_EXPOSED_HEADERS
-						.equalsIgnoreCase(name)) {
-					return exposedHeaders;
-				} else if (CORSConfiguration.CORS_SUPPORT_CREDENTIALS
-						.equalsIgnoreCase(name)) {
-					return supportCredentials;
-				} else if (CORSConfiguration.CORS_PREFLIGHT_MAXAGE
-						.equalsIgnoreCase(name)) {
-					return preflightMaxAge;
-				}
-				return null;
-			}
-
-			@SuppressWarnings("rawtypes")
-			public Enumeration getInitParameterNames() {
-				return null;
-			}
-		};
-
-		HttpServletRequest request = EasyMock
-				.createMock(HttpServletRequest.class);
-
-		EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-				.andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
-		EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-				true);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
-				HTTPS_LOCALHOST_EBAY_COM_8443);
-		EasyMock.expectLastCall();
-		request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-				CORSRequestType.SIMPLE.getType());
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(request);
-
-		HttpServletResponse response = EasyMock
-				.createNiceMock(HttpServletResponse.class);
-		EasyMock.replay(response);
-
-		FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-
-		CORSFilter corsFilter = new CORSFilter();
-		corsFilter.init(filterConfig);
-		corsFilter.doFilter(request, response, filterChain);
-		corsFilter.destroy();
-		// If we don't get an exception at this point, then all mocked objects
-		// worked as expected.
-	}
-
-	@Test
-	public void testDestroy() {
-		// Nothing to test.
-		// NO-OP
-	}
-
-	@Test
-	public void testJoin() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = ",";
-		elements.add("world");
-		elements.add("peace");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("world,peace".equals(join));
-	}
-
-	@Test
-	public void testJoinSingleElement() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = ",";
-		elements.add("world");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("world".equals(join));
-	}
-
-	@Test
-	public void testJoinSepNull() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = null;
-		elements.add("world");
-		elements.add("peace");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("world,peace".equals(join));
-	}
-
-	@Test
-	public void testJoinElementsNull() {
-		Set<String> elements = null;
-		String separator = ",";
-		String join = CORSFilter.join(elements, separator);
-
-		Assert.assertNull(join);
-	}
-
-	@Test
-	public void testJoinOneNullElement() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = ",";
-		elements.add(null);
-		elements.add("peace");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue(",peace".equals(join));
-	}
-
-	@Test
-	public void testJoinAllNullElements() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = ",";
-		elements.add(null);
-		elements.add(null);
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("".equals(join));
-	}
-
-	@Test
-	public void testJoinAllEmptyElements() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = ",";
-		elements.add("");
-		elements.add("");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("".equals(join));
-	}
-	
-	@Test
-	public void testJoinPipeSeparator() {
-		Set<String> elements = new LinkedHashSet<String>();
-		String separator = "|";
-		elements.add("world");
-		elements.add("peace");
-		String join = CORSFilter.join(elements, separator);
-		Assert.assertTrue("world|peace".equals(join));
-	}
+    /**
+     * The allowed origin for this test.
+     */
+    private static final String HTTPS_LOCALHOST_EBAY_COM_8443 = "https://localhost.ebay.com:8443";
+
+    private CORSConfiguration corsConfiguration;
+
+    /**
+     * Setup the intial configuration mock.
+     */
+    @Before
+    public void setup() {
+        corsConfiguration = new CORSConfiguration();
+        Set<String> allowedHttpHeaders = new HashSet<String>();
+        corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
+
+        Set<String> allowedOrigins = new HashSet<String>();
+        allowedOrigins.add(HTTPS_LOCALHOST_EBAY_COM_8443);
+        corsConfiguration.setAllowedOrigins(allowedOrigins);
+
+        Set<String> exposedHeaders = new HashSet<String>();
+        corsConfiguration.setExposedHeaders(exposedHeaders);
+        corsConfiguration.setSupportsCredentials(true);
+    }
+
+    @Test
+    public void testDoFilterSimple() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                HTTPS_LOCALHOST_EBAY_COM_8443);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.SIMPLE.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(request, response, filterChain);
+        corsFilter.destroy();
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    @Test
+    public void testDoFilterPreflight() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+
+        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
+        EasyMock.expect(
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
+                .andReturn("OPTIONS").anyTimes();
+        EasyMock.expect(
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
+                .andReturn("Content-Type").anyTimes();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                HTTPS_LOCALHOST_EBAY_COM_8443);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.PRE_FLIGHT.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(request, response, filterChain);
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    @Test
+    public void testDoFilterNotCORS() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(null).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                false);
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(request, response, filterChain);
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    @Test(expected = ServletException.class)
+    public void testDoFilterInvalidCORSOriginNotAllowed() throws IOException,
+            ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn("www.google.com").anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
+        EasyMock.expect(
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
+                .andReturn("OPTIONS").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                HTTPS_LOCALHOST_EBAY_COM_8443);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.INVALID_CORS.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        CORSConfiguration corsConfiguration = CORSConfiguration
+                .loadFromFilterConfig(TestFilterConfigs.getFilterConfig());
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(request, response, filterChain);
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    @Test(expected = ServletException.class)
+    public void testDoFilterNullRequestNullResponse() throws IOException,
+            ServletException {
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(null, null, filterChain);
+    }
+
+    @Test(expected = ServletException.class)
+    public void testDoFilterNullRequestResponse() throws IOException,
+            ServletException {
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        HttpServletResponse response = EasyMock
+                .createMock(HttpServletResponse.class);
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(null, response, filterChain);
+    }
+
+    @Test(expected = ServletException.class)
+    public void testDoFilterRequestNullResponse() throws IOException,
+            ServletException {
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        corsFilter.doFilter(request, null, filterChain);
+    }
+
+    @Test
+    public void testDoFilterSimpleCustomHandlers() throws IOException,
+            ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                HTTPS_LOCALHOST_EBAY_COM_8443);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.SIMPLE.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+
+        corsFilter.setCorsConfiguration(corsConfiguration);
+
+        corsFilter.doFilter(request, response, filterChain);
+        corsFilter.destroy();
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    /**
+     * Should load the default config and configure default handlers. And, not
+     * throw IOException.
+     * 
+     * @throws IOException
+     */
+    public void testDefaultConstructor() throws IOException {
+        new CORSFilter();
+    }
+
+    @Test
+    public void testInit() throws IOException, ServletException {
+        final String allowedHttpHeaders = "Content-Type";
+        final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
+        final String allowedOrigins = "https://localhost.ebay.com:8443,https://deals.ebay.com";
+        final String exposedHeaders = "Content-Encoding";
+        final String supportCredentials = "true";
+        final String preflightMaxAge = "1000";
+
+        FilterConfig filterConfig = new FilterConfig() {
+
+            public String getFilterName() {
+                // TODO Auto-generated method stub
+                return "cors-filter";
+            }
+
+            public ServletContext getServletContext() {
+                return null;
+            }
+
+            public String getInitParameter(String name) {
+                if (CORSConfiguration.CORS_ALLOWED_HEADERS
+                        .equalsIgnoreCase(name)) {
+                    return allowedHttpHeaders;
+                } else if (CORSConfiguration.CORS_ALLOWED_METHODS
+                        .equalsIgnoreCase(name)) {
+                    return allowedHttpMethods;
+                } else if (CORSConfiguration.CORS_ALLOWED_ORIGINS
+                        .equalsIgnoreCase(name)) {
+                    return allowedOrigins;
+                } else if (CORSConfiguration.CORS_EXPOSED_HEADERS
+                        .equalsIgnoreCase(name)) {
+                    return exposedHeaders;
+                } else if (CORSConfiguration.CORS_SUPPORT_CREDENTIALS
+                        .equalsIgnoreCase(name)) {
+                    return supportCredentials;
+                } else if (CORSConfiguration.CORS_PREFLIGHT_MAXAGE
+                        .equalsIgnoreCase(name)) {
+                    return preflightMaxAge;
+                }
+                return null;
+            }
+
+            @SuppressWarnings("rawtypes")
+            public Enumeration getInitParameterNames() {
+                return null;
+            }
+        };
+
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(HTTPS_LOCALHOST_EBAY_COM_8443).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                HTTPS_LOCALHOST_EBAY_COM_8443);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.SIMPLE.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(filterConfig);
+        corsFilter.doFilter(request, response, filterChain);
+        corsFilter.destroy();
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    @Test
+    public void testDestroy() {
+        // Nothing to test.
+        // NO-OP
+    }
+
+    @Test
+    public void testJoin() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = ",";
+        elements.add("world");
+        elements.add("peace");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("world,peace".equals(join));
+    }
+
+    @Test
+    public void testJoinSingleElement() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = ",";
+        elements.add("world");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("world".equals(join));
+    }
+
+    @Test
+    public void testJoinSepNull() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = null;
+        elements.add("world");
+        elements.add("peace");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("world,peace".equals(join));
+    }
+
+    @Test
+    public void testJoinElementsNull() {
+        Set<String> elements = null;
+        String separator = ",";
+        String join = CORSFilter.join(elements, separator);
+
+        Assert.assertNull(join);
+    }
+
+    @Test
+    public void testJoinOneNullElement() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = ",";
+        elements.add(null);
+        elements.add("peace");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue(",peace".equals(join));
+    }
+
+    @Test
+    public void testJoinAllNullElements() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = ",";
+        elements.add(null);
+        elements.add(null);
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("".equals(join));
+    }
+
+    @Test
+    public void testJoinAllEmptyElements() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = ",";
+        elements.add("");
+        elements.add("");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("".equals(join));
+    }
+
+    @Test
+    public void testJoinPipeSeparator() {
+        Set<String> elements = new LinkedHashSet<String>();
+        String separator = "|";
+        elements.add("world");
+        elements.add("peace");
+        String join = CORSFilter.join(elements, separator);
+        Assert.assertTrue("world|peace".equals(join));
+    }
 }
