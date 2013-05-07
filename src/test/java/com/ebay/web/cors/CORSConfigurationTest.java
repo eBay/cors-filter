@@ -28,10 +28,16 @@ public class CORSConfigurationTest {
     }
 
     @Test
+    public void testWithFilterConfigNull() {
+        CORSConfiguration corsConfiguration = CORSConfiguration
+                .loadFromFilterConfig(null);
+        Assert.assertNull(corsConfiguration);
+    }
+
+    @Test
     public void testWithFilterConfigAnyOrigin() {
         CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestConfigs
-                        .getAnyOriginFilterConfig());
+                .loadFromFilterConfig(TestConfigs.getAnyOriginFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
         Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
