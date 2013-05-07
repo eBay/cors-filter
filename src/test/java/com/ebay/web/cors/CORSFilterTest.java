@@ -3,6 +3,7 @@ package com.ebay.web.cors;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.servlet.FilterChain;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -344,4 +346,81 @@ public class CORSFilterTest {
 		// NO-OP
 	}
 
+	@Test
+	public void testJoin() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = ",";
+		elements.add("world");
+		elements.add("peace");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("world,peace".equals(join));
+	}
+
+	@Test
+	public void testJoinSingleElement() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = ",";
+		elements.add("world");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("world".equals(join));
+	}
+
+	@Test
+	public void testJoinSepNull() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = null;
+		elements.add("world");
+		elements.add("peace");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("world,peace".equals(join));
+	}
+
+	@Test
+	public void testJoinElementsNull() {
+		Set<String> elements = null;
+		String separator = ",";
+		String join = CORSFilter.join(elements, separator);
+
+		Assert.assertNull(join);
+	}
+
+	@Test
+	public void testJoinOneNullElement() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = ",";
+		elements.add(null);
+		elements.add("peace");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue(",peace".equals(join));
+	}
+
+	@Test
+	public void testJoinAllNullElements() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = ",";
+		elements.add(null);
+		elements.add(null);
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("".equals(join));
+	}
+
+	@Test
+	public void testJoinAllEmptyElements() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = ",";
+		elements.add("");
+		elements.add("");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("".equals(join));
+	}
+	
+	@Test
+	public void testJoinPipeSeparator() {
+		Set<String> elements = new LinkedHashSet<String>();
+		String separator = "|";
+		elements.add("world");
+		elements.add("peace");
+		String join = CORSFilter.join(elements, separator);
+		Assert.assertTrue("world|peace".equals(join));
+	}
 }

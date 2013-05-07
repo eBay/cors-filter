@@ -24,8 +24,6 @@ import java.util.Set;
 
 import javax.servlet.FilterConfig;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * The configuration for {@link CORSFilter}.
  * 
@@ -322,7 +320,14 @@ public final class CORSConfiguration {
 	 * @return Set<String>
 	 */
 	private Set<String> parseStringToSet(final String data) {
-		String[] splits = StringUtils.split(data, ",");
+		String[] splits = null;
+
+		if (data != null && data.length() > 0) {
+			splits = data.split(",");
+		} else {
+			splits = new String[] {};
+		}
+
 		Set<String> set = new HashSet<String>();
 		if ((splits != null) && (splits.length > 0)) {
 			for (String split : splits) {

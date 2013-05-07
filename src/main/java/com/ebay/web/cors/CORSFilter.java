@@ -16,6 +16,7 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.Filter;
@@ -26,8 +27,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * <p>
@@ -168,7 +167,7 @@ public class CORSFilter implements Filter {
 
 		// Expose headers if any.
 		if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
-			String exposedHeadersString = StringUtils.join(exposedHeaders, ",");
+			String exposedHeadersString = join(exposedHeaders, ",");
 			response.addHeader(
 					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
 					exposedHeadersString);
@@ -215,13 +214,13 @@ public class CORSFilter implements Filter {
 		if ((allowedHttpMethods != null) && (allowedHttpMethods.size() > 0)) {
 			response.addHeader(
 					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
-					StringUtils.join(allowedHttpMethods, ","));
+					join(allowedHttpMethods, ","));
 		}
 
 		if ((allowedHttpHeaders != null) && (allowedHttpHeaders.size() > 0)) {
 			response.addHeader(
 					CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
-					StringUtils.join(allowedHttpHeaders, ","));
+					join(allowedHttpHeaders, ","));
 		}
 
 		if (preflightMaxAge > 0) {
@@ -304,6 +303,33 @@ public class CORSFilter implements Filter {
 			// Don't set any attributes
 			break;
 		}
+	}
+
+	public static String join(Set<String> elements, String separator) {
+		if (elements == null) {
+			return null;
+		}
+		if (separator == null) {
+			separator = ",";
+		}
+		StringBuilder buffer = new StringBuilder();
+		boolean isFirst = true;
+		Iterator<String> iterator = elements.iterator();
+		while (iterator.hasNext()) {
+			Object element = iterator.next();
+
+			if (!isFirst) {
+				buffer.append(separator);
+			} else {
+				isFirst = false;
+			}
+
+			if (element != null) {
+				buffer.append(element);
+			}
+		}
+
+		return buffer.toString();
 	}
 
 	/**
