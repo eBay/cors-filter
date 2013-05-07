@@ -1,21 +1,11 @@
 package com.ebay.web.cors;
 
-import java.util.Set;
-
 import javax.servlet.ServletException;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class CORSConfigurationTest {
-    private CORSConfiguration config;
-
-    @Before
-    public void setUp() throws Exception {
-        this.config = new CORSConfiguration();
-    }
-
     @Test
     public void testWithFilterConfig() throws ServletException {
         CORSConfiguration corsConfiguration = CORSConfiguration
@@ -72,29 +62,5 @@ public class CORSConfigurationTest {
         Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsConfiguration.isSupportsCredentials());
         Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 0);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetAllowedOrigins() {
-        Set<String> allowedOrigins = this.config.getAllowedOrigins();
-        allowedOrigins.add("sherlock holmes");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetAllowedHttpMethods() {
-        Set<String> allowedHttpMethods = this.config.getAllowedHttpMethods();
-        allowedHttpMethods.add("dr.watson");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetExposedHeaders() {
-        Set<String> exposedHeaders = this.config.getExposedHeaders();
-        exposedHeaders.add("Sheldon!");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testGetAllowedHttpHeaders() {
-        Set<String> allowedHttpHeaders = this.config.getAllowedHttpHeaders();
-        allowedHttpHeaders.add("Raj");
     }
 }
