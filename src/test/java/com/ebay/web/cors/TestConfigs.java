@@ -8,13 +8,26 @@ import javax.servlet.ServletContext;
 public class TestConfigs {
     public static final String HTTPS_WWW_APACHE_ORG = "https://www.apache.org";
     public static final String HTTP_TOMCAT_APACHE_ORG = "http://tomcat.apache.org";
-    public static final String EXPOSED_HEADERS = "Content-Type";
+    public static final String EXPOSED_HEADERS = "X-CUSTOM-HEADER";
 
     public static FilterConfig getDefaultFilterConfig() {
         final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
         final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
         final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+        final String preflightMaxAge = CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
+
+    public static FilterConfig getFilterConfigWithExposedHeaders() {
+        final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = EXPOSED_HEADERS;
         final String supportCredentials = CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge = CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
 
