@@ -36,19 +36,6 @@ public class CORSConfigurationTest {
         Assert.assertNull(corsConfiguration);
     }
 
-    @Test
-    public void testWithFilterConfigAnyOrigin() throws ServletException {
-        CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestConfigs.getAnyOriginFilterConfig());
-        Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
-        Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
-        Assert.assertTrue(corsConfiguration.isAnyOriginAllowed());
-        Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 1);
-        Assert.assertFalse(corsConfiguration.isSupportsCredentials());
-        Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 1000);
-    }
-
     @Test(expected = ServletException.class)
     public void testWithFilterConfigInvalidPreflightAge()
             throws ServletException {
