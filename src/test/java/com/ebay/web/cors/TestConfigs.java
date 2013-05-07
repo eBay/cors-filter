@@ -23,6 +23,19 @@ public class TestConfigs {
                 preflightMaxAge);
     }
 
+    public static FilterConfig getDefaultFilterConfig() {
+        final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+        final String preflightMaxAge = CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
+
     public static FilterConfig getAnyOriginFilterConfig() {
         final String allowedHttpHeaders = "Content-Type";
         final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
@@ -35,7 +48,7 @@ public class TestConfigs {
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
     }
-    
+
     public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
         final String allowedHttpHeaders = "Content-Type";
         final String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
