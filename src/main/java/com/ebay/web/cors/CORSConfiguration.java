@@ -299,7 +299,7 @@ public final class CORSConfiguration {
         }
 
         Set<String> set = new HashSet<String>();
-        if ((splits != null) && (splits.length > 0)) {
+        if (splits.length > 0) {
             for (String split : splits) {
                 set.add(split.trim());
             }
