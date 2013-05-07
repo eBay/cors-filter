@@ -327,6 +327,26 @@ public final class CORSConfiguration {
         this.preflightMaxAge = preflightMaxAge;
     }
 
+    /**
+     * Returns true if any origin is allowed to make CORS request as per
+     * configuration.
+     * 
+     * @return <code>true</code> if any origin is allowed; <code>false</code>
+     *         otherwise.
+     */
+    public boolean isAnyOriginAllowed() {
+        return anyOriginAllowed;
+    }
+
+    /**
+     * Creates an instance of {@link CORSConfiguration} from the
+     * {@link FilterConfig} object.
+     * 
+     * @param filterConfig
+     *            The {@link FilterConfig} object containing filter init
+     *            parameters.
+     * @return {@link CORSConfiguration} The configuration object.
+     */
     public static CORSConfiguration loadFromFilterConfig(
             FilterConfig filterConfig) {
         CORSConfiguration corsConfiguration = null;
@@ -351,13 +371,4 @@ public final class CORSConfiguration {
 
         return corsConfiguration;
     }
-
-    public boolean isAnyOriginAllowed() {
-        return anyOriginAllowed;
-    }
-
-    public void setAnyOriginAllowed(boolean anyOriginAllowed) {
-        this.anyOriginAllowed = anyOriginAllowed;
-    }
-
 }
