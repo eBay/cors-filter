@@ -339,6 +339,27 @@ public class CORSFilterTest {
         // NO-OP
     }
 
+    @Test(expected = ServletException.class)
+    public void testInvalidCORS() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn("www.google.com").anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
+
+        EasyMock.replay(request);
+        EasyMock.replay(response);
+        EasyMock.replay(filterChain);
+
+        CORSFilter corsFilter = new CORSFilter();
+
+        corsFilter.handleInvalidCORS(request, response, filterChain);
+    }
+    
     @Test
     public void testJoin() {
         Set<String> elements = new LinkedHashSet<String>();
