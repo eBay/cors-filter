@@ -1,7 +1,6 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,31 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class CORSFilterTest {
-    private CORSConfiguration corsConfiguration;
-
-    /**
-     * Setup the intial configuration mock.
-     * 
-     * @throws ServletException
-     */
-    @Before
-    public void setup() throws ServletException {
-        corsConfiguration = new CORSConfiguration();
-        Set<String> allowedHttpHeaders = new HashSet<String>();
-        corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
-
-        Set<String> allowedOrigins = new HashSet<String>();
-        allowedOrigins.add(TestConfigs.HTTPS_WWW_APACHE_ORG);
-        corsConfiguration.setAllowedOrigins(allowedOrigins);
-
-        Set<String> exposedHeaders = new HashSet<String>();
-        corsConfiguration.setExposedHeaders(exposedHeaders);
-        corsConfiguration.setSupportsCredentials(true);
-    }
 
     @Test
     public void testDoFilterSimple() throws IOException, ServletException {
@@ -106,7 +83,8 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getSpecificOriginFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         // If we don't get an exception at this point, then all mocked objects
         // worked as expected.
@@ -132,7 +110,8 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         // If we don't get an exception at this point, then all mocked objects
         // worked as expected.
@@ -169,7 +148,8 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
         CORSConfiguration corsConfiguration = CORSConfiguration
-                .loadFromFilterConfig(TestConfigs.getSpecificOriginFilterConfig());
+                .loadFromFilterConfig(TestConfigs
+                        .getSpecificOriginFilterConfig());
         CORSFilter corsFilter = new CORSFilter(corsConfiguration);
         corsFilter.doFilter(request, response, filterChain);
         // If we don't get an exception at this point, then all mocked objects
@@ -181,7 +161,8 @@ public class CORSFilterTest {
             ServletException {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(null, null, filterChain);
     }
 
@@ -191,7 +172,8 @@ public class CORSFilterTest {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
         HttpServletResponse response = EasyMock
                 .createMock(HttpServletResponse.class);
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(null, response, filterChain);
     }
 
@@ -201,7 +183,8 @@ public class CORSFilterTest {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, null, filterChain);
     }
 
@@ -233,9 +216,8 @@ public class CORSFilterTest {
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
-        CORSFilter corsFilter = new CORSFilter(corsConfiguration);
-
-        corsFilter.setCorsConfiguration(corsConfiguration);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
 
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
