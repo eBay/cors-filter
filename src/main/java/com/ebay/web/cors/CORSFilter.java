@@ -107,6 +107,9 @@ public class CORSFilter implements Filter {
                 throw new ServletException(
                         "Error loading configuration using filter init", e);
             }
+        } else {
+            // Initialize with default configuration.
+            this.corsConfiguration = new CORSConfiguration();
         }
     }
 
