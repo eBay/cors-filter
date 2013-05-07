@@ -57,11 +57,6 @@ public class CORSFilter implements Filter {
         super();
     }
 
-    public CORSFilter(CORSConfiguration corsConfiguration) {
-        super();
-        this.corsConfiguration = corsConfiguration;
-    }
-
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse, final FilterChain filterChain)
             throws IOException, ServletException {
