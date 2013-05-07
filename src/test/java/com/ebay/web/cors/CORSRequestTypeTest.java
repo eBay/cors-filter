@@ -3,6 +3,7 @@ package com.ebay.web.cors;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.easymock.EasyMock;
@@ -39,9 +40,11 @@ public class CORSRequestTypeTest {
 
     /**
      * Setup the intial configuration mock.
+     * 
+     * @throws ServletException
      */
     @Before
-    public void setup() {
+    public void setup() throws ServletException {
         corsConfiguration = new CORSConfiguration();
         Set<String> allowedHttpHeaders = new HashSet<String>();
         corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
@@ -58,7 +61,7 @@ public class CORSRequestTypeTest {
         corsConfigurationAnyOrigin = generateAnyOriginConfig();
     }
 
-    private CORSConfiguration generateAnyOriginConfig() {
+    private CORSConfiguration generateAnyOriginConfig() throws ServletException {
         CORSConfiguration corsConfiguration = new CORSConfiguration();
         Set<String> allowedHttpHeaders = new HashSet<String>();
         corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);
@@ -269,9 +272,11 @@ public class CORSRequestTypeTest {
     /**
      * Tests for failure, when a different domain is used, that's not in the
      * allowed list of origins.
+     * 
+     * @throws ServletException
      */
     @Test
-    public void testCheckInvalidOrigin() {
+    public void testCheckInvalidOrigin() throws ServletException {
 
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
@@ -290,9 +295,11 @@ public class CORSRequestTypeTest {
     /**
      * Tests for failure, when a different sub-domain is used, that's not in the
      * allowed list of origins.
+     * 
+     * @throws ServletException
      */
     @Test
-    public void testCheckInvalidOriginNotAllowedSubdomain() {
+    public void testCheckInvalidOriginNotAllowedSubdomain() throws ServletException {
 
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
@@ -328,9 +335,11 @@ public class CORSRequestTypeTest {
     /**
      * "https://localhost.ebay.com:8443" is an allowed origin and
      * "http://localhost.ebay.com:8443" is not, because protocol doesn't match
+     * 
+     * @throws ServletException
      */
     @Test
-    public void testCheckForProtocolVariance() {
+    public void testCheckForProtocolVariance() throws ServletException {
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
@@ -348,9 +357,11 @@ public class CORSRequestTypeTest {
     /**
      * "https://localhost.ebay.com:8443" is an allowed origin and
      * "https://localhost.ebay.com:8080" is not, because ports doesn't match
+     * 
+     * @throws ServletException
      */
     @Test
-    public void testCheckForPortVariance() {
+    public void testCheckForPortVariance() throws ServletException {
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))

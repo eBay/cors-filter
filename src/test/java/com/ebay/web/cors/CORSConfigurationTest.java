@@ -2,6 +2,8 @@ package com.ebay.web.cors;
 
 import java.util.Set;
 
+import javax.servlet.ServletException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,7 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithFilterConfig() {
+    public void testWithFilterConfig() throws ServletException {
         CORSConfiguration corsConfiguration = CORSConfiguration
                 .loadFromFilterConfig(TestConfigs.getFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
@@ -28,14 +30,14 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithFilterConfigNull() {
+    public void testWithFilterConfigNull() throws ServletException {
         CORSConfiguration corsConfiguration = CORSConfiguration
                 .loadFromFilterConfig(null);
         Assert.assertNull(corsConfiguration);
     }
 
     @Test
-    public void testWithFilterConfigAnyOrigin() {
+    public void testWithFilterConfigAnyOrigin() throws ServletException {
         CORSConfiguration corsConfiguration = CORSConfiguration
                 .loadFromFilterConfig(TestConfigs.getAnyOriginFilterConfig());
         Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 1);
@@ -48,7 +50,7 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithStringParser() {
+    public void testWithStringParser() throws ServletException {
         String allowedHttpHeaders = "Content-Type";
         String allowedHttpMethods = "GET,POST,HEAD,OPTIONS";
         String allowedOrigins = "https://www.ebay.com,https://deals.ebay.com";
@@ -67,7 +69,7 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithStringParserEmpty() {
+    public void testWithStringParserEmpty() throws ServletException {
         String allowedHttpHeaders = "";
         String allowedHttpMethods = "";
         String allowedOrigins = "";
@@ -86,7 +88,7 @@ public class CORSConfigurationTest {
     }
 
     @Test
-    public void testWithStringParserNull() {
+    public void testWithStringParserNull() throws ServletException {
         String allowedHttpHeaders = null;
         String allowedHttpMethods = null;
         String allowedOrigins = null;

@@ -20,9 +20,11 @@ public class CORSFilterTest {
 
     /**
      * Setup the intial configuration mock.
+     * 
+     * @throws ServletException
      */
     @Before
-    public void setup() {
+    public void setup() throws ServletException {
         corsConfiguration = new CORSConfiguration();
         Set<String> allowedHttpHeaders = new HashSet<String>();
         corsConfiguration.setAllowedHttpHeaders(allowedHttpHeaders);

@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
 
 /**
  * The configuration for {@link CORSFilter}.
@@ -106,7 +107,7 @@ public final class CORSConfiguration {
     /**
      * Initialize defaults.
      */
-    public CORSConfiguration() {
+    public CORSConfiguration() throws ServletException {
         this.allowedOrigins = new HashSet<String>();
         this.allowedHttpMethods = new HashSet<String>();
         this.allowedHttpHeaders = new HashSet<String>();
@@ -135,7 +136,7 @@ public final class CORSConfiguration {
     public CORSConfiguration(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
-            final String preflightMaxAge) {
+            final String preflightMaxAge) throws ServletException {
         this();
 
         parseAndStore(allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
@@ -145,7 +146,7 @@ public final class CORSConfiguration {
     private void parseAndStore(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
-            final String preflightMaxAge) {
+            final String preflightMaxAge) throws ServletException {
         if (allowedOrigins != null) {
             if (allowedOrigins.trim().equals("*")) {
                 this.anyOriginAllowed = true;
@@ -169,8 +170,12 @@ public final class CORSConfiguration {
                 .parseBoolean(supportsCredentials);
         this.supportsCredentials = isSupportsCredentials;
 
-        this.preflightMaxAge = (preflightMaxAge != null && preflightMaxAge
-                .isEmpty() == false) ? Long.parseLong(preflightMaxAge) : 0;
+        try {
+            this.preflightMaxAge = (preflightMaxAge != null && preflightMaxAge
+                    .isEmpty() == false) ? Long.parseLong(preflightMaxAge) : 0;
+        } catch (NumberFormatException e) {
+            throw new ServletException("Unable to parse preflightMaxAge", e);
+        }
     }
 
     private void initDefaults() {
@@ -348,7 +353,7 @@ public final class CORSConfiguration {
      * @return {@link CORSConfiguration} The configuration object.
      */
     public static CORSConfiguration loadFromFilterConfig(
-            FilterConfig filterConfig) {
+            FilterConfig filterConfig) throws ServletException {
         CORSConfiguration corsConfiguration = null;
 
         if (filterConfig != null) {
