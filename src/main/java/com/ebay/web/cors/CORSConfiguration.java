@@ -323,16 +323,6 @@ public final class CORSConfiguration {
     }
 
     /**
-     * Sets pre-flight response max cache time.
-     * 
-     * @param preflightMaxAge
-     *            The value of max cache time.
-     */
-    public void setPreflightMaxAge(long preflightMaxAge) {
-        this.preflightMaxAge = preflightMaxAge;
-    }
-
-    /**
      * Returns true if any origin is allowed to make CORS request as per
      * configuration.
      * 
