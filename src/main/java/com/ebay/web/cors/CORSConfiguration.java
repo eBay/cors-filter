@@ -222,6 +222,10 @@ public final class CORSConfiguration {
         boolean isSupportsCredentials = Boolean
                 .parseBoolean(supportsCredentials);
         this.supportsCredentials = isSupportsCredentials;
+        if (this.supportsCredentials == true && this.anyOriginAllowed) {
+            throw new ServletException(
+                    "CORS Configuration exception. Cannot use '*' when supports credentials is true. See: http://www.w3.org/TR/cors");
+        }
 
         try {
             this.preflightMaxAge = (preflightMaxAge != null && preflightMaxAge

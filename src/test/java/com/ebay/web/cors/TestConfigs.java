@@ -22,6 +22,19 @@ public class TestConfigs {
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
     }
+    
+    public static FilterConfig getInvalidFilterConfigAnyOriginAndSupportsCredentials() {
+        final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods = CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = "true";
+        final String preflightMaxAge = CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
 
     public static FilterConfig getFilterConfigWithExposedHeaders() {
         final String allowedHttpHeaders = CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
