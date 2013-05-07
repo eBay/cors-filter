@@ -258,7 +258,7 @@ public final class CORSConfiguration {
     }
 
     /**
-     * Is cookie based aut supported ?
+     * Is cookie based auth supported ?
      * 
      * @return boolean
      */
