@@ -317,16 +317,6 @@ public final class CORSConfiguration {
     }
 
     /**
-     * Sets the supportCredentials property that is used to determine
-     * authentication support in a CORS request.
-     * 
-     * @param supportsCredentials
-     */
-    public void setSupportsCredentials(final boolean supportsCredentials) {
-        this.supportsCredentials = supportsCredentials;
-    }
-
-    /**
      * Takes a comma separated list and returns a Set<String>.
      * 
      * @param data
