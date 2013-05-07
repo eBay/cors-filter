@@ -334,13 +334,24 @@ public class CORSFilterTest {
     }
 
     @Test
-    public void testDestroy() {
-        // Nothing to test.
-        // NO-OP
+    public void testHandleNonCORSHandler() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        filterChain.doFilter(request, response);
+        EasyMock.expectLastCall();
+        EasyMock.replay(request);
+        EasyMock.replay(response);
+        EasyMock.replay(filterChain);
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.handleNonCORS(request, response, filterChain);
     }
 
     @Test(expected = ServletException.class)
-    public void testInvalidCORS() throws IOException, ServletException {
+    public void testHandleInvalidCORS() throws IOException, ServletException {
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
         HttpServletResponse response = EasyMock
@@ -359,7 +370,7 @@ public class CORSFilterTest {
 
         corsFilter.handleInvalidCORS(request, response, filterChain);
     }
-    
+
     @Test
     public void testJoin() {
         Set<String> elements = new LinkedHashSet<String>();
@@ -436,5 +447,11 @@ public class CORSFilterTest {
         elements.add("peace");
         String join = CORSFilter.join(elements, separator);
         Assert.assertTrue("world|peace".equals(join));
+    }
+
+    @Test
+    public void testDestroy() {
+        // Nothing to test.
+        // NO-OP
     }
 }
