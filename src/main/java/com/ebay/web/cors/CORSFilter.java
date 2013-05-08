@@ -47,9 +47,11 @@ import javax.servlet.http.HttpServletResponse;
  * <li><b>cors.isCorsRequest:</b> Flag to determine if request is a CORS
  * request. Set to <code>true</code> if CORS request; <code>false</code>
  * otherwise.</li>
- * <li><b>cors.origin:</b> The Origin URL.</li>
- * <li><b>cors.requestType:</b> Type of request. Values: <code>simple</code> or
+ * <li><b>cors.request.origin:</b> The Origin URL.</li>
+ * <li><b>cors.request.type:</b> Type of request. Values: <code>simple</code> or
  * <code>preflight</code> or <code>not_cors</code> or <code>invalid_cors</code></li>
+ * <li><b>cors.request.headers:</b> Request headers sent as
+ * 'Access-Control-Request-Headers' header, for pre-flight request.</li>
  * </ul>
  * </p>
  * 
@@ -137,7 +139,7 @@ public class CORSFilter implements Filter {
      * Attribute that contains the origin of the request.
      */
     public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "origin";
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.origin";
 
     /**
      * Boolean value, suggesting if the request is a CORS request or not.
@@ -149,7 +151,14 @@ public class CORSFilter implements Filter {
      * Type of CORS request, of type {@link CORSRequestType}.
      */
     public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "requestType";
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.type";
+
+    /**
+     * Request headers sent as 'Access-Control-Request-Headers' header, for
+     * pre-flight request.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.headers";
 
     // -------------------------------------------------------------- Constants
     /**
@@ -467,10 +476,12 @@ public class CORSFilter implements Filter {
      * <li><b>cors.isCorsRequest:</b> Flag to determine if request is a CORS
      * request. Set to <code>true</code> if CORS request; <code>false</code>
      * otherwise.</li>
-     * <li><b>cors.origin:</b> The Origin URL.</li>
-     * <li><b>cors.requestType:</b> Type of request. Values: <code>simple</code>
-     * or <code>preflight</code> or <code>not_cors</code> or
+     * <li><b>cors.request.origin:</b> The Origin URL.</li>
+     * <li><b>cors.request.type:</b> Type of request. Values:
+     * <code>simple</code> or <code>preflight</code> or <code>not_cors</code> or
      * <code>invalid_cors</code></li>
+     * <li><b>cors.request.headers:</b> Request headers sent as
+     * 'Access-Control-Request-Headers' header, for pre-flight request.</li>
      * </ul>
      * 
      * @param request
@@ -507,6 +518,10 @@ public class CORSFilter implements Filter {
             request.setAttribute(
                     CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                     corsRequestType.getType());
+            request.setAttribute(
+                    CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
+                    request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS)
+                    );
             break;
         case NOT_CORS:
             request.setAttribute(

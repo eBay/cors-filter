@@ -340,6 +340,9 @@ public class CORSFilterTest {
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.PRE_FLIGHT.getType());
         EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
+                "Content-Type");
+        EasyMock.expectLastCall();
 
         EasyMock.replay(request);
 
@@ -381,7 +384,9 @@ public class CORSFilterTest {
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.PRE_FLIGHT.getType());
         EasyMock.expectLastCall();
-
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
+                "Content-Type");
+        EasyMock.expectLastCall();
         EasyMock.replay(request);
 
         HttpServletResponse response =
@@ -861,6 +866,9 @@ public class CORSFilterTest {
     public void testDecorateCORSPropertiesCORSRequestTypePreFlight() {
         HttpServletRequest request =
                 EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.expect(
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
+                .andReturn("Content-Type").anyTimes();
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
@@ -871,6 +879,9 @@ public class CORSFilterTest {
         EasyMock.expectLastCall();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                 CORSRequestType.PRE_FLIGHT.getType());
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
+                "Content-Type");
         EasyMock.expectLastCall();
         EasyMock.replay(request);
         CORSFilter.decorateCORSProperties(request, CORSRequestType.PRE_FLIGHT);
