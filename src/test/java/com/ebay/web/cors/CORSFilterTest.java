@@ -24,8 +24,8 @@ public class CORSFilterTest {
      */
     @Test
     public void testDoFilterSimpleGET() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -43,8 +43,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         EasyMock.expectLastCall();
@@ -70,8 +70,8 @@ public class CORSFilterTest {
      */
     @Test
     public void testDoFilterSimplePOST() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -89,8 +89,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         EasyMock.expectLastCall();
@@ -116,8 +116,8 @@ public class CORSFilterTest {
      */
     @Test
     public void testDoFilterSimpleHEAD() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -135,8 +135,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         EasyMock.expectLastCall();
@@ -156,8 +156,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterSimpleSpecificHeader() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -175,8 +175,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
@@ -197,8 +197,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterSimpleAnyOriginAndSupportsCredentials()
             throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -216,8 +216,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
@@ -239,8 +239,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterSimpleWithExposedHeaders() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -258,8 +258,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
                 TestConfigs.EXPOSED_HEADERS);
@@ -279,8 +279,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterSimpleWithCredentials() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -298,8 +298,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                 "true");
@@ -318,8 +318,8 @@ public class CORSFilterTest {
 
     @Test
     public void testDoFilterPreflight() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -343,8 +343,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -359,8 +359,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterPreflightWithCredentials() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -384,8 +384,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                 "true");
@@ -403,8 +403,8 @@ public class CORSFilterTest {
 
     @Test
     public void testDoFilterNotCORS() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(null).anyTimes();
         EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
@@ -415,8 +415,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -431,8 +431,8 @@ public class CORSFilterTest {
     @Test(expected = ServletException.class)
     public void testDoFilterInvalidCORSOriginNotAllowed() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn("www.google.com").anyTimes();
@@ -453,8 +453,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -482,8 +482,8 @@ public class CORSFilterTest {
     public void testDoFilterNullRequestResponse() throws IOException,
             ServletException {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-        HttpServletResponse response = EasyMock
-                .createMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createMock(HttpServletResponse.class);
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(null, response, filterChain);
@@ -493,8 +493,8 @@ public class CORSFilterTest {
     public void testDoFilterRequestNullResponse() throws IOException,
             ServletException {
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, null, filterChain);
@@ -503,8 +503,8 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterSimpleCustomHandlers() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -522,8 +522,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -549,8 +549,8 @@ public class CORSFilterTest {
 
     @Test
     public void testInit() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -568,8 +568,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -585,8 +585,8 @@ public class CORSFilterTest {
     @Test
     public void testInitDefaultFilterConfig() throws IOException,
             ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
@@ -604,8 +604,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -629,8 +629,8 @@ public class CORSFilterTest {
 
     @Test
     public void testSimpleCORSRequest() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
@@ -648,8 +648,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -669,8 +669,8 @@ public class CORSFilterTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testNotSimple() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
@@ -693,8 +693,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -713,8 +713,8 @@ public class CORSFilterTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testNotPreflight() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
@@ -732,8 +732,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -746,8 +746,8 @@ public class CORSFilterTest {
 
     @Test
     public void testPreFlightHandler() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
@@ -770,8 +770,8 @@ public class CORSFilterTest {
 
         EasyMock.replay(request);
 
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         EasyMock.replay(response);
 
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
@@ -784,10 +784,10 @@ public class CORSFilterTest {
 
     @Test
     public void testHandleNonCORSHandler() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
         filterChain.doFilter(request, response);
         EasyMock.expectLastCall();
@@ -801,10 +801,10 @@ public class CORSFilterTest {
 
     @Test(expected = ServletException.class)
     public void testHandleInvalidCORS() throws IOException, ServletException {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
-        HttpServletResponse response = EasyMock
-                .createNiceMock(HttpServletResponse.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
+        HttpServletResponse response =
+                EasyMock.createNiceMock(HttpServletResponse.class);
         FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
@@ -832,16 +832,16 @@ public class CORSFilterTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testDecorateCORSPropertiesValidRequestNullRequestType() {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         EasyMock.replay(request);
         CORSFilter.decorateCORSProperties(request, null);
     }
 
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeSimple() {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
@@ -859,8 +859,8 @@ public class CORSFilterTest {
 
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypePreFlight() {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
@@ -878,8 +878,8 @@ public class CORSFilterTest {
 
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeNotCORS() {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
                 false);
         EasyMock.expectLastCall();
@@ -889,8 +889,8 @@ public class CORSFilterTest {
 
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeInvalidCORS() {
-        HttpServletRequest request = EasyMock
-                .createMock(HttpServletRequest.class);
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
         EasyMock.replay(request);
         CORSFilter
                 .decorateCORSProperties(request, CORSRequestType.INVALID_CORS);
