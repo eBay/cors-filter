@@ -33,33 +33,36 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
- * A {@link Filter} to support CORS (Cross-Origin Resource Sharing).
+ * A {@link Filter} to support CORS (<b>C</b>ross-<b>O</b>rigin <b>R</b>esource
+ * <b>S</b>haring).
  * </p>
  * 
  * <p>
  * This is a reference implementation of W3C's CORS specification for resources.
  * Each {@link HttpServletRequest} request is inspected as per specification,
- * and appropriate response headers are added.
+ * and appropriate response headers are added to {@link HttpServletResponse}.
  * </p>
  * 
  * <p>
  * By default, it also sets following request attributes, that helps to
  * determine nature of request downstream.
  * <ul>
- * <li><b>cors.isCorsRequest:</b> Flag to determine if a request is a CORS
- * request</li>
- * <li><b>cors.origin:</b> Origin URL</li>
- * <li><b>cors.requestType:</b> simple or preflight or not_cors or invalid_cors</li>
+ * <li><b>cors.isCorsRequest:</b> Flag to determine if request is a CORS
+ * request. Set to <code>true</code> if CORS request; <code>false</code>
+ * otherwise.</li>
+ * <li><b>cors.origin:</b> The Origin URL.</li>
+ * <li><b>cors.requestType:</b> Type of request. Values: <code>simple</code> or
+ * <code>preflight</code> or <code>not_cors</code> or <code>invalid_cors</code></li>
  * </ul>
  * </p>
  * 
  * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
- * @see <a href="http://www.w3.org/TR/cors/">CORS spec</a>
+ * @see <a href="http://www.w3.org/TR/cors/">CORS specification</a>
  * 
  */
 public class CORSFilter implements Filter {
     /**
-     * Holds CORS configuration.
+     * Holds configuration details.
      * 
      * @see CORSConfiguration
      */
