@@ -206,11 +206,10 @@ public class CORSFilter implements Filter {
      */
     private CORSConfiguration corsConfiguration;
 
-    public void
-            doFilter(final ServletRequest servletRequest,
-                    final ServletResponse servletResponse,
-                    final FilterChain filterChain) throws IOException,
-                    ServletException {
+    public void doFilter(final ServletRequest servletRequest,
+            final ServletResponse servletResponse,
+            final FilterChain filterChain) throws IOException,
+            ServletException {
         if (!(servletRequest instanceof HttpServletRequest)
                 || !(servletResponse instanceof HttpServletResponse)) {
             String message =
@@ -284,9 +283,10 @@ public class CORSFilter implements Filter {
 
         // Add a single Access-Control-Allow-Origin header.
         if (corsConfig.isAnyOriginAllowed()
-        // If resource doesn't support credentials and if any origin is allowed
-        // to make CORS request, return header with '*'.
                 && !corsConfig.isSupportsCredentials()) {
+            // If resource doesn't support credentials and if any origin is
+            // allowed
+            // to make CORS request, return header with '*'.
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         } else {
