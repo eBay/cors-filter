@@ -122,19 +122,19 @@ public class TestConfigs {
             }
 
             public String getInitParameter(String name) {
-                if (CORSConfiguration.CORS_ALLOWED_HEADERS
+                if (CORSConfiguration.PARAM_CORS_ALLOWED_HEADERS
                         .equalsIgnoreCase(name)) {
                     return allowedHttpHeaders;
-                } else if (CORSConfiguration.CORS_ALLOWED_METHODS
+                } else if (CORSConfiguration.PARAM_CORS_ALLOWED_METHODS
                         .equalsIgnoreCase(name)) {
                     return allowedHttpMethods;
-                } else if (CORSConfiguration.CORS_ALLOWED_ORIGINS
+                } else if (CORSConfiguration.PARAM_CORS_ALLOWED_ORIGINS
                         .equalsIgnoreCase(name)) {
                     return allowedOrigins;
-                } else if (CORSConfiguration.CORS_EXPOSED_HEADERS
+                } else if (CORSConfiguration.PARAM_CORS_EXPOSED_HEADERS
                         .equalsIgnoreCase(name)) {
                     return exposedHeaders;
-                } else if (CORSConfiguration.CORS_SUPPORT_CREDENTIALS
+                } else if (CORSConfiguration.PARAM_CORS_SUPPORT_CREDENTIALS
                         .equalsIgnoreCase(name)) {
                     return supportCredentials;
                 } else if (CORSConfiguration.CORS_PREFLIGHT_MAXAGE

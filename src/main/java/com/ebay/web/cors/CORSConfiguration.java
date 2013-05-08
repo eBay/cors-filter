@@ -104,27 +104,27 @@ public final class CORSConfiguration {
     /**
      * Key to retrieve allowed origins from {@link FilterConfig}.
      */
-    public static final String CORS_ALLOWED_ORIGINS = "cors.allowed.origins";
+    public static final String PARAM_CORS_ALLOWED_ORIGINS = "cors.allowed.origins";
 
     /**
      * Key to retrieve support credentials from {@link FilterConfig}.
      */
-    public static final String CORS_SUPPORT_CREDENTIALS = "cors.support.credentials";
+    public static final String PARAM_CORS_SUPPORT_CREDENTIALS = "cors.support.credentials";
 
     /**
      * Key to retrieve exposed headers from {@link FilterConfig}.
      */
-    public static final String CORS_EXPOSED_HEADERS = "cors.exposed.headers";
+    public static final String PARAM_CORS_EXPOSED_HEADERS = "cors.exposed.headers";
 
     /**
      * Key to retrieve allowed headers from {@link FilterConfig}.
      */
-    public static final String CORS_ALLOWED_HEADERS = "cors.allowed.headers";
+    public static final String PARAM_CORS_ALLOWED_HEADERS = "cors.allowed.headers";
 
     /**
      * Key to retrieve allowed methods from {@link FilterConfig}.
      */
-    public static final String CORS_ALLOWED_METHODS = "cors.allowed.methods";
+    public static final String PARAM_CORS_ALLOWED_METHODS = "cors.allowed.methods";
 
     /**
      * Key to retrieve preflight max age from {@link FilterConfig}.
@@ -403,15 +403,15 @@ public final class CORSConfiguration {
 
         if (filterConfig != null) {
             String allowedOrigins = filterConfig
-                    .getInitParameter(CORS_ALLOWED_ORIGINS);
+                    .getInitParameter(PARAM_CORS_ALLOWED_ORIGINS);
             String allowedHttpMethods = filterConfig
-                    .getInitParameter(CORS_ALLOWED_METHODS);
+                    .getInitParameter(PARAM_CORS_ALLOWED_METHODS);
             String allowedHttpHeaders = filterConfig
-                    .getInitParameter(CORS_ALLOWED_HEADERS);
+                    .getInitParameter(PARAM_CORS_ALLOWED_HEADERS);
             String exposedHeaders = filterConfig
-                    .getInitParameter(CORS_EXPOSED_HEADERS);
+                    .getInitParameter(PARAM_CORS_EXPOSED_HEADERS);
             String supportsCredentials = filterConfig
-                    .getInitParameter(CORS_SUPPORT_CREDENTIALS);
+                    .getInitParameter(PARAM_CORS_SUPPORT_CREDENTIALS);
             String preflightMaxAge = filterConfig
                     .getInitParameter(CORS_PREFLIGHT_MAXAGE);
             corsConfiguration = new CORSConfiguration(allowedOrigins,
