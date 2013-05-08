@@ -56,15 +56,16 @@ public enum CORSRequestType {
      *            The {@link HttpServletRequest} object.
      * @return {@link CORSRequestType}
      */
-    public static CORSRequestType checkRequestType(
-            final HttpServletRequest request, final CORSConfiguration corsConfig) {
+    public static CORSRequestType
+            checkRequestType(final HttpServletRequest request,
+                    final CORSConfiguration corsConfig) {
         if (request == null) {
             throw new IllegalArgumentException(
                     "HttpServletRequest object is null");
         }
 
-        final Set<String> allowedHttpMethods = corsConfig
-                .getAllowedHttpMethods();
+        final Set<String> allowedHttpMethods =
+                corsConfig.getAllowedHttpMethods();
         String requestMethod = request.getMethod();
 
         // A valid CORS request must have an 'Origin' header.
@@ -131,8 +132,8 @@ public enum CORSRequestType {
      * @return
      */
     private static boolean hasOriginHeader(final HttpServletRequest request) {
-        String originHeader = request
-                .getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        String originHeader =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         return (originHeader != null) && (originHeader.length() > 0);
     }
 
@@ -145,8 +146,8 @@ public enum CORSRequestType {
      */
     private static boolean hasAccessControlRequestMethodHeader(
             final HttpServletRequest request) {
-        String header = request
-                .getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
+        String header =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
         return (header != null) && (header.length() > 0);
     }
 
@@ -159,8 +160,8 @@ public enum CORSRequestType {
      */
     private static boolean hasAccessControlRequestHeadersHeader(
             final HttpServletRequest request) {
-        String header = request
-                .getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
+        String header =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
         return (header != null) && (header.length() > 0);
     }
 
@@ -175,8 +176,10 @@ public enum CORSRequestType {
         // A CORS pre-flight request is sent as a HTTP preflight request.
         String requestMethod = request.getMethod();
         if ((requestMethod != null) && requestMethod.equals("OPTIONS")) {
-            boolean hasAccessControlRequestMethodHeader = hasAccessControlRequestMethodHeader(request);
-            boolean hasAccessControlRequestHeadersHeader = hasAccessControlRequestHeadersHeader(request);
+            boolean hasAccessControlRequestMethodHeader =
+                    hasAccessControlRequestMethodHeader(request);
+            boolean hasAccessControlRequestHeadersHeader =
+                    hasAccessControlRequestHeadersHeader(request);
             if (hasAccessControlRequestMethodHeader
                     || hasAccessControlRequestHeadersHeader) {
                 return true;
