@@ -278,29 +278,18 @@ public class CORSFilterTest {
 
     @Test
     public void testDoFilterNotCORS() throws IOException, ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(null).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-
-        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-                false);
-        EasyMock.expectLastCall();
-
-        EasyMock.replay(request);
-
-        HttpServletResponse response =
-                EasyMock.createNiceMock(HttpServletResponse.class);
-        EasyMock.replay(response);
-
-        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                null);
+        request.setMethod("POST");
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
-        // If we don't get an exception at this point, then all mocked objects
-        // worked as expected.
+
+        Assert.assertFalse((Boolean) request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
     }
 
     @Test(expected = ServletException.class)
