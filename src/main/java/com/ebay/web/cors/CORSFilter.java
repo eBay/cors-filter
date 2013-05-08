@@ -59,18 +59,156 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CORSFilter implements Filter {
     /**
+     * The Access-Control-Allow-Origin header indicates whether a resource can
+     * be shared based by returning the value of the Origin request header in
+     * the response.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN =
+            "Access-Control-Allow-Origin";
+
+    /**
+     * The Access-Control-Allow-Credentials header indicates whether the
+     * response to request can be exposed when the omit credentials flag is
+     * unset. When part of the response to a preflight request it indicates that
+     * the actual request can include user credentials.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS =
+            "Access-Control-Allow-Credentials";
+
+    /**
+     * The Access-Control-Expose-Headers header indicates which headers are safe
+     * to expose to the API of a CORS API specification
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS =
+            "Access-Control-Expose-Headers";
+
+    /**
+     * The Access-Control-Max-Age header indicates how long the results of a
+     * preflight request can be cached in a preflight result cache.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE =
+            "Access-Control-Max-Age";
+
+    /**
+     * The Access-Control-Allow-Methods header indicates, as part of the
+     * response to a preflight request, which methods can be used during the
+     * actual request.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS =
+            "Access-Control-Allow-Methods";
+
+    /**
+     * The Access-Control-Allow-Headers header indicates, as part of the
+     * response to a preflight request, which header field names can be used
+     * during the actual request.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS =
+            "Access-Control-Allow-Headers";
+
+    /**
+     * The Origin header indicates where the cross-origin request or preflight
+     * request originates from.
+     */
+    public static final String REQUEST_HEADER_ORIGIN = "Origin";
+
+    /**
+     * The Access-Control-Request-Method header indicates which method will be
+     * used in the actual request as part of the preflight request.
+     */
+    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD =
+            "Access-Control-Request-Method";
+
+    /**
+     * The Access-Control-Request-Headers header indicates which headers will be
+     * used in the actual request as part of the preflight request.
+     */
+    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS =
+            "Access-Control-Request-Headers";
+
+    /**
+     * The prefix to a CORS request attribute.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_PREFIX = "cors.";
+
+    /**
+     * Attribute that contains the origin of the request.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "origin";
+
+    /**
+     * Boolean value, suggesting if the request is a CORS request or not.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "isCorsRequest";
+
+    /**
+     * Type of CORS request, of type {@link CORSRequestType}.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "requestType";
+
+    /**
+     * {@link Collection} of Simple HTTP methods. Case sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("GET", "POST", "HEAD"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS =
+            new HashSet<String>(Arrays.asList("Accept", "Accept-Language",
+                    "Content-Language"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS =
+            new HashSet<String>(Arrays.asList("Cache-Control",
+                    "Content-Language", "Content-Type", "Expires",
+                    "Last-Modified", "Pragma"));
+
+    /**
+     * A Simple HTTP request header, if the header values matches
+     * {@code SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES}. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final String SIMPLE_REQUEST_HEADER_CONTENT_TYPE =
+            "Content-Type";
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES =
+            new HashSet<String>(Arrays.asList(
+                    "application/x-www-form-urlencoded", "multipart/form-data",
+                    "text/plain"));
+    /**
      * Holds configuration details.
      * 
      * @see CORSConfiguration
      */
     private CORSConfiguration corsConfiguration;
 
-    public void doFilter(final ServletRequest servletRequest,
-            final ServletResponse servletResponse, final FilterChain filterChain)
-            throws IOException, ServletException {
+    public void
+            doFilter(final ServletRequest servletRequest,
+                    final ServletResponse servletResponse,
+                    final FilterChain filterChain) throws IOException,
+                    ServletException {
         if (!(servletRequest instanceof HttpServletRequest)
                 || !(servletResponse instanceof HttpServletResponse)) {
-            String message = "CORS doesn't support non-HTTP request or response.";
+            String message =
+                    "CORS doesn't support non-HTTP request or response.";
             throw new ServletException(message);
         }
 
@@ -79,8 +217,8 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         // Determines the CORS request type.
-        CORSRequestType requestType = CORSRequestType.checkRequestType(request,
-                corsConfiguration);
+        CORSRequestType requestType =
+                CORSRequestType.checkRequestType(request, corsConfiguration);
 
         // Adds CORS specific attributes to request.
         CORSFilter.decorateCORSProperties(request, requestType);
@@ -104,8 +242,8 @@ public class CORSFilter implements Filter {
     public void init(final FilterConfig filterConfig) throws ServletException {
         if (filterConfig != null) {
             try {
-                this.corsConfiguration = CORSConfiguration
-                        .loadFromFilterConfig(filterConfig);
+                this.corsConfiguration =
+                        CORSConfiguration.loadFromFilterConfig(filterConfig);
             } catch (Exception e) {
                 throw new ServletException(
                         "Error loading configuration using filter init", e);
@@ -126,13 +264,14 @@ public class CORSFilter implements Filter {
             final HttpServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
         if (CORSRequestType.checkRequestType(request, corsConfiguration) != CORSRequestType.SIMPLE) {
-            String message = "Expects a HttpServletRequest object of type "
-                    + CORSRequestType.SIMPLE.getType();
+            String message =
+                    "Expects a HttpServletRequest object of type "
+                            + CORSRequestType.SIMPLE.getType();
             throw new IllegalArgumentException(message);
         }
 
-        final String origin = request
-                .getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
@@ -191,10 +330,10 @@ public class CORSFilter implements Filter {
         String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         final CORSConfiguration corsConfig = corsConfiguration;
-        final Set<String> allowedHttpMethods = corsConfig
-                .getAllowedHttpMethods();
-        final Set<String> allowedHttpHeaders = corsConfig
-                .getAllowedHttpHeaders();
+        final Set<String> allowedHttpMethods =
+                corsConfig.getAllowedHttpMethods();
+        final Set<String> allowedHttpHeaders =
+                corsConfig.getAllowedHttpHeaders();
         final long preflightMaxAge = corsConfig.getPreflightMaxAge();
 
         // Must be returned, in order for browser runtime to accept the
@@ -251,8 +390,9 @@ public class CORSFilter implements Filter {
             throws IOException, ServletException {
         String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         String method = request.getMethod();
-        String message = "Encountered an invalid CORS request, from Origin: "
-                + origin + " ; requested with method: " + method;
+        String message =
+                "Encountered an invalid CORS request, from Origin: " + origin
+                        + " ; requested with method: " + method;
         throw new ServletException(message);
     }
 
@@ -337,127 +477,4 @@ public class CORSFilter implements Filter {
         return buffer.toString();
     }
 
-    /**
-     * The Access-Control-Allow-Origin header indicates whether a resource can
-     * be shared based by returning the value of the Origin request header in
-     * the response.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
-
-    /**
-     * The Access-Control-Allow-Credentials header indicates whether the
-     * response to request can be exposed when the omit credentials flag is
-     * unset. When part of the response to a preflight request it indicates that
-     * the actual request can include user credentials.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
-
-    /**
-     * The Access-Control-Expose-Headers header indicates which headers are safe
-     * to expose to the API of a CORS API specification
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS = "Access-Control-Expose-Headers";
-
-    /**
-     * The Access-Control-Max-Age header indicates how long the results of a
-     * preflight request can be cached in a preflight result cache.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE = "Access-Control-Max-Age";
-
-    /**
-     * The Access-Control-Allow-Methods header indicates, as part of the
-     * response to a preflight request, which methods can be used during the
-     * actual request.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
-
-    /**
-     * The Access-Control-Allow-Headers header indicates, as part of the
-     * response to a preflight request, which header field names can be used
-     * during the actual request.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
-
-    /**
-     * The Origin header indicates where the cross-origin request or preflight
-     * request originates from.
-     */
-    public static final String REQUEST_HEADER_ORIGIN = "Origin";
-
-    /**
-     * The Access-Control-Request-Method header indicates which method will be
-     * used in the actual request as part of the preflight request.
-     */
-    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD = "Access-Control-Request-Method";
-
-    /**
-     * The Access-Control-Request-Headers header indicates which headers will be
-     * used in the actual request as part of the preflight request.
-     */
-    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
-
-    /**
-     * The prefix to a CORS request attribute.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_PREFIX = "cors.";
-
-    /**
-     * Attribute that contains the origin of the request.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN = HTTP_REQUEST_ATTRIBUTE_PREFIX
-            + "origin";
-
-    /**
-     * Boolean value, suggesting if the request is a CORS request or not.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST = HTTP_REQUEST_ATTRIBUTE_PREFIX
-            + "isCorsRequest";
-
-    /**
-     * Type of CORS request, of type {@link CORSRequestType}.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = HTTP_REQUEST_ATTRIBUTE_PREFIX
-            + "requestType";
-
-    /**
-     * {@link Collection} of Simple HTTP methods. Case sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("GET", "POST", "HEAD"));
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS = new HashSet<String>(
-            Arrays.asList("Accept", "Accept-Language", "Content-Language"));
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS = new HashSet<String>(
-            Arrays.asList("Cache-Control", "Content-Language", "Content-Type",
-                    "Expires", "Last-Modified", "Pragma"));
-
-    /**
-     * A Simple HTTP request header, if the header values matches
-     * {@code SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES}. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final String SIMPLE_REQUEST_HEADER_CONTENT_TYPE = "Content-Type";
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES = new HashSet<String>(
-            Arrays.asList("application/x-www-form-urlencoded",
-                    "multipart/form-data", "text/plain"));
 }
