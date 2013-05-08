@@ -14,7 +14,7 @@
  * the License.
  */
 /**
- * This package contains CORS related classes.
+ * Provides classes that implements W3C's CORS specification.
  */
 package com.ebay.web.cors;
 
