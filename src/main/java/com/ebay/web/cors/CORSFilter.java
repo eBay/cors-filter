@@ -33,14 +33,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
- * A {@link Filter} to support CORS (<b>C</b>ross-<b>O</b>rigin <b>R</b>esource
- * <b>S</b>haring).
- * </p>
- * 
- * <p>
- * This is a reference implementation of W3C's CORS specification for resources.
- * Each {@link HttpServletRequest} request is inspected as per specification,
- * and appropriate response headers are added to {@link HttpServletResponse}.
+ * A {@link Filter} that enable client-side cross-origin requests by
+ * implementing W3C's CORS (<b>C</b>ross-<b>O</b>rigin <b>R</b>esource
+ * <b>S</b>haring) speficiation for resources. Each {@link HttpServletRequest}
+ * request is inspected as per specification, and appropriate response headers
+ * are added to {@link HttpServletResponse}.
  * </p>
  * 
  * <p>
