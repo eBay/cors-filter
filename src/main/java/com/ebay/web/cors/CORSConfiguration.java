@@ -24,52 +24,52 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 
 /**
- * The configuration for {@link CORSFilter}.
- * 
+ * <p>
+ * The configuration object for {@link CORSFilter}.
+ * </p>
  * <ul>
  * <li>
  * <b>Allowed Origins:</b> A {@link Collection} of origins consisting of zero or
- * more origins that are allowed access to the resource.</li>
+ * more origins that are allowed access to the resource. Init param name:
+ * <code>cors.allowed.origins</code></li>
  * <li>
  * <b>Allowed HTTP Methods:</b> A {@link Collection} of methods consisting of
- * zero or more methods that are supported by the resource.</li>
+ * zero or more methods that are supported by the resource. Init param name:
+ * <code>cors.allowed.methods</code></li>
  * <li>
  * <b>Allowed HTTP Headers:</b> A {@link Collection} of headers consisting of
- * zero or more header field names that are supported by the resource.</li>
+ * zero or more header field names that are supported by the resource. Init
+ * param name: <code>cors.allowed.headers</code></li>
  * <li>
  * <b>Exposed headers:</b> A {@link Collection} of exposed headers consisting of
  * zero or more header field names of headers other than the simple response
- * headers that the resource might use and can be exposed.</li>
+ * headers that the resource might use and can be exposed. Init param name:
+ * <code>cors.exposed.headers</code></li>
  * <li>
  * <b>Pre-flight max age:</b> The amount of seconds the user agent is allowed to
- * cache the result of the pre-flight request.</li>
+ * cache the result of the pre-flight request. Init param name:
+ * <code>cors.preflight.maxage</code></li>
  * <li>
  * <b>Supports credentials:</b> A supports credentials flag that indicates
  * whether the resource supports user credentials in the request. It is true
- * when the resource does and false otherwise.</li>
+ * when the resource does and false otherwise. Init param name:
+ * <code>cors.support.credentials</code></li>
  * </ul>
  * <p>
- * Defaults:
+ * If {@link FilterConfig} is not provided. Following defaults are used:
  * </p>
  * <ul>
- * <li>Allowed HTTP methods: [GET, POST, OPTIONS, HEAD]</li>
- * <li>Supports credentials: false</li>
+ * <li><b>Allowed origin:</b> *</li>
+ * <li><b>Allowed HTTP methods:</b> [GET, POST, OPTIONS, HEAD]</li>
+ * <li><b>Pre-flight max age:</b> 1800 seconds</li>
+ * <li><b>Supports credentials:</b> false</li>
+ * <li><b>Allowed HTTP headers:</b> Origin,Accept,X-Requested-With,Content-Type</li>
  * </ul>
  * 
  * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
  * 
  */
 public final class CORSConfiguration {
-    /**
-     * By default, time duration to cache pre-flight response is 30 mins.
-     */
-    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
-
-    /**
-     * By default, cookie based auth is turned off.
-     */
-    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
-
     /**
      * By default, all origins are allowed to make requests.
      */
@@ -79,6 +79,16 @@ public final class CORSConfiguration {
      * By default, following methods are supported: GET, POST, HEAD and OPTIONS.
      */
     public static final String DEFAULT_ALLOWED_HTTP_METHODS = "GET,POST,HEAD,OPTIONS";
+
+    /**
+     * By default, time duration to cache pre-flight response is 30 mins.
+     */
+    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
+
+    /**
+     * By default, cookie based auth is turned off.
+     */
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
 
     /**
      * By default, following headers are supported:
