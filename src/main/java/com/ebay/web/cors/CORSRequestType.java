@@ -79,7 +79,7 @@ public enum CORSRequestType {
 
         final Set<String> allowedHttpMethods =
                 corsConfig.getAllowedHttpMethods();
-        String requestMethod = request.getMethod();
+        final String requestMethod = request.getMethod();
 
         // A valid CORS request must have an 'Origin' header.
         // Section 6.1.1 and 6.2.1
@@ -100,7 +100,14 @@ public enum CORSRequestType {
         }
 
         // Checks if the request is a pre-flight request.
-        if (isPreflight(request)) {
+        if (requestMethod.equals("OPTIONS")) {
+            // Section 6.2.3
+            boolean hasAccessControlRequestMethodHeader =
+                    hasAccessControlRequestMethodHeader(request);
+            if (!hasAccessControlRequestMethodHeader) {
+                return INVALID_CORS;
+            }
+
             return PRE_FLIGHT;
         }
 
@@ -123,7 +130,8 @@ public enum CORSRequestType {
             return true;
         }
         final Set<String> allowedOrigins = corsConfig.getAllowedOrigins();
-        final String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         // If 'Origin' header is a case-sensitive match of any of allowed
         // origins, then return true, else return false.
@@ -160,43 +168,8 @@ public enum CORSRequestType {
             final HttpServletRequest request) {
         final String header =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
-        return (header != null) && (header.length() > 0);
-    }
-
-    /**
-     * Checks for the presence of 'Access-Control-Request-Headers' header.
-     * 
-     * @param request
-     *            The {@link HttpServletRequest} object.
-     * @return <code>true</code> if request has 'Access-Control-Request-Headers'
-     *         header; <code>false</code> otherwise.
-     */
-    private static boolean hasAccessControlRequestHeadersHeader(
-            final HttpServletRequest request) {
-        final String header =
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
-        return (header != null) && (header.length() > 0);
-    }
-
-    /**
-     * Checks if the request is a CORS pre-flight request.
-     * 
-     * @param request
-     *            The {@link HttpServletRequest} object.
-     * @return <code>true</code> if request is pre-flight; <code>false</code>
-     *         otherwise.
-     */
-    private static boolean isPreflight(final HttpServletRequest request) {
-
-        // A CORS pre-flight request is sent as a HTTP OPTIONS request.
-        final String requestMethod = request.getMethod();
-        if ((requestMethod != null) && requestMethod.equals("OPTIONS")) {
-            boolean hasAccessControlRequestMethodHeader =
-                    hasAccessControlRequestMethodHeader(request);
-            boolean hasAccessControlRequestHeadersHeader =
-                    hasAccessControlRequestHeadersHeader(request);
-            if (hasAccessControlRequestMethodHeader
-                    || hasAccessControlRequestHeadersHeader) {
+        if (header != null) {
+            if (CORSFilter.HTTP_METHODS.contains(header)) {
                 return true;
             }
         }

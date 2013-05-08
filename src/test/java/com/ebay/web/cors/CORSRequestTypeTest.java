@@ -124,7 +124,7 @@ public class CORSRequestTypeTest {
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
 
-        Assert.assertEquals(CORSRequestType.PRE_FLIGHT, requestType);
+        Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
         EasyMock.verify(request);
     }
 
@@ -157,7 +157,7 @@ public class CORSRequestTypeTest {
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
 
-        Assert.assertEquals(CORSRequestType.PRE_FLIGHT, requestType);
+        Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
         EasyMock.verify(request);
     }
 
