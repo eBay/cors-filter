@@ -58,6 +58,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public class CORSFilter implements Filter {
+    // ------------------------------------------------------- Response Headers
     /**
      * The Access-Control-Allow-Origin header indicates whether a resource can
      * be shared based by returning the value of the Origin request header in
@@ -105,6 +106,7 @@ public class CORSFilter implements Filter {
     public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS =
             "Access-Control-Allow-Headers";
 
+    // ------------------------------------------------------- Request Headers
     /**
      * The Origin header indicates where the cross-origin request or preflight
      * request originates from.
@@ -125,6 +127,7 @@ public class CORSFilter implements Filter {
     public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS =
             "Access-Control-Request-Headers";
 
+    // ----------------------------------------------------- Request attributes
     /**
      * The prefix to a CORS request attribute.
      */
@@ -148,6 +151,7 @@ public class CORSFilter implements Filter {
     public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE =
             HTTP_REQUEST_ATTRIBUTE_PREFIX + "requestType";
 
+    // -------------------------------------------------------------- Constants
     /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
@@ -193,6 +197,8 @@ public class CORSFilter implements Filter {
             new HashSet<String>(Arrays.asList(
                     "application/x-www-form-urlencoded", "multipart/form-data",
                     "text/plain"));
+
+    // ----------------------------------------------------- Instance variables
     /**
      * Holds configuration details.
      * 
