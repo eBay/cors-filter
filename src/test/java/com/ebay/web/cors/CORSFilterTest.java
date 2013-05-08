@@ -15,14 +15,113 @@ import org.junit.Test;
 
 public class CORSFilterTest {
 
+    /**
+     * Tests if a GET request is treated as simple request.
+     * 
+     * @See http://www.w3.org/TR/cors/#simple-method
+     * @throws IOException
+     * @throws ServletException
+     */
     @Test
-    public void testDoFilterSimple() throws IOException, ServletException {
+    public void testDoFilterSimpleGET() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("GET").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.SIMPLE.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        response.addHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        EasyMock.expectLastCall();
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        corsFilter.destroy();
+        EasyMock.verify(request, response);
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    /**
+     * Tests if a POST request is treated as simple request.
+     * 
+     * @See http://www.w3.org/TR/cors/#simple-method
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Test
+    public void testDoFilterSimplePOST() throws IOException, ServletException {
         HttpServletRequest request = EasyMock
                 .createMock(HttpServletRequest.class);
 
         EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
                 .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
         EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
+
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.SIMPLE.getType());
+        EasyMock.expectLastCall();
+
+        EasyMock.replay(request);
+
+        HttpServletResponse response = EasyMock
+                .createNiceMock(HttpServletResponse.class);
+        response.addHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+        EasyMock.expectLastCall();
+        EasyMock.replay(response);
+
+        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        corsFilter.destroy();
+        EasyMock.verify(request, response);
+        // If we don't get an exception at this point, then all mocked objects
+        // worked as expected.
+    }
+
+    /**
+     * Tests if a HEAD request is treated as simple request.
+     * 
+     * @See http://www.w3.org/TR/cors/#simple-method
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Test
+    public void testDoFilterSimpleHEAD() throws IOException, ServletException {
+        HttpServletRequest request = EasyMock
+                .createMock(HttpServletRequest.class);
+
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn("HEAD").anyTimes();
 
         request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
                 true);
