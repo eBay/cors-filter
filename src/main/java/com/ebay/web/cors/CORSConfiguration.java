@@ -138,9 +138,10 @@ public final class CORSConfiguration {
     /**
      * Key to retrieve preflight max age from {@link FilterConfig}.
      */
-    public static final String PARAM_CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
+    public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
+            "cors.preflight.maxage";
 
-    // -------------------------------------------------------------- Constants
+    // ----------------------------------------------------- Instance variables
     /**
      * A {@link Collection} of origins consisting of zero or more origins that
      * are allowed access to the resource.
@@ -184,6 +185,7 @@ public final class CORSConfiguration {
      */
     private long preflightMaxAge;
 
+    // ----------------------------------------------------------- Constructors
     /**
      * Initialize defaults.
      */
@@ -228,6 +230,8 @@ public final class CORSConfiguration {
                 exposedHeaders, supportsCredentials, preflightMaxAge);
     }
 
+    // -------------------------------------------------------- Private methods
+
     private void parseAndStore(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
@@ -270,6 +274,33 @@ public final class CORSConfiguration {
         }
     }
 
+    /**
+     * Takes a comma separated list and returns a Set<String>.
+     * 
+     * @param data
+     *            A comma separated list of strings.
+     * @return Set<String>
+     */
+    private Set<String> parseStringToSet(final String data) {
+        String[] splits = null;
+
+        if (data != null && data.length() > 0) {
+            splits = data.split(",");
+        } else {
+            splits = new String[] {};
+        }
+
+        Set<String> set = new HashSet<String>();
+        if (splits.length > 0) {
+            for (String split : splits) {
+                set.add(split.trim());
+            }
+        }
+
+        return set;
+    }
+
+    // --------------------------------------------------------- Public methods
     /**
      * Returns an unmodifiable set of allowedOrigins.
      * 
@@ -356,32 +387,6 @@ public final class CORSConfiguration {
     }
 
     /**
-     * Takes a comma separated list and returns a Set<String>.
-     * 
-     * @param data
-     *            A comma separated list of strings.
-     * @return Set<String>
-     */
-    private Set<String> parseStringToSet(final String data) {
-        String[] splits = null;
-
-        if (data != null && data.length() > 0) {
-            splits = data.split(",");
-        } else {
-            splits = new String[] {};
-        }
-
-        Set<String> set = new HashSet<String>();
-        if (splits.length > 0) {
-            for (String split : splits) {
-                set.add(split.trim());
-            }
-        }
-
-        return set;
-    }
-
-    /**
      * Gets pre-flight response max cache time.
      * 
      * @return long
@@ -400,6 +405,8 @@ public final class CORSConfiguration {
     public boolean isAnyOriginAllowed() {
         return anyOriginAllowed;
     }
+
+    // --------------------------------------------------------- Static methods
 
     /**
      * Creates an instance of {@link CORSConfiguration} from the
