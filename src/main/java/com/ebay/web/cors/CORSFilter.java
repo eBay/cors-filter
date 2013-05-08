@@ -231,15 +231,19 @@ public class CORSFilter implements Filter {
 
         switch (requestType) {
         case SIMPLE:
+            // Handles a Simple CORS request.
             this.handleSimpleCORS(request, response, filterChain);
             break;
         case PRE_FLIGHT:
+            // Handles a Pre-flight CORS request.
             this.handlePreflightCORS(request, response, filterChain);
             break;
         case NOT_CORS:
+            // Handles a Normal request that is not a cross-origin request.
             this.handleNonCORS(request, response, filterChain);
             break;
         default:
+            // Handles a CORS request that violates specification.
             this.handleInvalidCORS(request, response, filterChain);
             break;
         }
@@ -263,6 +267,14 @@ public class CORSFilter implements Filter {
     /**
      * Handles a CORS request of type {@link CORSRequestType}.SIMPLE.
      * 
+     * @param request
+     *            The {@link HttpServletRequest} object.
+     * @param response
+     *            The {@link HttpServletResponse} object.
+     * @param filterChain
+     *            The {@link FilterChain} object.
+     * @throws IOException
+     * @throws ServletException
      * @see <a href="http://www.w3.org/TR/cors/#resource-requests">Simple
      *      Cross-Origin Request, Actual Request, and Redirects</a>
      */
@@ -324,6 +336,15 @@ public class CORSFilter implements Filter {
 
     /**
      * Handles CORS pre-flight request.
+     * 
+     * @param request
+     *            The {@link HttpServletRequest} object.
+     * @param response
+     *            The {@link HttpServletResponse} object.
+     * @param filterChain
+     *            The {@link FilterChain} object.
+     * @throws IOException
+     * @throws ServletException
      */
     public void handlePreflightCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
@@ -334,7 +355,8 @@ public class CORSFilter implements Filter {
                             + CORSRequestType.PRE_FLIGHT.getType());
         }
 
-        String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> allowedHttpMethods =
@@ -374,12 +396,22 @@ public class CORSFilter implements Filter {
                     String.valueOf(preflightMaxAge));
         }
 
-        // Don't forward the request down the filter chain.
+        // Do not forward the request down the filter chain.
     }
 
     /**
-     * Handles a request, that's not a CORS request, but is a valid request.
-     * This implementation, just forwards the request down the filter chain.
+     * Handles a request, that's not a CORS request, but is a valid request i.e.
+     * it is not a cross-origin request. This implementation, just forwards the
+     * request down the filter chain.
+     * 
+     * @param request
+     *            The {@link HttpServletRequest} object.
+     * @param response
+     *            The {@link HttpServletResponse} object.
+     * @param filterChain
+     *            The {@link FilterChain} object.
+     * @throws IOException
+     * @throws ServletException
      */
     public void handleNonCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
@@ -389,8 +421,16 @@ public class CORSFilter implements Filter {
     }
 
     /**
-     * Will throw a {@link ServletException}, which ultimately, will lead the
-     * request to a {@link AbortServlet}.
+     * Handles a CORS request that violates specification.
+     * 
+     * @param request
+     *            The {@link HttpServletRequest} object.
+     * @param response
+     *            The {@link HttpServletResponse} object.
+     * @param filterChain
+     *            The {@link FilterChain} object.
+     * @throws IOException
+     * @throws ServletException
      */
     public void handleInvalidCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
