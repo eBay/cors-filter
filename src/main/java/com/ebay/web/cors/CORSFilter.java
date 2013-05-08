@@ -47,18 +47,12 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public class CORSFilter implements Filter {
-    /** Configuration object */
-    private CORSConfiguration corsConfiguration;
-
     /**
-     * Creates a CORS filter, and loads configuration from classpath, by default
-     * from cors-configuration.properties.
+     * Holds CORS configuration.
      * 
-     * @throws IOException
+     * @see CORSConfiguration
      */
-    public CORSFilter() {
-        super();
-    }
+    private CORSConfiguration corsConfiguration;
 
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse, final FilterChain filterChain)
@@ -111,10 +105,6 @@ public class CORSFilter implements Filter {
         }
     }
 
-    public void destroy() {
-
-    }
-
     /**
      * Handles a CORS request of type {@link CORSRequestType}.SIMPLE.
      * 
@@ -130,32 +120,40 @@ public class CORSFilter implements Filter {
             throw new IllegalArgumentException(message);
         }
 
-        final String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin = request
+                .getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
 
-        // Must be returned, in order for browser runtime to accept the
-        // response.
+        // Add a single Access-Control-Allow-Origin header.
         if (corsConfig.isAnyOriginAllowed()
+        // If resource doesn't support credentials and if any origin is allowed
+        // to make CORS request, return header with '*'.
                 && !corsConfig.isSupportsCredentials()) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         } else {
+            // If the resource supports credentials add a single
+            // Access-Control-Allow-Origin header, with the value of the Origin
+            // header as value.
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                     origin);
         }
 
-        // Must be returned, in order for browser to accept the response, as
-        // this request was made with cookies.
+        // If the resource supports credentials, add a single
+        // Access-Control-Allow-Credentials header with the case-sensitive
+        // string "true" as value.
         if (corsConfig.isSupportsCredentials()) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
         }
 
-        // Expose headers if any.
+        // If the list of exposed headers is not empty add one or more
+        // Access-Control-Expose-Headers headers, with as values the header
+        // field names given in the list of exposed headers.
         if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
             String exposedHeadersString = join(exposedHeaders, ",");
             response.addHeader(
@@ -245,6 +243,10 @@ public class CORSFilter implements Filter {
         String message = "Encountered an invalid CORS request, from Origin: "
                 + origin + " ; requested with method: " + method;
         throw new ServletException(message);
+    }
+
+    public void destroy() {
+
     }
 
     /**
