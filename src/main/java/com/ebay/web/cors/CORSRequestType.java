@@ -82,17 +82,13 @@ public enum CORSRequestType {
         String requestMethod = request.getMethod();
 
         // A valid CORS request must have an 'Origin' header.
-        // Section 6.1: If the Origin header is not present terminate this set
-        // of steps. The
-        // request is outside the scope of this specification.
+        // Section 6.1.1 and 6.2.1
         if (!hasOriginHeader(request)) {
             return NOT_CORS;
         }
 
-        // Did request originated from an allowed Origin ?
-        // Section 6.1: If the value of the Origin header is not a
-        // case-sensitive match for any of the values in list of origins, do not
-        // set any additional headers and terminate this set of steps.
+        // Did request originate from an allowed Origin ?
+        // Section 6.1.2 and 6.2.2
         if (!isOriginAllowed(request, corsConfig)) {
             return INVALID_CORS;
         }
@@ -103,7 +99,7 @@ public enum CORSRequestType {
             return INVALID_CORS;
         }
 
-        // Check if the request is a Pre-flight request.
+        // Checks if the request is a pre-flight request.
         if (isPreflight(request)) {
             return PRE_FLIGHT;
         }
@@ -127,7 +123,7 @@ public enum CORSRequestType {
             return true;
         }
         final Set<String> allowedOrigins = corsConfig.getAllowedOrigins();
-        String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         // If 'Origin' header is a case-sensitive match of any of allowed
         // origins, then return true, else return false.
@@ -147,7 +143,7 @@ public enum CORSRequestType {
      *         <code>false</code> otherwise.
      */
     private static boolean hasOriginHeader(final HttpServletRequest request) {
-        String originHeader =
+        final String originHeader =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         return (originHeader != null) && (originHeader.length() > 0);
     }
@@ -162,7 +158,7 @@ public enum CORSRequestType {
      */
     private static boolean hasAccessControlRequestMethodHeader(
             final HttpServletRequest request) {
-        String header =
+        final String header =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
         return (header != null) && (header.length() > 0);
     }
@@ -177,7 +173,7 @@ public enum CORSRequestType {
      */
     private static boolean hasAccessControlRequestHeadersHeader(
             final HttpServletRequest request) {
-        String header =
+        final String header =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
         return (header != null) && (header.length() > 0);
     }
@@ -192,8 +188,8 @@ public enum CORSRequestType {
      */
     private static boolean isPreflight(final HttpServletRequest request) {
 
-        // A CORS pre-flight request is sent as a HTTP preflight request.
-        String requestMethod = request.getMethod();
+        // A CORS pre-flight request is sent as a HTTP OPTIONS request.
+        final String requestMethod = request.getMethod();
         if ((requestMethod != null) && requestMethod.equals("OPTIONS")) {
             boolean hasAccessControlRequestMethodHeader =
                     hasAccessControlRequestMethodHeader(request);

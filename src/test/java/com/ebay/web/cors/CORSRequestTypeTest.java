@@ -348,6 +348,30 @@ public class CORSRequestTypeTest {
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
         EasyMock.verify(request);
     }
+    
+    /**
+     * When requestMethod is null
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckNullRequestMethod() throws ServletException {
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn("https://localhost.ebay.com:8443").anyTimes();
+        EasyMock.expect(request.getMethod()).andReturn(null).anyTimes();
+        EasyMock.replay(request);
+        CORSConfiguration corsConfigurationAnyOrigin =
+                CORSConfiguration.loadFromFilterConfig(TestConfigs
+                        .getDefaultFilterConfig());
+        CORSRequestType requestType =
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
+
+        Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
+        EasyMock.verify(request);
+    }
 
     /**
      * "https://localhost.ebay.com:8443" is an allowed origin and

@@ -281,19 +281,21 @@ public class CORSFilter implements Filter {
     public void handleSimpleCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
-        if (CORSRequestType.checkRequestType(request, corsConfiguration) != CORSRequestType.SIMPLE) {
+        CORSRequestType requestType =
+                CORSRequestType.checkRequestType(request, corsConfiguration);
+        if (requestType != CORSRequestType.SIMPLE) {
             String message =
                     "Expects a HttpServletRequest object of type "
                             + CORSRequestType.SIMPLE.getType();
             throw new IllegalArgumentException(message);
         }
 
+        final CORSConfiguration corsConfig = corsConfiguration;
         final String origin =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
-
-        final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
 
+        // Section 6.1.3
         // Add a single Access-Control-Allow-Origin header.
         if (corsConfig.isAnyOriginAllowed()
                 && !corsConfig.isSupportsCredentials()) {
@@ -310,7 +312,7 @@ public class CORSFilter implements Filter {
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                     origin);
         }
-
+        // Section 6.1.3
         // If the resource supports credentials, add a single
         // Access-Control-Allow-Credentials header with the case-sensitive
         // string "true" as value.
@@ -320,6 +322,7 @@ public class CORSFilter implements Filter {
                     "true");
         }
 
+        // Section 6.1.4
         // If the list of exposed headers is not empty add one or more
         // Access-Control-Expose-Headers headers, with as values the header
         // field names given in the list of exposed headers.
@@ -349,7 +352,9 @@ public class CORSFilter implements Filter {
     public void handlePreflightCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
-        if (CORSRequestType.checkRequestType(request, corsConfiguration) != CORSRequestType.PRE_FLIGHT) {
+        CORSRequestType requestType =
+                CORSRequestType.checkRequestType(request, corsConfiguration);
+        if (requestType != CORSRequestType.PRE_FLIGHT) {
             throw new IllegalArgumentException(
                     "Expects a HttpServletRequest object of type "
                             + CORSRequestType.PRE_FLIGHT.getType());
