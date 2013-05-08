@@ -16,6 +16,9 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -134,7 +137,8 @@ public class CORSFilter implements Filter {
 
         // Must be returned, in order for browser runtime to accept the
         // response.
-        if (corsConfig.isAnyOriginAllowed() && !corsConfig.isSupportsCredentials()) {
+        if (corsConfig.isAnyOriginAllowed()
+                && !corsConfig.isSupportsCredentials()) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         } else {
@@ -291,8 +295,9 @@ public class CORSFilter implements Filter {
         }
     }
 
-    public static String join(final Set<String> elements, final String joinSeparator ) {
-        String separator = ","; 
+    public static String join(final Set<String> elements,
+            final String joinSeparator) {
+        String separator = ",";
         if (elements == null) {
             return null;
         }
@@ -400,4 +405,46 @@ public class CORSFilter implements Filter {
      */
     public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE = HTTP_REQUEST_ATTRIBUTE_PREFIX
             + "requestType";
+
+    /**
+     * {@link Collection} of Simple HTTP methods. Case sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("GET", "POST", "HEAD"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS = new HashSet<String>(
+            Arrays.asList("Accept", "Accept-Language", "Content-Language"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS = new HashSet<String>(
+            Arrays.asList("Cache-Control", "Content-Language", "Content-Type",
+                    "Expires", "Last-Modified", "Pragma"));
+
+    /**
+     * A Simple HTTP request header, if the header values matches
+     * {@code SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES}. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final String SIMPLE_REQUEST_HEADER_CONTENT_TYPE = "Content-Type";
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES = new HashSet<String>(
+            Arrays.asList("application/x-www-form-urlencoded",
+                    "multipart/form-data", "text/plain"));
 }
