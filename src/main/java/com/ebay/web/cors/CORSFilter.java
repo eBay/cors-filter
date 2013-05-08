@@ -130,7 +130,7 @@ public class CORSFilter implements Filter {
             throw new IllegalArgumentException(message);
         }
 
-        String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
+        final String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
 
         final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
