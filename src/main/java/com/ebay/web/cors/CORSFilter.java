@@ -153,6 +153,14 @@ public class CORSFilter implements Filter {
 
     // -------------------------------------------------------------- Constants
     /**
+     * {@link Collection} of HTTP methods. Case sensitive.
+     * 
+     * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
+     */
+    public static final Set<String> HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
+                    "TRACE", "CONNECT"));
+    /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
      * @see http://www.w3.org/TR/cors/#terminology
