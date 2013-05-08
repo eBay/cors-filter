@@ -291,12 +291,13 @@ public class CORSFilter implements Filter {
         }
     }
 
-    public static String join(Set<String> elements, String separator) {
+    public static String join(final Set<String> elements, final String joinSeparator ) {
+        String separator = ","; 
         if (elements == null) {
             return null;
         }
-        if (separator == null) {
-            separator = ",";
+        if (joinSeparator != null) {
+            separator = joinSeparator;
         }
         StringBuilder buffer = new StringBuilder();
         boolean isFirst = true;
