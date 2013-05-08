@@ -24,39 +24,32 @@ public class CORSFilterTest {
      */
     @Test
     public void testDoFilterSimpleGET() throws IOException, ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTPS_WWW_APACHE_ORG).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("GET").anyTimes();
-
-        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
-                true);
-        EasyMock.expectLastCall();
-        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
-        EasyMock.expectLastCall();
-        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-                CORSRequestType.SIMPLE.getType());
-        EasyMock.expectLastCall();
+        request.setMethod("GET");
 
-        EasyMock.replay(request);
-
-        HttpServletResponse response =
-                EasyMock.createNiceMock(HttpServletResponse.class);
+        MockHttpServletResponse response = new MockHttpServletResponse();
         response.addHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-        EasyMock.expectLastCall();
-        EasyMock.replay(response);
 
-        FilterChain filterChain = EasyMock.createNiceMock(FilterChain.class);
+        FilterChain filterChain = new MockFilterChain();
 
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
         corsFilter.destroy();
-        EasyMock.verify(request, response);
+
+        Assert.assertNotNull(request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+        Assert.assertTrue((Boolean) request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+        Assert.assertTrue(request.getAttribute(
+                CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN).equals(
+                TestConfigs.HTTPS_WWW_APACHE_ORG));
+        Assert.assertTrue(request.getAttribute(
+                CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
+                CORSRequestType.SIMPLE.getType()));
         // If we don't get an exception at this point, then all mocked objects
         // worked as expected.
     }
