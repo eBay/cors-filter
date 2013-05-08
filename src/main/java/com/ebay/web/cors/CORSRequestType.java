@@ -20,26 +20,38 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Types of CORS request, as per specification.
+ * Enumerates varies types of CORS requests. Also, provides utility methods to
+ * determine the request type.
  * 
  * @author Mohit Soni
  * 
  */
 public enum CORSRequestType {
-    /** A valid CORS request. */
+    // ----------------------------------------------------------- Enumerations
+    /**
+     * Actual CORS request.
+     */
     SIMPLE("simple"),
-    /** A valid pre-flight CORS request. */
+    /**
+     * A pre-flight CORS request, to get meta information.
+     */
     PRE_FLIGHT("pre_flight"),
-    /** Not a CORS request, but a normal request. */
+    /**
+     * Not a CORS request, but a normal request.
+     */
     NOT_CORS("not_cors"),
-    /** An invalid CORS request. */
+    /**
+     * An invalid CORS request.
+     */
     INVALID_CORS("invalid_cors");
 
+    // ----------------------------------------------------- Instance variables
     /**
      * The string representation of CORS request type.
      */
     private String type;
 
+    // ---------------------------------------------------- Private constructor
     /**
      * Initializes the type property.
      * 
@@ -49,6 +61,7 @@ public enum CORSRequestType {
         this.type = type;
     }
 
+    // --------------------------------------------------------- Helper methods
     /**
      * Determines the type of CORS request.
      * 
@@ -99,7 +112,7 @@ public enum CORSRequestType {
     }
 
     /**
-     * Checks if the origin is allowed to make a CORS request.
+     * Checks if the Origin is allowed to make a CORS request.
      * 
      * @param request
      *            The {@link HttpServletRequest} object.
@@ -126,10 +139,12 @@ public enum CORSRequestType {
     }
 
     /**
-     * Checks for the presence of Origin header.
+     * Checks for the presence of 'Origin' header.
      * 
      * @param request
-     * @return
+     *            The {@link HttpServletRequest} object.
+     * @return <code>true</code> if request has 'Origin' header;
+     *         <code>false</code> otherwise.
      */
     private static boolean hasOriginHeader(final HttpServletRequest request) {
         String originHeader =
@@ -138,11 +153,12 @@ public enum CORSRequestType {
     }
 
     /**
-     * Checks for the presence of CORSFilter.ACCESS_CONTROL_REQUEST_METHOD
-     * header.
+     * Checks for the presence of 'Access-Control-Request-Method' header.
      * 
      * @param request
-     * @return
+     *            The {@link HttpServletRequest} object.
+     * @return <code>true</code> if request has 'Access-Control-Request-Method'
+     *         header; <code>false</code> otherwise.
      */
     private static boolean hasAccessControlRequestMethodHeader(
             final HttpServletRequest request) {
@@ -152,11 +168,12 @@ public enum CORSRequestType {
     }
 
     /**
-     * Checks for the presence of CORSFilter.ACCESS_CONTROL_REQUEST_HEADERS
-     * header.
+     * Checks for the presence of 'Access-Control-Request-Headers' header.
      * 
      * @param request
-     * @return
+     *            The {@link HttpServletRequest} object.
+     * @return <code>true</code> if request has 'Access-Control-Request-Headers'
+     *         header; <code>false</code> otherwise.
      */
     private static boolean hasAccessControlRequestHeadersHeader(
             final HttpServletRequest request) {
@@ -169,7 +186,9 @@ public enum CORSRequestType {
      * Checks if the request is a CORS pre-flight request.
      * 
      * @param request
-     * @return
+     *            The {@link HttpServletRequest} object.
+     * @return <code>true</code> if request is pre-flight; <code>false</code>
+     *         otherwise.
      */
     private static boolean isPreflight(final HttpServletRequest request) {
 
@@ -188,10 +207,11 @@ public enum CORSRequestType {
         return false;
     }
 
+    // -------------------------------------------------------------- Accessors
     /**
      * Returns the {@link String} representation of the {@link CORSRequestType}.
      * 
-     * @return
+     * @return The {@link String} representation.
      */
     public String getType() {
         return this.type;

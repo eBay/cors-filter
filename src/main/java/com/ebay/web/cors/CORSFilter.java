@@ -410,6 +410,15 @@ public class CORSFilter implements Filter {
     // --------------------------------------------------------- Static methods
     /**
      * Decorates the {@link HttpServletRequest}, with CORS attributes.
+     * <ul>
+     * <li><b>cors.isCorsRequest:</b> Flag to determine if request is a CORS
+     * request. Set to <code>true</code> if CORS request; <code>false</code>
+     * otherwise.</li>
+     * <li><b>cors.origin:</b> The Origin URL.</li>
+     * <li><b>cors.requestType:</b> Type of request. Values: <code>simple</code>
+     * or <code>preflight</code> or <code>not_cors</code> or
+     * <code>invalid_cors</code></li>
+     * </ul>
      * 
      * @param request
      *            The {@link HttpServletRequest} object.
@@ -458,7 +467,7 @@ public class CORSFilter implements Filter {
 
     /**
      * Joins elements of {@link Set} into a string, where each element is
-     * separated by the provided separater.
+     * separated by the provided separator.
      * 
      * @param elements
      *            The {@link Set} containing elements to join together.
