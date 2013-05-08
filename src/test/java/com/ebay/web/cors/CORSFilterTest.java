@@ -11,9 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CORSFilterTest {
+    private FilterChain filterChain = new MockFilterChain();
+
+    @Before
+    public void setup() {
+    }
 
     /**
      * Tests if a GET request is treated as simple request.
@@ -30,18 +36,14 @@ public class CORSFilterTest {
         request.setMethod("GET");
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        response.addHeader(
-                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-
-        FilterChain filterChain = new MockFilterChain();
 
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
-        corsFilter.destroy();
 
-        Assert.assertNotNull(request
-                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+        Assert.assertTrue(response.getHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
+                "*"));
         Assert.assertTrue((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
         Assert.assertTrue(request.getAttribute(

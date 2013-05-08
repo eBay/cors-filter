@@ -201,8 +201,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     }
 
     public Enumeration getHeaderNames() {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.enumeration(headers.keySet());
     }
 
     public int getIntHeader(String name) {
