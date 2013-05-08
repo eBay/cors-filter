@@ -83,7 +83,8 @@ public enum CORSRequestType {
             return INVALID_CORS;
         }
 
-        // Does this CORS request requests resource with an allowed HttpMethod ?
+        // Does this CORS request, requests resource with an allowed HttpMethod
+        // ?
         if (!allowedHttpMethods.contains(requestMethod)) {
             return INVALID_CORS;
         }
@@ -96,6 +97,16 @@ public enum CORSRequestType {
         return SIMPLE;
     }
 
+    /**
+     * Checks if the origin is allowed to make a CORS request.
+     * 
+     * @param request
+     *            The {@link HttpServletRequest} object.
+     * @param corsConfig
+     *            The {@link CORSConfiguration} object.
+     * @return <code>true</code> if origin is allowed; <code>false</code>
+     *         otherwise.
+     */
     private static boolean isOriginAllowed(final HttpServletRequest request,
             final CORSConfiguration corsConfig) {
         if (corsConfig.isAnyOriginAllowed()) {
