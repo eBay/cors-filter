@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletResponse;
  * </ul>
  * </p>
  * 
- * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
+ * @author Mohit Soni
  * @see <a href="http://www.w3.org/TR/cors/">CORS specification</a>
  * 
  */

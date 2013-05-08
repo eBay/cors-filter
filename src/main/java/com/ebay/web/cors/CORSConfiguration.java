@@ -66,7 +66,7 @@ import javax.servlet.ServletException;
  * <li><b>Allowed HTTP headers:</b> Origin,Accept,X-Requested-With,Content-Type</li>
  * </ul>
  * 
- * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
+ * @author Mohit Soni
  * 
  */
 public final class CORSConfiguration {

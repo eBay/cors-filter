@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Types of CORS request, as per specification.
  * 
- * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
+ * @author Mohit Soni
  * 
  */
 public enum CORSRequestType {
