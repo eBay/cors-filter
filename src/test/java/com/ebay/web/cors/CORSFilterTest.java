@@ -888,6 +888,32 @@ public class CORSFilterTest {
     }
 
     @Test
+    public void
+            testDecorateCORSPropertiesCORSRequestTypePreFlightNoACRHHeadersPassed() {
+        HttpServletRequest request =
+                EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
+                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
+        EasyMock.expect(
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
+                .andReturn(null).anyTimes();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST,
+                true);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                CORSRequestType.PRE_FLIGHT.getType());
+        EasyMock.expectLastCall();
+        request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
+                "");
+        EasyMock.expectLastCall();
+        EasyMock.replay(request);
+        CORSFilter.decorateCORSProperties(request, CORSRequestType.PRE_FLIGHT);
+    }
+
+    @Test
     public void testDecorateCORSPropertiesCORSRequestTypeNotCORS() {
         HttpServletRequest request =
                 EasyMock.createMock(HttpServletRequest.class);

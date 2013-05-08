@@ -518,9 +518,14 @@ public class CORSFilter implements Filter {
             request.setAttribute(
                     CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
                     corsRequestType.getType());
+            String headers =
+                    request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
+            if (headers == null) {
+                headers = "";
+            }
             request.setAttribute(
                     CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS,
-                    request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS)
+                    headers
                     );
             break;
         case NOT_CORS:
