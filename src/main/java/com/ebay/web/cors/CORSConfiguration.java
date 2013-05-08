@@ -231,7 +231,25 @@ public final class CORSConfiguration {
     }
 
     // -------------------------------------------------------- Private methods
-
+    /**
+     * Parses each param-value and populates configuration variables.
+     * 
+     * @param allowedOrigins
+     *            A {@link String} of comma separated origins.
+     * @param allowedHttpMethods
+     *            A {@link String} of comma separated HTTP methods.
+     * @param allowedHttpHeaders
+     *            A {@link String} of comma separated HTTP headers.
+     * @param exposedHeaders
+     *            A {@link String} of comma separated headers that needs to be
+     *            exposed.
+     * @param supportsCredentials
+     *            "true" if support credentials needs to be enabled.
+     * @param preflightMaxAge
+     *            The amount of seconds the user agent is allowed to cache the
+     *            result of the pre-flight request.
+     * @throws ServletException
+     */
     private void parseAndStore(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
@@ -300,7 +318,7 @@ public final class CORSConfiguration {
         return set;
     }
 
-    // --------------------------------------------------------- Public methods
+    // ------------------------------------------------- Accessors and Mutators
     /**
      * Returns an unmodifiable set of allowedOrigins.
      * 
@@ -407,7 +425,6 @@ public final class CORSConfiguration {
     }
 
     // --------------------------------------------------------- Static methods
-
     /**
      * Creates an instance of {@link CORSConfiguration} from the
      * {@link FilterConfig} object.
