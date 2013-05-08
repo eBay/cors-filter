@@ -137,7 +137,7 @@ public class TestConfigs {
                 } else if (CORSConfiguration.PARAM_CORS_SUPPORT_CREDENTIALS
                         .equalsIgnoreCase(name)) {
                     return supportCredentials;
-                } else if (CORSConfiguration.CORS_PREFLIGHT_MAXAGE
+                } else if (CORSConfiguration.PARAM_CORS_PREFLIGHT_MAXAGE
                         .equalsIgnoreCase(name)) {
                     return preflightMaxAge;
                 }
