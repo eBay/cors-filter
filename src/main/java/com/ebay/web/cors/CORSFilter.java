@@ -206,6 +206,7 @@ public class CORSFilter implements Filter {
      */
     private CORSConfiguration corsConfiguration;
 
+    // --------------------------------------------------------- Public methods
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException,
@@ -406,6 +407,7 @@ public class CORSFilter implements Filter {
 
     }
 
+    // --------------------------------------------------------- Static methods
     /**
      * Decorates the {@link HttpServletRequest}, with CORS attributes.
      * 
@@ -454,6 +456,17 @@ public class CORSFilter implements Filter {
         }
     }
 
+    /**
+     * Joins elements of {@link Set} into a string, where each element is
+     * separated by the provided separater.
+     * 
+     * @param elements
+     *            The {@link Set} containing elements to join together.
+     * @param joinSeparator
+     *            The character to be used for separating elements.
+     * @return The joined {@link String}; <code>null</code> if elements
+     *         {@link Set} is null.
+     */
     public static String join(final Set<String> elements,
             final String joinSeparator) {
         String separator = ",";
