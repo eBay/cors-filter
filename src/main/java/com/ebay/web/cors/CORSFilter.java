@@ -33,13 +33,24 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
- * A servlet filter to support CORS (Cross-Origin Resource Sharing).
+ * A {@link Filter} to support CORS (Cross-Origin Resource Sharing).
  * </p>
  * 
  * <p>
- * An incoming HTTP request is intercepted, and is inspected as per CORS spec,
- * and with help of {@link CORSConfiguration}. Appropriate, response headers (as
- * per spec) are added, if required.
+ * This is a reference implementation of W3C's CORS specification for resources.
+ * Each {@link HttpServletRequest} request is inspected as per specification,
+ * and appropriate response headers are added.
+ * </p>
+ * 
+ * <p>
+ * By default, it also sets following request attributes, that helps to
+ * determine nature of request downstream.
+ * <ul>
+ * <li><b>cors.isCorsRequest:</b> Flag to determine if a request is a CORS
+ * request</li>
+ * <li><b>cors.origin:</b> Origin URL</li>
+ * <li><b>cors.requestType:</b> simple or preflight or not_cors or invalid_cors</li>
+ * </ul>
  * </p>
  * 
  * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
