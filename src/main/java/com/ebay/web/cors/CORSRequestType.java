@@ -68,11 +68,17 @@ public enum CORSRequestType {
         String requestMethod = request.getMethod();
 
         // A valid CORS request must have an 'Origin' header.
+        // Section 6.1: If the Origin header is not present terminate this set
+        // of steps. The
+        // request is outside the scope of this specification.
         if (!hasOriginHeader(request)) {
             return NOT_CORS;
         }
 
         // Did request originated from an allowed Origin ?
+        // Section 6.1: If the value of the Origin header is not a
+        // case-sensitive match for any of the values in list of origins, do not
+        // set any additional headers and terminate this set of steps.
         if (!isOriginAllowed(request, corsConfig)) {
             return INVALID_CORS;
         }

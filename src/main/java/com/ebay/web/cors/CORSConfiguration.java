@@ -15,6 +15,7 @@
  */
 package com.ebay.web.cors;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,27 +28,32 @@ import javax.servlet.ServletException;
  * 
  * <ul>
  * <li>
- * <b>Allowed Origins:</b> A white list of origins, which can send a CORS
- * request.</li>
+ * <b>Allowed Origins:</b> A {@link Collection} of origins consisting of zero or
+ * more origins that are allowed access to the resource.</li>
  * <li>
- * <b>Allowed HTTP Methods:</b> HTTP verbs that can be used to send a CORS
- * request.</li>
+ * <b>Allowed HTTP Methods:</b> A {@link Collection} of methods consisting of
+ * zero or more methods that are supported by the resource.</li>
  * <li>
- * <b>Allowed HTTP Headers:</b> A list of headers that can be sent with a CORS
- * request.</li>
+ * <b>Allowed HTTP Headers:</b> A {@link Collection} of headers consisting of
+ * zero or more header field names that are supported by the resource.</li>
  * <li>
- * <b>Exposed headers:</b> A list of response headers that can be exposed to JS
- * API.</li>
+ * <b>Exposed headers:</b> A {@link Collection} of exposed headers consisting of
+ * zero or more header field names of headers other than the simple response
+ * headers that the resource might use and can be exposed.</li>
  * <li>
- * <b>Pre-flight max age:</b> Time duration, in seconds that a client can cache
- * pre-flight request.</li>
+ * <b>Pre-flight max age:</b> The amount of seconds the user agent is allowed to
+ * cache the result of the pre-flight request.</li>
+ * <li>
+ * <b>Supports credentials:</b> A supports credentials flag that indicates
+ * whether the resource supports user credentials in the request. It is true
+ * when the resource does and false otherwise.</li>
  * </ul>
  * <p>
  * Defaults:
  * </p>
  * <ul>
  * <li>Allowed HTTP methods: [GET, POST, OPTIONS, HEAD]</li>
- * <li>Supports credentials: true</li>
+ * <li>Supports credentials: false</li>
  * </ul>
  * 
  * @author <a href="mailto:mosoni@ebay.com">Mohit Soni</a>
@@ -116,7 +122,8 @@ public final class CORSConfiguration {
     public static final String CORS_PREFLIGHT_MAXAGE = "cors.preflight.maxage";
 
     /**
-     * Set of origin URL that are allowed to make a CORS request.
+     * A {@link Collection} of origins consisting of zero or more origins that
+     * are allowed access to the resource.
      */
     private final Set<String> allowedOrigins;
 
@@ -126,22 +133,28 @@ public final class CORSConfiguration {
     private boolean anyOriginAllowed;
 
     /**
-     * Set of allowed HTTP methods, which the CORS filter support.
+     * A {@link Collection} of methods consisting of zero or more methods that
+     * are supported by the resource.
      */
     private final Set<String> allowedHttpMethods;
 
     /**
-     * Set of allowed headers, which the CORS filter support.
+     * A {@link Collection} of headers consisting of zero or more header field
+     * names that are supported by the resource.
      */
     private final Set<String> allowedHttpHeaders;
 
     /**
-     * Set of exposed headers.
+     * A {@link Collection} of exposed headers consisting of zero or more header
+     * field names of headers other than the simple response headers that the
+     * resource might use and can be exposed.
      */
     private Set<String> exposedHeaders;
 
     /**
-     * Does filter supports credentials ?
+     * A supports credentials flag that indicates whether the resource supports
+     * user credentials in the request. It is true when the resource does and
+     * false otherwise.
      */
     private boolean supportsCredentials;
 
