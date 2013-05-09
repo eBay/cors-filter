@@ -684,10 +684,10 @@ public class CORSFilterTest {
         request.setMethod("OPTIONS");
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs
-                .getDefaultFilterConfig());
+                .getFilterConfigAnyOriginAndSupportsCredentialsDisabled());
         corsFilter.doFilter(request, response, filterChain);
-        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
-                response.getStatus());
+        Assert.assertTrue(response.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals("*"));
+        Assert.assertNull(response.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS));
     }
     
     @Test
