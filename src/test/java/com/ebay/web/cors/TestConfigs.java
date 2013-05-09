@@ -69,7 +69,7 @@ public class TestConfigs {
         final String allowedHttpHeaders =
                 CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS+",PUT";
         final String allowedOrigins = HTTPS_WWW_APACHE_ORG;
         final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials = "true";
@@ -88,7 +88,7 @@ public class TestConfigs {
         final String allowedHttpHeaders =
                 CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
+                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
         final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials =
                 CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
