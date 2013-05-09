@@ -1,0 +1,7 @@
+CORS Filter depends on the following libraries:
+
+JUnit
+Licensed under the Common Public License 1.0
+
+servlet-api
+Dual licensed under GPLv2 and CDDL v1.1
