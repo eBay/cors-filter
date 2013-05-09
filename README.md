@@ -45,7 +45,7 @@ Include cors-filter jar in your classpath. And, add filter configuration to your
   </filter-mapping>
 ```
 
-### Adding information about the CORS in HttpServletRequest
+### Information added by CORS filter about request in HttpServletRequest object
 CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
 
 * **cors.isCorsRequest**: Flag to determine if a request is a CORS request
