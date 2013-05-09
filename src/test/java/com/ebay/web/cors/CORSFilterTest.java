@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,7 +49,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     /**
@@ -62,6 +64,7 @@ public class CORSFilterTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
+        request.setContentType("text/plain");
         request.setMethod("POST");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -79,7 +82,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     /**
@@ -111,7 +114,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     @Test
@@ -121,6 +124,7 @@ public class CORSFilterTest {
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
         request.setMethod("POST");
+        request.setContentType("text/plain");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         CORSFilter corsFilter = new CORSFilter();
@@ -137,7 +141,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     @Test
@@ -168,7 +172,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     @Test
@@ -178,6 +182,7 @@ public class CORSFilterTest {
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTPS_WWW_APACHE_ORG);
         request.setMethod("POST");
+        request.setContentType("text/plain");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         CORSFilter corsFilter = new CORSFilter();
@@ -198,7 +203,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     @Test
@@ -229,7 +234,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.PRE_FLIGHT.getType()));
+                CORSFilter.CORSRequestType.PRE_FLIGHT.name().toLowerCase()));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS).equals(
                 "Content-Type"));
@@ -267,7 +272,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.PRE_FLIGHT.getType()));
+                CORSFilter.CORSRequestType.PRE_FLIGHT.name().toLowerCase()));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS).equals(
                 "Content-Type"));
@@ -279,6 +284,7 @@ public class CORSFilterTest {
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 null);
         request.setMethod("POST");
+        request.setContentType("text/plain");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         CORSFilter corsFilter = new CORSFilter();
@@ -289,7 +295,7 @@ public class CORSFilterTest {
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
     }
 
-    @Test(expected = ServletException.class)
+    @Test
     public void testDoFilterInvalidCORSOriginNotAllowed() throws IOException,
             ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -301,6 +307,9 @@ public class CORSFilterTest {
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getSpecificOriginFilterConfig());
         corsFilter.doFilter(request, response, filterChain);
+
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
     }
 
     @Test(expected = ServletException.class)
@@ -352,7 +361,7 @@ public class CORSFilterTest {
                 TestConfigs.HTTPS_WWW_APACHE_ORG));
         Assert.assertTrue(request.getAttribute(
                 CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
-                CORSRequestType.SIMPLE.getType()));
+                CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
     @Test(expected = ServletException.class)
@@ -415,7 +424,8 @@ public class CORSFilterTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testDecorateCORSPropertiesNullRequestValidCORSRequestType() {
-        CORSFilter.decorateCORSProperties(null, CORSRequestType.SIMPLE);
+        CORSFilter.decorateCORSProperties(null,
+                CORSFilter.CORSRequestType.SIMPLE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -427,7 +437,8 @@ public class CORSFilterTest {
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeNotCORS() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        CORSFilter.decorateCORSProperties(request, CORSRequestType.NOT_CORS);
+        CORSFilter.decorateCORSProperties(request,
+                CORSFilter.CORSRequestType.NOT_CORS);
         Assert.assertFalse((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
     }
@@ -435,9 +446,475 @@ public class CORSFilterTest {
     @Test
     public void testDecorateCORSPropertiesCORSRequestTypeInvalidCORS() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        CORSFilter.decorateCORSProperties(request, CORSRequestType.INVALID_CORS);
+        CORSFilter
+                .decorateCORSProperties(request,
+                        CORSFilter.CORSRequestType.INVALID_CORS);
         Assert.assertNull(request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+    }
+
+    @Test
+    public void testCheckSimpleRequestTypeAnyOrigin() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.ANY_ORIGIN);
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.SIMPLE, requestType);
+    }
+
+    /**
+     * Happy path test, when a valid CORS Simple request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckSimpleRequestType() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.SIMPLE, requestType);
+    }
+
+    /**
+     * Happy path test, when a valid CORS Pre-flight request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckPreFlightRequestType() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "Content-Type");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.PRE_FLIGHT, requestType);
+    }
+
+    /**
+     * when a valid CORS Pre-flight request arrives, with no
+     * Access-Control-Request-Method
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeNoACRM() throws ServletException,
+            IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * when a valid CORS Pre-flight request arrives, with empty
+     * Access-Control-Request-Method
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeEmptyACRM()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * Happy path test, when a valid CORS Pre-flight request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeNoHeaders()
+            throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.PRE_FLIGHT, requestType);
+    }
+
+    /**
+     * Section 6.2.3
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeInvalidRequestMethod()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "POLITE");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * Section Section 6.2.5
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeUnsupportedRequestMethod()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "TRACE");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+    
+    /**
+     * Section Section 6.2.6
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeUnsupportedRequestHeaders()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "X-ANSWER");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSecureFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+    
+    /**
+     * Section Section 6.2.7
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeAnyOriginNoWithCredentials()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "Origin");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+    
+    @Test
+    public void testCheckPreFlightRequestTypeOriginNotAllowed()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "www.ebay.com");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSecureFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * Happy path test, when a valid CORS Pre-flight request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckPreFlightRequestTypeEmptyHeaders()
+            throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "");
+        request.setMethod("OPTIONS");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.PRE_FLIGHT, requestType);
+    }
+
+    /**
+     * Negative test, when a CORS request arrives, with an empty origin.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckNotCORSRequestTypeEmptyOrigin()
+            throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
+    }
+
+    /**
+     * Negative test, when a CORS request arrives, with a null origin.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckNotCORSRequestTypeNullOrigin() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                null);
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
+    }
+
+    /**
+     * Tests for failure, when a different domain is used, that's not in the
+     * allowed list of origins.
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckInvalidOrigin() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "www.example.com");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * Tests for failure, when a different sub-domain is used, that's not in the
+     * allowed list of origins.
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckInvalidOriginNotAllowedSubdomain()
+            throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://commons.apache.org");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * PUT is not an allowed request method.
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckInvalidRequestMethod() throws ServletException,
+            IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org");
+        request.setMethod("PUT");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * When requestMethod is null
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckNullRequestMethod() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org");
+        request.setMethod(null);
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
+    }
+
+    /**
+     * "http://tomcat.apache.org" is an allowed origin and
+     * "https://tomcat.apache.org" is not, because scheme doesn't match
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckForSchemeVariance() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "https://tomcat.apache.org");
+        request.setMethod("POST");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
+    }
+
+    /**
+     * "http://tomcat.apache.org" is an allowed origin and
+     * "http://tomcat.apache.org:8080" is not, because ports doesn't match
+     * 
+     * @throws ServletException
+     * @throws IOException
+     */
+    @Test
+    public void testCheckForPortVariance() throws ServletException, IOException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org:8080");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfig());
+        corsFilter.doFilter(request, response, filterChain);
+        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
+                response.getStatus());
+    }
+
+    /**
+     * Tests for failure, when an invalid {@link HttpServletRequest} is
+     * encountered.
+     * 
+     * @throws ServletException
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testCheckRequestTypeNull() throws ServletException {
+        HttpServletRequest request = null;
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.checkRequestType(request);
     }
 
     @Test

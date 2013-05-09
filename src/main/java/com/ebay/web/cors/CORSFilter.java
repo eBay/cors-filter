@@ -16,10 +16,13 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.Filter;
@@ -162,6 +165,34 @@ public class CORSFilter implements Filter {
 
     // -------------------------------------------------------------- Constants
     /**
+     * Enumerates varies types of CORS requests. Also, provides utility methods
+     * to determine the request type.
+     */
+    public static enum CORSRequestType {
+        /**
+         * A simple HTTP request, i.e. it shouldn't be pre-flighted.
+         */
+        SIMPLE,
+        /**
+         * A HTTP request that needs to be pre-flighted.
+         */
+        ACTUAL,
+        /**
+         * A pre-flight CORS request, to get meta information, before a
+         * non-simple HTTP request is sent.
+         */
+        PRE_FLIGHT,
+        /**
+         * Not a CORS request, but a normal request.
+         */
+        NOT_CORS,
+        /**
+         * An invalid CORS request.
+         */
+        INVALID_CORS;
+    }
+
+    /**
      * {@link Collection} of HTTP methods. Case sensitive.
      * 
      * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
@@ -169,6 +200,11 @@ public class CORSFilter implements Filter {
     public static final Set<String> HTTP_METHODS = new HashSet<String>(
             Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
                     "TRACE", "CONNECT"));
+    /**
+     * {@link Collection} of non-simple HTTP methods. Case sensitive.
+     */
+    public static final Set<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
     /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
@@ -240,8 +276,7 @@ public class CORSFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         // Determines the CORS request type.
-        CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
+        CORSFilter.CORSRequestType requestType = checkRequestType(request);
 
         // Adds CORS specific attributes to request.
         CORSFilter.decorateCORSProperties(request, requestType);
@@ -249,6 +284,10 @@ public class CORSFilter implements Filter {
         switch (requestType) {
         case SIMPLE:
             // Handles a Simple CORS request.
+            this.handleSimpleCORS(request, response, filterChain);
+            break;
+        case ACTUAL:
+            // Handles an Actual CORS request.
             this.handleSimpleCORS(request, response, filterChain);
             break;
         case PRE_FLIGHT:
@@ -298,24 +337,37 @@ public class CORSFilter implements Filter {
     public void handleSimpleCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
-        CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
-        if (requestType != CORSRequestType.SIMPLE) {
+        CORSFilter.CORSRequestType requestType =
+                checkRequestType(request);
+        if (!(requestType == CORSFilter.CORSRequestType.SIMPLE
+        || requestType == CORSFilter.CORSRequestType.ACTUAL)) {
             String message =
                     "Expects a HttpServletRequest object of type "
-                            + CORSRequestType.SIMPLE.getType();
+                            + CORSFilter.CORSRequestType.SIMPLE
+                            + " or "
+                            + CORSFilter.CORSRequestType.ACTUAL;
             throw new IllegalArgumentException(message);
         }
 
-        final CORSConfiguration corsConfig = corsConfiguration;
         final String origin =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
-        final Set<String> exposedHeaders = corsConfig.getExposedHeaders();
+        final String method = request.getMethod();
+        final Set<String> exposedHeaders =
+                corsConfiguration.getExposedHeaders();
+
+        // Section 6.1.2
+        if (!isOriginAllowed(origin)) {
+            handleInvalidCORS(request, response, filterChain);
+        }
+
+        if (!corsConfiguration.getAllowedHttpMethods().contains(method)) {
+            handleInvalidCORS(request, response, filterChain);
+        }
 
         // Section 6.1.3
         // Add a single Access-Control-Allow-Origin header.
-        if (corsConfig.isAnyOriginAllowed()
-                && !corsConfig.isSupportsCredentials()) {
+        if (corsConfiguration.isAnyOriginAllowed()
+                && !corsConfiguration.isSupportsCredentials()) {
             // If resource doesn't support credentials and if any origin is
             // allowed
             // to make CORS request, return header with '*'.
@@ -333,7 +385,7 @@ public class CORSFilter implements Filter {
         // If the resource supports credentials, add a single
         // Access-Control-Allow-Credentials header with the case-sensitive
         // string "true" as value.
-        if (corsConfig.isSupportsCredentials()) {
+        if (corsConfiguration.isSupportsCredentials()) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
@@ -369,53 +421,107 @@ public class CORSFilter implements Filter {
     public void handlePreflightCORS(final HttpServletRequest request,
             final HttpServletResponse response, final FilterChain filterChain)
             throws IOException, ServletException {
-        CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
+        CORSRequestType requestType = checkRequestType(request);
         if (requestType != CORSRequestType.PRE_FLIGHT) {
             throw new IllegalArgumentException(
                     "Expects a HttpServletRequest object of type "
-                            + CORSRequestType.PRE_FLIGHT.getType());
+                            + CORSRequestType.PRE_FLIGHT.name().toLowerCase());
         }
 
         final String origin =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
-
-        final CORSConfiguration corsConfig = corsConfiguration;
         final Set<String> allowedHttpMethods =
-                corsConfig.getAllowedHttpMethods();
+                corsConfiguration.getAllowedHttpMethods();
         final Set<String> allowedHttpHeaders =
-                corsConfig.getAllowedHttpHeaders();
-        final long preflightMaxAge = corsConfig.getPreflightMaxAge();
+                corsConfiguration.getAllowedHttpHeaders();
+        final long preflightMaxAge = corsConfiguration.getPreflightMaxAge();
+        final boolean supportsCredentials =
+                corsConfiguration.isSupportsCredentials();
 
-        // Must be returned, in order for browser runtime to accept the
-        // response.
-        response.addHeader(
-                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+        // Section 6.2.2
+        if (!isOriginAllowed(origin)) {
+            handleInvalidCORS(request, response, filterChain);
+            return;
+        }
 
-        // Must be returned, in order for browser to accept the response, as
-        // this request was made with cookies.
-        if (corsConfig.isSupportsCredentials()) {
+        // Section 6.2.3
+        String accessControlRequestMethod =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
+        if (accessControlRequestMethod == null
+                || (accessControlRequestMethod != null && HTTP_METHODS
+                        .contains(accessControlRequestMethod.trim()) == false)) {
+            handleInvalidCORS(request, response, filterChain);
+            return;
+        } else {
+            accessControlRequestMethod = accessControlRequestMethod.trim();
+        }
+
+        // Section 6.2.4
+        String accessControlRequestHeadersHeader =
+                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
+        List<String> accessControlRequestHeaders = new LinkedList<String>();
+        if (accessControlRequestHeadersHeader != null
+                && !accessControlRequestHeadersHeader.trim().isEmpty()) {
+            String[] headers =
+                    accessControlRequestHeadersHeader.trim().split(",");
+            for (String header : headers) {
+                accessControlRequestHeaders.add(header.trim().toLowerCase());
+            }
+        }
+
+        // Section 6.2.5
+        if (!allowedHttpMethods.contains(accessControlRequestMethod)) {
+            handleInvalidCORS(request, response, filterChain);
+            return;
+        }
+
+        // Section 6.2.6
+        if (!accessControlRequestHeaders.isEmpty()) {
+            for (String header : accessControlRequestHeaders) {
+                if (!allowedHttpHeaders.contains(header)) {
+                    handleInvalidCORS(request, response, filterChain);
+                    return;
+                }
+            }
+        }
+
+        // Section 6.2.7
+        if (supportsCredentials) {
+            response.addHeader(
+                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                    origin);
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
+        } else {
+            if (corsConfiguration.isAnyOriginAllowed()) {
+                response.addHeader(
+                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                        "*");
+            } else {
+                response.addHeader(
+                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                        origin);
+            }
         }
 
-        if ((allowedHttpMethods != null) && (allowedHttpMethods.size() > 0)) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
-                    join(allowedHttpMethods, ","));
-        }
-
-        if ((allowedHttpHeaders != null) && (allowedHttpHeaders.size() > 0)) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
-                    join(allowedHttpHeaders, ","));
-        }
-
+        // Section 6.2.8
         if (preflightMaxAge > 0) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
                     String.valueOf(preflightMaxAge));
+        }
+
+        // Section 6.2.9
+        response.addHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
+                accessControlRequestMethod);
+
+        // Section 6.2.10
+        if ((allowedHttpHeaders != null) && (!allowedHttpHeaders.isEmpty())) {
+            response.addHeader(
+                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
+                    join(allowedHttpHeaders, ","));
         }
 
         // Do not forward the request down the filter chain.
@@ -461,8 +567,14 @@ public class CORSFilter implements Filter {
         String method = request.getMethod();
         String message =
                 "Encountered an invalid CORS request, from Origin: " + origin
-                        + " ; requested with method: " + method;
-        throw new ServletException(message);
+                        + ", requested with method: " + method;
+        response.setContentType("text/plain");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.resetBuffer();
+        PrintWriter writer = response.getWriter();
+        writer.println("CORS Filter: " + message);
+        // throw new ServletException(message);
+        return;
     }
 
     public void destroy() {
@@ -508,7 +620,16 @@ public class CORSFilter implements Filter {
                     request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
             request.setAttribute(
                     CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-                    corsRequestType.getType());
+                    corsRequestType.name().toLowerCase());
+            break;
+        case ACTUAL:
+            request.setAttribute(
+                    CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST, true);
+            request.setAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN,
+                    request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
+            request.setAttribute(
+                    CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
+                    corsRequestType.name().toLowerCase());
             break;
         case PRE_FLIGHT:
             request.setAttribute(
@@ -517,7 +638,7 @@ public class CORSFilter implements Filter {
                     request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN));
             request.setAttribute(
                     CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE,
-                    corsRequestType.getType());
+                    corsRequestType.name().toLowerCase());
             String headers =
                     request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
             if (headers == null) {
@@ -578,4 +699,70 @@ public class CORSFilter implements Filter {
         return buffer.toString();
     }
 
+    /**
+     * Determines the request type.
+     * 
+     * @param request
+     * @return
+     */
+    public CORSRequestType checkRequestType(final HttpServletRequest request) {
+        CORSRequestType requestType = CORSRequestType.INVALID_CORS;
+        if (request == null) {
+            throw new IllegalArgumentException(
+                    "HttpServletRequest object is null");
+        }
+        String originHeader = request.getHeader(REQUEST_HEADER_ORIGIN);
+        // Section 6.1.1 and Section 6.2.1
+        if ((originHeader != null) && (originHeader.length() > 0)) {
+            String method = request.getMethod();
+            if (method != null && HTTP_METHODS.contains(method)) {
+                if ("OPTIONS".equals(method)) {
+                    requestType = CORSRequestType.PRE_FLIGHT;
+                } else if (COMPLEX_HTTP_METHODS.contains(method)) {
+                    requestType = CORSRequestType.ACTUAL;
+                } else if ("GET".equals(method) || "HEAD".equals(method)) {
+                    requestType = CORSRequestType.SIMPLE;
+                } else if ("POST".equals(method)) {
+                    String contentType = request.getContentType();
+                    if (contentType != null) {
+                        contentType = contentType.toLowerCase().trim();
+                        if (SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES
+                                .contains(contentType)) {
+                            requestType = CORSRequestType.SIMPLE;
+                        } else {
+                            requestType = CORSRequestType.ACTUAL;
+                        }
+                    }
+                }
+            }
+        } else {
+            requestType = CORSRequestType.NOT_CORS;
+        }
+
+        return requestType;
+    }
+
+    /**
+     * Checks if the Origin is allowed to make a CORS request.
+     * 
+     * @param origin
+     *            The Origin.
+     * @return <code>true</code> if origin is allowed; <code>false</code>
+     *         otherwise.
+     */
+    private boolean isOriginAllowed(final String origin) {
+        if (corsConfiguration.isAnyOriginAllowed()) {
+            return true;
+        }
+        final Set<String> allowedOrigins =
+                corsConfiguration.getAllowedOrigins();
+
+        // If 'Origin' header is a case-sensitive match of any of allowed
+        // origins, then return true, else return false.
+        if (allowedOrigins.contains(origin)) {
+            return true;
+        }
+
+        return false;
+    }
 }
