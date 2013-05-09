@@ -51,6 +51,7 @@ CORS filter adds information about a CORS request, in the HttpServletRequest obj
 * **cors.isCorsRequest**: Flag to determine if a request is a CORS request
 * **cors.origin**: Origin URL
 * **cors.requestType**: simple or preflight or not_cors or invalid_cors
+* **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for pre-flight request.
 
 ### Background
 [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a URL that's different from the origin URL.
