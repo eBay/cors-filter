@@ -56,8 +56,9 @@ CORS filter adds information about a CORS request, in the HttpServletRequest obj
 ## References
 Here's a list of good resources to start with CORS:
 
-* [HTML5 Rocks CORS Tutorial](http://www.html5rocks.com/en/tutorials/cors/)
 * [W3C's CORS Spec](http://www.w3.org/TR/cors/)
+* [HTML5 Rocks CORS Tutorial](http://www.html5rocks.com/en/tutorials/cors/)
+* [Mozilla's HTTP access control (CORS)](https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS)
+* [Mozilla's Server-Side Access Control](https://developer.mozilla.org/en-US/docs/Server-Side_Access_Control)
 * [Enable CORS](http://enable-cors.org)
-* [List of Response headers supports by CORS Spec](http://www.w3.org/TR/cors/#syntax)
 * [Other implementations](http://software.dzhuvinov.com/cors-filter.html)
