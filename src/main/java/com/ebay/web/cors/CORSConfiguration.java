@@ -271,7 +271,12 @@ public final class CORSConfiguration {
 
         Set<String> setAllowedHttpHeaders =
                 parseStringToSet(allowedHttpHeaders);
-        setAllowedHttpHeaders(setAllowedHttpHeaders);
+        Set<String> lowerCaseHeaders = new HashSet<String>();
+        for (String header : setAllowedHttpHeaders) {
+            String lowerCase = header.toLowerCase();
+            lowerCaseHeaders.add(lowerCase);
+        }
+        setAllowedHttpHeaders(lowerCaseHeaders);
 
         Set<String> setExposedHeaders = parseStringToSet(exposedHeaders);
         setExposedHeaders(setExposedHeaders);
