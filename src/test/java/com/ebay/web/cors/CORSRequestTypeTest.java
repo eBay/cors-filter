@@ -3,7 +3,6 @@ package com.ebay.web.cors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,13 +21,10 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckSimpleRequestTypeAnyOrigin() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.ANY_ORIGIN).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("GET").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.ANY_ORIGIN);
+        request.setMethod("GET");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
@@ -37,7 +33,6 @@ public class CORSRequestTypeTest {
                         corsConfigurationAnyOrigin);
 
         Assert.assertEquals(CORSRequestType.SIMPLE, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -47,22 +42,17 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckSimpleRequestType() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setMethod("POST");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.SIMPLE, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -72,28 +62,23 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckPreFlightRequestType() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-                .andReturn("OPTIONS").anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-                .andReturn("Content-Type").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "Content-Type");
+        request.setMethod("OPTIONS");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.PRE_FLIGHT, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -104,28 +89,18 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckPreFlightRequestTypeNoACRM() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
 
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-                .andReturn(null).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-                .andReturn("Content-Type").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-        EasyMock.replay(request);
+        request.setMethod("OPTIONS");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -137,28 +112,20 @@ public class CORSRequestTypeTest {
     @Test
     public void testCheckPreFlightRequestTypeEmptyACRM()
             throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-                .andReturn("").anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-                .andReturn("Content-Type").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "");
+        request.setMethod("OPTIONS");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -169,28 +136,39 @@ public class CORSRequestTypeTest {
     @Test
     public void testCheckPreFlightRequestTypeNoHeaders()
             throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-                .andReturn("OPTIONS").anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-                .andReturn(null).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setMethod("OPTIONS");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.PRE_FLIGHT, requestType);
-        EasyMock.verify(request);
+    }
+    
+    @Test
+    public void testCheckPreFlightRequestTypeInvalidRequestMethod()
+            throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "POLITE");
+        request.setMethod("OPTIONS");
+        CORSConfiguration corsConfigurationAnyOrigin =
+                CORSConfiguration.loadFromFilterConfig(TestConfigs
+                        .getDefaultFilterConfig());
+        CORSRequestType requestType =
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
+        Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
     }
 
     /**
@@ -201,28 +179,23 @@ public class CORSRequestTypeTest {
     @Test
     public void testCheckPreFlightRequestTypeEmptyHeaders()
             throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(TestConfigs.HTTP_TOMCAT_APACHE_ORG).anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD))
-                .andReturn("OPTIONS").anyTimes();
-        EasyMock.expect(
-                request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS))
-                .andReturn("").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("OPTIONS").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD,
+                "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "");
+        request.setMethod("OPTIONS");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.PRE_FLIGHT, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -233,21 +206,17 @@ public class CORSRequestTypeTest {
     @Test
     public void testCheckNotCORSRequestTypeEmptyOrigin()
             throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "");
+        request.setMethod("GET");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.NOT_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -257,21 +226,17 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckNotCORSRequestTypeNullOrigin() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn(null).anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                null);
+        request.setMethod("GET");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getDefaultFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.NOT_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -282,21 +247,17 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckInvalidOrigin() throws ServletException {
-
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("www.google.com").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
-        CORSConfiguration corsConfiguration =
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "www.example.com");
+        request.setMethod("GET");
+        CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
-
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
@@ -308,23 +269,19 @@ public class CORSRequestTypeTest {
     @Test
     public void testCheckInvalidOriginNotAllowedSubdomain()
             throws ServletException {
-
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("https://foo.ebay.com:8443").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
-        CORSConfiguration corsConfiguration =
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://commons.apache.org");
+        request.setMethod("GET");
+        CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
-
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
-
+    
     /**
      * PUT is not an allowed request method.
      * 
@@ -332,23 +289,19 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckInvalidRequestMethod() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("https://localhost.ebay.com:8443").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("PUT").anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org");
+        request.setMethod("PUT");
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
-                        .getDefaultFilterConfig());
+                        .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
-    
+
     /**
      * When requestMethod is null
      * 
@@ -356,69 +309,59 @@ public class CORSRequestTypeTest {
      */
     @Test
     public void testCheckNullRequestMethod() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("https://localhost.ebay.com:8443").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn(null).anyTimes();
-        EasyMock.replay(request);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org");
+        request.setMethod(null);
         CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
-                        .getDefaultFilterConfig());
+                        .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
                 CORSRequestType.checkRequestType(request,
                         corsConfigurationAnyOrigin);
-
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
-     * "https://localhost.ebay.com:8443" is an allowed origin and
-     * "http://localhost.ebay.com:8443" is not, because protocol doesn't match
+     * "http://tomcat.apache.org" is an allowed origin and
+     * "https://tomcat.apache.org" is not, because scheme doesn't match
      * 
      * @throws ServletException
      */
     @Test
-    public void testCheckForProtocolVariance() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("http://localhost.ebay.com:8443").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
-        CORSConfiguration corsConfiguration =
+    public void testCheckForSchemeVariance() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "https://tomcat.apache.org");
+        request.setMethod("POST");
+        CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
-
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
-     * "https://localhost.ebay.com:8443" is an allowed origin and
-     * "https://localhost.ebay.com:8080" is not, because ports doesn't match
+     * "http://tomcat.apache.org" is an allowed origin and
+     * "http://tomcat.apache.org:8080" is not, because ports doesn't match
      * 
      * @throws ServletException
      */
     @Test
     public void testCheckForPortVariance() throws ServletException {
-        HttpServletRequest request =
-                EasyMock.createMock(HttpServletRequest.class);
-        EasyMock.expect(request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN))
-                .andReturn("https://localhost.ebay.com:8080").anyTimes();
-        EasyMock.expect(request.getMethod()).andReturn("POST").anyTimes();
-        EasyMock.replay(request);
-        CORSConfiguration corsConfiguration =
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://tomcat.apache.org:8080");
+        request.setMethod("GET");
+        CORSConfiguration corsConfigurationAnyOrigin =
                 CORSConfiguration.loadFromFilterConfig(TestConfigs
                         .getSpecificOriginFilterConfig());
         CORSRequestType requestType =
-                CORSRequestType.checkRequestType(request, corsConfiguration);
-
+                CORSRequestType.checkRequestType(request,
+                        corsConfigurationAnyOrigin);
         Assert.assertEquals(CORSRequestType.INVALID_CORS, requestType);
-        EasyMock.verify(request);
     }
 
     /**
