@@ -25,6 +25,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     private Map<String, List<String>> headers =
             new HashMap<String, List<String>>();
     private String method;
+    private String contentType;
 
     public Object getAttribute(String name) {
         return attributes.get(name);
@@ -50,8 +51,11 @@ public class MockHttpServletRequest implements HttpServletRequest {
     }
 
     public String getContentType() {
+        return this.contentType;
+    }
 
-        return null;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public ServletInputStream getInputStream() throws IOException {

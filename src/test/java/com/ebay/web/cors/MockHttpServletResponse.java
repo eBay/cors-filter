@@ -2,6 +2,7 @@ package com.ebay.web.cors;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 public class MockHttpServletResponse implements HttpServletResponse {
     List headerNames = new ArrayList();
     List headerValues = new ArrayList();
+    PrintWriter pw;
+    int status;
 
     public String getCharacterEncoding() {
 
@@ -30,8 +33,10 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public PrintWriter getWriter() throws IOException {
-
-        return null;
+        if (pw == null) {
+            pw = new PrintWriter(new StringWriter());
+        }
+        return pw;
     }
 
     public void setCharacterEncoding(String charset) {
@@ -162,7 +167,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setStatus(int sc) {
+        this.status = sc;
+    }
 
+    public int getStatus() {
+        return this.status;
     }
 
     public void setStatus(int sc, String sm) {
