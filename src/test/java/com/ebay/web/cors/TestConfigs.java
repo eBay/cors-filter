@@ -15,6 +15,9 @@ public class TestConfigs {
      */
     public static final String ANY_ORIGIN = "*";
 
+    public static final MockServletContext mockServletContext =
+            new MockServletContext();
+
     public static FilterConfig getDefaultFilterConfig() {
         final String allowedHttpHeaders =
                 CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
@@ -157,7 +160,7 @@ public class TestConfigs {
             }
 
             public ServletContext getServletContext() {
-                return null;
+                return mockServletContext;
             }
 
             public String getInitParameter(String name) {
