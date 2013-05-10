@@ -221,10 +221,7 @@ public final class CORSConfiguration {
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
             final String preflightMaxAge) throws ServletException {
-        this.allowedOrigins = new HashSet<String>();
-        this.allowedHttpMethods = new HashSet<String>();
-        this.allowedHttpHeaders = new HashSet<String>();
-        this.exposedHeaders = new HashSet<String>();
+        this();
 
         parseAndStore(allowedOrigins, allowedHttpMethods, allowedHttpHeaders,
                 exposedHeaders, supportsCredentials, preflightMaxAge);
@@ -265,35 +262,45 @@ public final class CORSConfiguration {
             }
         }
 
-        Set<String> setAllowedHttpMethods =
-                parseStringToSet(allowedHttpMethods);
-        setAllowedHttpMethods(setAllowedHttpMethods);
-
-        Set<String> setAllowedHttpHeaders =
-                parseStringToSet(allowedHttpHeaders);
-        Set<String> lowerCaseHeaders = new HashSet<String>();
-        for (String header : setAllowedHttpHeaders) {
-            String lowerCase = header.toLowerCase();
-            lowerCaseHeaders.add(lowerCase);
+        if (allowedHttpMethods != null) {
+            Set<String> setAllowedHttpMethods =
+                    parseStringToSet(allowedHttpMethods);
+            setAllowedHttpMethods(setAllowedHttpMethods);
         }
-        setAllowedHttpHeaders(lowerCaseHeaders);
 
-        Set<String> setExposedHeaders = parseStringToSet(exposedHeaders);
-        setExposedHeaders(setExposedHeaders);
-
-        // For any value other then 'true' this will be false.
-        boolean isSupportsCredentials =
-                Boolean.parseBoolean(supportsCredentials);
-        this.supportsCredentials = isSupportsCredentials;
-
-        try {
-            if (preflightMaxAge != null && preflightMaxAge.isEmpty() == false) {
-                this.preflightMaxAge = Long.parseLong(preflightMaxAge);
-            } else {
-                this.preflightMaxAge = 0L;
+        if (allowedHttpHeaders != null) {
+            Set<String> setAllowedHttpHeaders =
+                    parseStringToSet(allowedHttpHeaders);
+            Set<String> lowerCaseHeaders = new HashSet<String>();
+            for (String header : setAllowedHttpHeaders) {
+                String lowerCase = header.toLowerCase();
+                lowerCaseHeaders.add(lowerCase);
             }
-        } catch (NumberFormatException e) {
-            throw new ServletException("Unable to parse preflightMaxAge", e);
+            setAllowedHttpHeaders(lowerCaseHeaders);
+        }
+
+        if (exposedHeaders != null) {
+            Set<String> setExposedHeaders = parseStringToSet(exposedHeaders);
+            setExposedHeaders(setExposedHeaders);
+        }
+
+        if (supportsCredentials != null) {
+            // For any value other then 'true' this will be false.
+            boolean isSupportsCredentials =
+                    Boolean.parseBoolean(supportsCredentials);
+            this.supportsCredentials = isSupportsCredentials;
+        }
+
+        if (preflightMaxAge != null) {
+            try {
+                if (preflightMaxAge.isEmpty() == false) {
+                    this.preflightMaxAge = Long.parseLong(preflightMaxAge);
+                } else {
+                    this.preflightMaxAge = 0L;
+                }
+            } catch (NumberFormatException e) {
+                throw new ServletException("Unable to parse preflightMaxAge", e);
+            }
         }
     }
 
@@ -340,6 +347,7 @@ public final class CORSConfiguration {
      *            The set of allowed origins.
      */
     public void setAllowedOrigins(final Set<String> allowedOrigins) {
+        this.allowedOrigins.clear();
         this.allowedOrigins.addAll(allowedOrigins);
     }
 
@@ -359,6 +367,7 @@ public final class CORSConfiguration {
      *            The Set<String> of allowed HTTP methods.
      */
     public void setAllowedHttpMethods(final Set<String> allowedHttpMethods) {
+        this.allowedHttpMethods.clear();
         this.allowedHttpMethods.addAll(allowedHttpMethods);
     }
 
@@ -378,7 +387,8 @@ public final class CORSConfiguration {
      *            The Set<String> of exposed HTTP headers.
      */
     public void setExposedHeaders(final Set<String> exposedHeaders) {
-        this.exposedHeaders = exposedHeaders;
+        this.exposedHeaders.clear();
+        this.exposedHeaders.addAll(exposedHeaders);
     }
 
     /**
@@ -397,6 +407,7 @@ public final class CORSConfiguration {
      *            The Set<String> of allowed HTTP headers.
      */
     public void setAllowedHttpHeaders(final Set<String> allowedHttpHeaders) {
+        this.allowedHttpHeaders.clear();
         this.allowedHttpHeaders.addAll(allowedHttpHeaders);
     }
 

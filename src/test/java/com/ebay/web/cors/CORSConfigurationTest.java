@@ -47,6 +47,11 @@ public class CORSConfigurationTest {
         Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 0);
     }
 
+    /**
+     * If an init param is null, it's default value will be used.
+     * 
+     * @throws ServletException
+     */
     @Test
     public void testWithStringParserNull() throws ServletException {
         String allowedHttpHeaders = null;
@@ -59,11 +64,12 @@ public class CORSConfigurationTest {
                 new CORSConfiguration(allowedOrigins, allowedHttpMethods,
                         allowedHttpHeaders, exposedHeaders, supportCredentials,
                         preflightMaxAge);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 0);
-        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 0);
+        Assert.assertTrue(corsConfiguration.getAllowedHttpHeaders().size() == 4);
+        Assert.assertTrue(corsConfiguration.getAllowedHttpMethods().size() == 4);
         Assert.assertTrue(corsConfiguration.getAllowedOrigins().size() == 0);
+        Assert.assertTrue(corsConfiguration.isAnyOriginAllowed());
         Assert.assertTrue(corsConfiguration.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsConfiguration.isSupportsCredentials());
-        Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 0);
+        Assert.assertTrue(corsConfiguration.getPreflightMaxAge() == 1800);
     }
 }
