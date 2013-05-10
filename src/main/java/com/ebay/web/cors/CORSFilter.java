@@ -16,7 +16,6 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -259,6 +258,16 @@ public class CORSFilter implements Filter {
      */
     private CORSConfiguration corsConfiguration;
 
+    /**
+     * Holds filter configuration.
+     */
+    private FilterConfig filterConfig;
+
+    /**
+     * Controls access log logging.
+     */
+    private boolean isLoggingEnabled;
+
     // --------------------------------------------------------- Public methods
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse,
@@ -306,13 +315,18 @@ public class CORSFilter implements Filter {
     }
 
     public void init(final FilterConfig filterConfig) throws ServletException {
+        this.filterConfig = filterConfig;
+        this.isLoggingEnabled = true;
         if (filterConfig != null) {
             try {
                 this.corsConfiguration =
                         CORSConfiguration.loadFromFilterConfig(filterConfig);
             } catch (Exception e) {
+                String message =
+                        "Error loading configuration using filter init";
+                log(message, e);
                 throw new ServletException(
-                        "Error loading configuration using filter init", e);
+                        message, e);
             }
         } else {
             // Initialize with default configuration.
@@ -358,10 +372,12 @@ public class CORSFilter implements Filter {
         // Section 6.1.2
         if (!isOriginAllowed(origin)) {
             handleInvalidCORS(request, response, filterChain);
+            return;
         }
 
         if (!corsConfiguration.getAllowedHttpMethods().contains(method)) {
             handleInvalidCORS(request, response, filterChain);
+            return;
         }
 
         // Section 6.1.3
@@ -571,9 +587,9 @@ public class CORSFilter implements Filter {
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.resetBuffer();
-        PrintWriter writer = response.getWriter();
-        writer.println("CORS Filter: " + message);
-        // throw new ServletException(message);
+
+        log(message);
+
         return;
     }
 
@@ -768,5 +784,17 @@ public class CORSFilter implements Filter {
         }
 
         return false;
+    }
+
+    private void log(String message) {
+        if (filterConfig != null && isLoggingEnabled) {
+            filterConfig.getServletContext().log(message);
+        }
+    }
+
+    private void log(String message, Throwable t) {
+        if (filterConfig != null && isLoggingEnabled) {
+            filterConfig.getServletContext().log(message, t);
+        }
     }
 }
