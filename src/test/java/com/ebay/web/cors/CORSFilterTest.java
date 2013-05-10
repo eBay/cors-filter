@@ -278,17 +278,23 @@ public class CORSFilterTest {
                 "Content-Type"));
     }
 
+    /**
+     * Negative test, when a CORS request arrives, with a null origin.
+     */
     @Test
-    public void testDoFilterNotCORS() throws IOException, ServletException {
+    public void testDoFilterNullOrigin() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
-                null);
+        
         request.setMethod("POST");
         request.setContentType("text/plain");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
+        
         corsFilter.doFilter(request, response, filterChain);
 
         Assert.assertFalse((Boolean) request
@@ -752,26 +758,7 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
-    }
-
-    /**
-     * Negative test, when a CORS request arrives, with a null origin.
-     * 
-     * @throws ServletException
-     */
-    @Test
-    public void testCheckNotCORSRequestTypeNullOrigin() throws ServletException {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
-                null);
-        request.setMethod("GET");
-        CORSFilter corsFilter = new CORSFilter();
-        corsFilter.init(TestConfigs
-                .getDefaultFilterConfig());
-        CORSFilter.CORSRequestType requestType =
-                corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
     }
 
     /**

@@ -713,24 +713,28 @@ public class CORSFilter implements Filter {
         }
         String originHeader = request.getHeader(REQUEST_HEADER_ORIGIN);
         // Section 6.1.1 and Section 6.2.1
-        if ((originHeader != null) && (originHeader.length() > 0)) {
-            String method = request.getMethod();
-            if (method != null && HTTP_METHODS.contains(method)) {
-                if ("OPTIONS".equals(method)) {
-                    requestType = CORSRequestType.PRE_FLIGHT;
-                } else if (COMPLEX_HTTP_METHODS.contains(method)) {
-                    requestType = CORSRequestType.ACTUAL;
-                } else if ("GET".equals(method) || "HEAD".equals(method)) {
-                    requestType = CORSRequestType.SIMPLE;
-                } else if ("POST".equals(method)) {
-                    String contentType = request.getContentType();
-                    if (contentType != null) {
-                        contentType = contentType.toLowerCase().trim();
-                        if (SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES
-                                .contains(contentType)) {
-                            requestType = CORSRequestType.SIMPLE;
-                        } else {
-                            requestType = CORSRequestType.ACTUAL;
+        if (originHeader != null) {
+            if (originHeader.isEmpty()) {
+                requestType = CORSRequestType.INVALID_CORS;
+            } else {
+                String method = request.getMethod();
+                if (method != null && HTTP_METHODS.contains(method)) {
+                    if ("OPTIONS".equals(method)) {
+                        requestType = CORSRequestType.PRE_FLIGHT;
+                    } else if (COMPLEX_HTTP_METHODS.contains(method)) {
+                        requestType = CORSRequestType.ACTUAL;
+                    } else if ("GET".equals(method) || "HEAD".equals(method)) {
+                        requestType = CORSRequestType.SIMPLE;
+                    } else if ("POST".equals(method)) {
+                        String contentType = request.getContentType();
+                        if (contentType != null) {
+                            contentType = contentType.toLowerCase().trim();
+                            if (SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES
+                                    .contains(contentType)) {
+                                requestType = CORSRequestType.SIMPLE;
+                            } else {
+                                requestType = CORSRequestType.ACTUAL;
+                            }
                         }
                     }
                 }
