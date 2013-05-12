@@ -1035,6 +1035,7 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsFilter.isSupportsCredentials());
         Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
+        Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
 
     @Test(expected = ServletException.class)
@@ -1055,6 +1056,7 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsFilter.isSupportsCredentials());
         Assert.assertTrue(corsFilter.getPreflightMaxAge() == 0);
+        Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
 
     /**
@@ -1073,6 +1075,7 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
         Assert.assertFalse(corsFilter.isSupportsCredentials());
         Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
+        Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
 
     @Test

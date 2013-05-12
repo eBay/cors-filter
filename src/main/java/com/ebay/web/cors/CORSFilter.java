@@ -916,7 +916,7 @@ public class CORSFilter implements Filter {
     }
 
     private void log(String message) {
-        if (filterConfig != null && loggingEnabled) {
+        if (loggingEnabled) {
             filterConfig.getServletContext().log(message);
         }
     }
