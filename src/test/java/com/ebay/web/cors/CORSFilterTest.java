@@ -530,6 +530,46 @@ public class CORSFilterTest {
     }
 
     /**
+     * Happy path test, when a valid CORS Simple request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckActualRequestType() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setMethod("PUT");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.ACTUAL, requestType);
+    }
+
+    /**
+     * Happy path test, when a valid CORS Simple request arrives.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testCheckActualRequestTypeMethodPOSTNotSimpleHeaders()
+            throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTP_TOMCAT_APACHE_ORG);
+        request.setMethod("POST");
+        request.setContentType("application/json");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.ACTUAL, requestType);
+    }
+
+    /**
      * Happy path test, when a valid CORS Pre-flight request arrives.
      * 
      * @throws ServletException
