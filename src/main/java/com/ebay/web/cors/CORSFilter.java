@@ -703,9 +703,16 @@ public class CORSFilter implements Filter {
             throws IOException, ServletException {
         String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         String method = request.getMethod();
+        String accessControlRequestHeaders =
+                request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
+
         String message =
-                "Encountered an invalid CORS request, from Origin: " + origin
-                        + ", requested with method: " + method;
+                "Invalid CORS request; Origin=" + origin + ";Method=" + method;
+        if (accessControlRequestHeaders != null) {
+            message =
+                    message + ";Access-Control-Request-Headers="
+                            + accessControlRequestHeaders;
+        }
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.resetBuffer();
