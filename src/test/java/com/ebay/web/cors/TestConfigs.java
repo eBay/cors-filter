@@ -20,15 +20,15 @@ public class TestConfigs {
 
     public static FilterConfig getDefaultFilterConfig() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
-        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials =
-                CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
@@ -37,14 +37,14 @@ public class TestConfigs {
 
     public static FilterConfig getFilterConfigAnyOriginAndSupportsCredentials() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
-        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials = "true";
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
@@ -54,14 +54,14 @@ public class TestConfigs {
     public static FilterConfig
             getFilterConfigAnyOriginAndSupportsCredentialsDisabled() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
-        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials = "false";
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
@@ -70,15 +70,15 @@ public class TestConfigs {
 
     public static FilterConfig getFilterConfigWithExposedHeaders() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
-        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
         final String exposedHeaders = EXPOSED_HEADERS;
         final String supportCredentials =
-                CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
@@ -87,18 +87,22 @@ public class TestConfigs {
 
     public static FilterConfig getSecureFilterConfig() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
         final String allowedOrigins = HTTPS_WWW_APACHE_ORG;
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials = "true";
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
+    }
+
+    public static FilterConfig getNullFilterConfig() {
+        return generateFilterConfig(null, null, null, null, null, null);
     }
 
     public static FilterConfig getSpecificOriginFilterConfig() {
@@ -106,14 +110,14 @@ public class TestConfigs {
                 HTTPS_WWW_APACHE_ORG + "," + HTTP_TOMCAT_APACHE_ORG;
 
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials =
-                CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge =
-                CORSConfiguration.DEFAULT_PREFLIGHT_MAXAGE;
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
@@ -122,13 +126,13 @@ public class TestConfigs {
 
     public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
         final String allowedHttpHeaders =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
         final String allowedHttpMethods =
-                CORSConfiguration.DEFAULT_ALLOWED_HTTP_METHODS;
-        final String allowedOrigins = CORSConfiguration.DEFAULT_ALLOWED_ORIGINS;
-        final String exposedHeaders = CORSConfiguration.DEFAULT_EXPOSED_HEADERS;
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
         final String supportCredentials =
-                CORSConfiguration.DEFAULT_SUPPORTS_CREDENTIALS;
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
         final String preflightMaxAge = "abc";
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
@@ -164,22 +168,22 @@ public class TestConfigs {
             }
 
             public String getInitParameter(String name) {
-                if (CORSConfiguration.PARAM_CORS_ALLOWED_HEADERS
+                if (CORSFilter.PARAM_CORS_ALLOWED_HEADERS
                         .equalsIgnoreCase(name)) {
                     return allowedHttpHeaders;
-                } else if (CORSConfiguration.PARAM_CORS_ALLOWED_METHODS
+                } else if (CORSFilter.PARAM_CORS_ALLOWED_METHODS
                         .equalsIgnoreCase(name)) {
                     return allowedHttpMethods;
-                } else if (CORSConfiguration.PARAM_CORS_ALLOWED_ORIGINS
+                } else if (CORSFilter.PARAM_CORS_ALLOWED_ORIGINS
                         .equalsIgnoreCase(name)) {
                     return allowedOrigins;
-                } else if (CORSConfiguration.PARAM_CORS_EXPOSED_HEADERS
+                } else if (CORSFilter.PARAM_CORS_EXPOSED_HEADERS
                         .equalsIgnoreCase(name)) {
                     return exposedHeaders;
-                } else if (CORSConfiguration.PARAM_CORS_SUPPORT_CREDENTIALS
+                } else if (CORSFilter.PARAM_CORS_SUPPORT_CREDENTIALS
                         .equalsIgnoreCase(name)) {
                     return supportCredentials;
-                } else if (CORSConfiguration.PARAM_CORS_PREFLIGHT_MAXAGE
+                } else if (CORSFilter.PARAM_CORS_PREFLIGHT_MAXAGE
                         .equalsIgnoreCase(name)) {
                     return preflightMaxAge;
                 }

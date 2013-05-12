@@ -186,7 +186,8 @@ public class CORSFilter implements Filter {
          */
         NOT_CORS,
         /**
-         * An invalid CORS request.
+         * An invalid CORS request, i.e. it qualifies to be a CORS request, but
+         * fails to be a valid one.
          */
         INVALID_CORS;
     }
@@ -250,14 +251,78 @@ public class CORSFilter implements Filter {
                     "application/x-www-form-urlencoded", "multipart/form-data",
                     "text/plain"));
 
-    // ----------------------------------------------------- Instance variables
+    // ------------------------------------------------ Configuration Defaults
     /**
-     * Holds configuration details.
-     * 
-     * @see CORSConfiguration
+     * By default, all origins are allowed to make requests.
      */
-    private CORSConfiguration corsConfiguration;
+    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
 
+    /**
+     * By default, following methods are supported: GET, POST, HEAD and OPTIONS.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_METHODS =
+            "GET,POST,HEAD,OPTIONS";
+
+    /**
+     * By default, time duration to cache pre-flight response is 30 mins.
+     */
+    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
+
+    /**
+     * By default, cookie based auth is turned off.
+     */
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
+
+    /**
+     * By default, following headers are supported:
+     * Origin,Accept,X-Requested-With, and Content-Type.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_HEADERS =
+            "Origin,Accept,X-Requested-With,Content-Type";
+
+    /**
+     * By default, none of the headers are exposed in response.
+     */
+    public static final String DEFAULT_EXPOSED_HEADERS = "";
+
+    // ----------------------------------------------------- Init param-name(s)
+    /**
+     * Key to retrieve allowed origins from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_ORIGINS =
+            "cors.allowed.origins";
+
+    /**
+     * Key to retrieve support credentials from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_SUPPORT_CREDENTIALS =
+            "cors.support.credentials";
+
+    /**
+     * Key to retrieve exposed headers from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_EXPOSED_HEADERS =
+            "cors.exposed.headers";
+
+    /**
+     * Key to retrieve allowed headers from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_HEADERS =
+            "cors.allowed.headers";
+
+    /**
+     * Key to retrieve allowed methods from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_METHODS =
+            "cors.allowed.methods";
+
+    /**
+     * Key to retrieve preflight max age from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
+            "cors.preflight.maxage";
+
+    // ----------------------------------------------------- Instance variables
     /**
      * Holds filter configuration.
      */
@@ -267,6 +332,57 @@ public class CORSFilter implements Filter {
      * Controls access log logging.
      */
     private boolean isLoggingEnabled;
+
+    /**
+     * A {@link Collection} of origins consisting of zero or more origins that
+     * are allowed access to the resource.
+     */
+    private final Set<String> allowedOrigins;
+
+    /**
+     * Determines if any origin is allowed to make request.
+     */
+    private boolean anyOriginAllowed;
+
+    /**
+     * A {@link Collection} of methods consisting of zero or more methods that
+     * are supported by the resource.
+     */
+    private final Set<String> allowedHttpMethods;
+
+    /**
+     * A {@link Collection} of headers consisting of zero or more header field
+     * names that are supported by the resource.
+     */
+    private final Set<String> allowedHttpHeaders;
+
+    /**
+     * A {@link Collection} of exposed headers consisting of zero or more header
+     * field names of headers other than the simple response headers that the
+     * resource might use and can be exposed.
+     */
+    private Set<String> exposedHeaders;
+
+    /**
+     * A supports credentials flag that indicates whether the resource supports
+     * user credentials in the request. It is true when the resource does and
+     * false otherwise.
+     */
+    private boolean supportsCredentials;
+
+    /**
+     * Indicates (in seconds) how long the results of a pre-flight request can
+     * be cached in a pre-flight result cache.
+     */
+    private long preflightMaxAge;
+
+    // --------------------------------------------------------- Constructor(s)
+    public CORSFilter() {
+        this.allowedOrigins = new HashSet<String>();
+        this.allowedHttpMethods = new HashSet<String>();
+        this.allowedHttpHeaders = new HashSet<String>();
+        this.exposedHeaders = new HashSet<String>();
+    }
 
     // --------------------------------------------------------- Public methods
     public void doFilter(final ServletRequest servletRequest,
@@ -315,22 +431,32 @@ public class CORSFilter implements Filter {
     }
 
     public void init(final FilterConfig filterConfig) throws ServletException {
+        // Initialize defaults
+        parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
+                DEFAULT_ALLOWED_HTTP_HEADERS, DEFAULT_EXPOSED_HEADERS,
+                DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE);
+
         this.filterConfig = filterConfig;
         this.isLoggingEnabled = true;
+
         if (filterConfig != null) {
-            try {
-                this.corsConfiguration =
-                        CORSConfiguration.loadFromFilterConfig(filterConfig);
-            } catch (Exception e) {
-                String message =
-                        "Error loading configuration using filter init";
-                log(message, e);
-                throw new ServletException(
-                        message, e);
-            }
-        } else {
-            // Initialize with default configuration.
-            this.corsConfiguration = new CORSConfiguration();
+            String allowedOrigins =
+                    filterConfig.getInitParameter(PARAM_CORS_ALLOWED_ORIGINS);
+            String allowedHttpMethods =
+                    filterConfig.getInitParameter(PARAM_CORS_ALLOWED_METHODS);
+            String allowedHttpHeaders =
+                    filterConfig.getInitParameter(PARAM_CORS_ALLOWED_HEADERS);
+            String exposedHeaders =
+                    filterConfig.getInitParameter(PARAM_CORS_EXPOSED_HEADERS);
+            String supportsCredentials =
+                    filterConfig
+                            .getInitParameter(PARAM_CORS_SUPPORT_CREDENTIALS);
+            String preflightMaxAge =
+                    filterConfig.getInitParameter(PARAM_CORS_PREFLIGHT_MAXAGE);
+
+            parseAndStore(allowedOrigins, allowedHttpMethods,
+                    allowedHttpHeaders,
+                    exposedHeaders, supportsCredentials, preflightMaxAge);
         }
     }
 
@@ -366,8 +492,6 @@ public class CORSFilter implements Filter {
         final String origin =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         final String method = request.getMethod();
-        final Set<String> exposedHeaders =
-                corsConfiguration.getExposedHeaders();
 
         // Section 6.1.2
         if (!isOriginAllowed(origin)) {
@@ -375,15 +499,14 @@ public class CORSFilter implements Filter {
             return;
         }
 
-        if (!corsConfiguration.getAllowedHttpMethods().contains(method)) {
+        if (!allowedHttpMethods.contains(method)) {
             handleInvalidCORS(request, response, filterChain);
             return;
         }
 
         // Section 6.1.3
         // Add a single Access-Control-Allow-Origin header.
-        if (corsConfiguration.isAnyOriginAllowed()
-                && !corsConfiguration.isSupportsCredentials()) {
+        if (anyOriginAllowed && !supportsCredentials) {
             // If resource doesn't support credentials and if any origin is
             // allowed
             // to make CORS request, return header with '*'.
@@ -401,7 +524,7 @@ public class CORSFilter implements Filter {
         // If the resource supports credentials, add a single
         // Access-Control-Allow-Credentials header with the case-sensitive
         // string "true" as value.
-        if (corsConfiguration.isSupportsCredentials()) {
+        if (supportsCredentials) {
             response.addHeader(
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
@@ -446,13 +569,6 @@ public class CORSFilter implements Filter {
 
         final String origin =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
-        final Set<String> allowedHttpMethods =
-                corsConfiguration.getAllowedHttpMethods();
-        final Set<String> allowedHttpHeaders =
-                corsConfiguration.getAllowedHttpHeaders();
-        final long preflightMaxAge = corsConfiguration.getPreflightMaxAge();
-        final boolean supportsCredentials =
-                corsConfiguration.isSupportsCredentials();
 
         // Section 6.2.2
         if (!isOriginAllowed(origin)) {
@@ -510,7 +626,7 @@ public class CORSFilter implements Filter {
                     CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
         } else {
-            if (corsConfiguration.isAnyOriginAllowed()) {
+            if (anyOriginAllowed) {
                 response.addHeader(
                         CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                         "*");
@@ -771,11 +887,9 @@ public class CORSFilter implements Filter {
      *         otherwise.
      */
     private boolean isOriginAllowed(final String origin) {
-        if (corsConfiguration.isAnyOriginAllowed()) {
+        if (anyOriginAllowed) {
             return true;
         }
-        final Set<String> allowedOrigins =
-                corsConfiguration.getAllowedOrigins();
 
         // If 'Origin' header is a case-sensitive match of any of allowed
         // origins, then return true, else return false.
@@ -792,9 +906,142 @@ public class CORSFilter implements Filter {
         }
     }
 
-    private void log(String message, Throwable t) {
-        if (filterConfig != null && isLoggingEnabled) {
-            filterConfig.getServletContext().log(message, t);
+    /**
+     * Parses each param-value and populates configuration variables.
+     * 
+     * @param allowedOrigins
+     *            A {@link String} of comma separated origins.
+     * @param allowedHttpMethods
+     *            A {@link String} of comma separated HTTP methods.
+     * @param allowedHttpHeaders
+     *            A {@link String} of comma separated HTTP headers.
+     * @param exposedHeaders
+     *            A {@link String} of comma separated headers that needs to be
+     *            exposed.
+     * @param supportsCredentials
+     *            "true" if support credentials needs to be enabled.
+     * @param preflightMaxAge
+     *            The amount of seconds the user agent is allowed to cache the
+     *            result of the pre-flight request.
+     * @throws ServletException
+     */
+    private void parseAndStore(final String allowedOrigins,
+            final String allowedHttpMethods, final String allowedHttpHeaders,
+            final String exposedHeaders, final String supportsCredentials,
+            final String preflightMaxAge) throws ServletException {
+        if (allowedOrigins != null) {
+            if (allowedOrigins.trim().equals("*")) {
+                this.anyOriginAllowed = true;
+            } else {
+                this.anyOriginAllowed = false;
+                Set<String> setAllowedOrigins =
+                        parseStringToSet(allowedOrigins);
+                this.allowedOrigins.clear();
+                this.allowedOrigins.addAll(setAllowedOrigins);
+            }
+        }
+
+        if (allowedHttpMethods != null) {
+            Set<String> setAllowedHttpMethods =
+                    parseStringToSet(allowedHttpMethods);
+            this.allowedHttpMethods.clear();
+            this.allowedHttpMethods.addAll(setAllowedHttpMethods);
+        }
+
+        if (allowedHttpHeaders != null) {
+            Set<String> setAllowedHttpHeaders =
+                    parseStringToSet(allowedHttpHeaders);
+            Set<String> lowerCaseHeaders = new HashSet<String>();
+            for (String header : setAllowedHttpHeaders) {
+                String lowerCase = header.toLowerCase();
+                lowerCaseHeaders.add(lowerCase);
+            }
+            this.allowedHttpHeaders.clear();
+            this.allowedHttpHeaders.addAll(lowerCaseHeaders);
+        }
+
+        if (exposedHeaders != null) {
+            Set<String> setExposedHeaders = parseStringToSet(exposedHeaders);
+            this.exposedHeaders.clear();
+            this.exposedHeaders.addAll(setExposedHeaders);
+        }
+
+        if (supportsCredentials != null) {
+            // For any value other then 'true' this will be false.
+            boolean isSupportsCredentials =
+                    Boolean.parseBoolean(supportsCredentials);
+            this.supportsCredentials = isSupportsCredentials;
+        }
+
+        if (preflightMaxAge != null) {
+            try {
+                if (preflightMaxAge.isEmpty() == false) {
+                    this.preflightMaxAge = Long.parseLong(preflightMaxAge);
+                } else {
+                    this.preflightMaxAge = 0L;
+                }
+            } catch (NumberFormatException e) {
+                throw new ServletException("Unable to parse preflightMaxAge", e);
+            }
         }
     }
+
+    /**
+     * Takes a comma separated list and returns a Set<String>.
+     * 
+     * @param data
+     *            A comma separated list of strings.
+     * @return Set<String>
+     */
+    private Set<String> parseStringToSet(final String data) {
+        String[] splits = null;
+
+        if (data != null && data.length() > 0) {
+            splits = data.split(",");
+        } else {
+            splits = new String[] {};
+        }
+
+        Set<String> set = new HashSet<String>();
+        if (splits.length > 0) {
+            for (String split : splits) {
+                set.add(split.trim());
+            }
+        }
+
+        return set;
+    }
+
+    public boolean isLoggingEnabled() {
+        return isLoggingEnabled;
+    }
+
+    public boolean isAnyOriginAllowed() {
+        return anyOriginAllowed;
+    }
+
+    public Set<String> getExposedHeaders() {
+        return exposedHeaders;
+    }
+
+    public boolean isSupportsCredentials() {
+        return supportsCredentials;
+    }
+
+    public long getPreflightMaxAge() {
+        return preflightMaxAge;
+    }
+
+    public Set<String> getAllowedOrigins() {
+        return allowedOrigins;
+    }
+
+    public Set<String> getAllowedHttpMethods() {
+        return allowedHttpMethods;
+    }
+
+    public Set<String> getAllowedHttpHeaders() {
+        return allowedHttpHeaders;
+    }
+
 }

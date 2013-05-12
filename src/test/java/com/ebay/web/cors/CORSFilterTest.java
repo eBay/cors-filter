@@ -284,7 +284,7 @@ public class CORSFilterTest {
     @Test
     public void testDoFilterNullOrigin() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        
+
         request.setMethod("POST");
         request.setContentType("text/plain");
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -294,7 +294,7 @@ public class CORSFilterTest {
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
         Assert.assertEquals(CORSFilter.CORSRequestType.NOT_CORS, requestType);
-        
+
         corsFilter.doFilter(request, response, filterChain);
 
         Assert.assertFalse((Boolean) request
@@ -639,7 +639,7 @@ public class CORSFilterTest {
         Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
                 response.getStatus());
     }
-    
+
     /**
      * Section Section 6.2.6
      * 
@@ -667,7 +667,7 @@ public class CORSFilterTest {
         Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
                 response.getStatus());
     }
-    
+
     /**
      * Section Section 6.2.7
      * 
@@ -692,10 +692,13 @@ public class CORSFilterTest {
         corsFilter.init(TestConfigs
                 .getFilterConfigAnyOriginAndSupportsCredentialsDisabled());
         corsFilter.doFilter(request, response, filterChain);
-        Assert.assertTrue(response.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals("*"));
-        Assert.assertNull(response.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS));
+        Assert.assertTrue(response.getHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
+                "*"));
+        Assert.assertNull(response
+                .getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS));
     }
-    
+
     @Test
     public void testCheckPreFlightRequestTypeOriginNotAllowed()
             throws ServletException, IOException {
@@ -758,7 +761,8 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
 
     /**
@@ -980,6 +984,58 @@ public class CORSFilterTest {
         elements.add("peace");
         String join = CORSFilter.join(elements, separator);
         Assert.assertTrue("world|peace".equals(join));
+    }
+
+    @Test
+    public void testWithFilterConfig() throws ServletException {
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedHttpMethods().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
+        Assert.assertTrue(corsFilter.isAnyOriginAllowed());
+        Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
+        Assert.assertFalse(corsFilter.isSupportsCredentials());
+        Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
+    }
+
+    @Test(expected = ServletException.class)
+    public void testWithFilterConfigInvalidPreflightAge()
+            throws ServletException {
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getFilterConfigInvalidMaxPreflightAge());
+    }
+
+    @Test
+    public void testWithStringParserEmpty() throws ServletException {
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getEmptyFilterConfig());
+        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 0);
+        Assert.assertTrue(corsFilter.getAllowedHttpMethods().size() == 0);
+        Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
+        Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
+        Assert.assertFalse(corsFilter.isSupportsCredentials());
+        Assert.assertTrue(corsFilter.getPreflightMaxAge() == 0);
+    }
+
+    /**
+     * If an init param is null, it's default value will be used.
+     * 
+     * @throws ServletException
+     */
+    @Test
+    public void testWithStringParserNull() throws ServletException {
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getNullFilterConfig());
+        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedHttpMethods().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
+        Assert.assertTrue(corsFilter.isAnyOriginAllowed());
+        Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
+        Assert.assertFalse(corsFilter.isSupportsCredentials());
+        Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
     }
 
     @Test
