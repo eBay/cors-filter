@@ -62,7 +62,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public class CORSFilter implements Filter {
-    // ------------------------------------------------------- Response Headers
+    // -------------------------------------------------- CORS Response Headers
     /**
      * The Access-Control-Allow-Origin header indicates whether a resource can
      * be shared based by returning the value of the Origin request header in
@@ -110,7 +110,7 @@ public class CORSFilter implements Filter {
     public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS =
             "Access-Control-Allow-Headers";
 
-    // ------------------------------------------------------- Request Headers
+    // -------------------------------------------------- CORS Request Headers
     /**
      * The Origin header indicates where the cross-origin request or preflight
      * request originates from.
@@ -285,7 +285,7 @@ public class CORSFilter implements Filter {
      */
     public static final String DEFAULT_EXPOSED_HEADERS = "";
 
-    // ----------------------------------------------------- Init param-name(s)
+    // ----------------------------------------Filter Config Init param-name(s)
     /**
      * Key to retrieve allowed origins from {@link FilterConfig}.
      */
@@ -321,17 +321,18 @@ public class CORSFilter implements Filter {
      */
     public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
             "cors.preflight.maxage";
+    
+    /**
+     * Key to retrieve access log logging flag.
+     */
+    public static final String PARAM_CORS_LOGGING_ENABLED =
+            "cors.logging.enabled";
 
     // ----------------------------------------------------- Instance variables
     /**
      * Holds filter configuration.
      */
     private FilterConfig filterConfig;
-
-    /**
-     * Controls access log logging.
-     */
-    private boolean isLoggingEnabled;
 
     /**
      * A {@link Collection} of origins consisting of zero or more origins that
@@ -375,6 +376,11 @@ public class CORSFilter implements Filter {
      * be cached in a pre-flight result cache.
      */
     private long preflightMaxAge;
+
+    /**
+     * Controls access log logging.
+     */
+    private boolean isLoggingEnabled;
 
     // --------------------------------------------------------- Constructor(s)
     public CORSFilter() {
