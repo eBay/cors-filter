@@ -241,6 +241,43 @@ public class CORSFilterTest {
     }
 
     @Test
+    public void testDoFilterPreflightNegativeMaxAge() throws IOException,
+            ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD, "PUT");
+        request.setHeader(
+                CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS,
+                "Content-Type");
+        request.setMethod("OPTIONS");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getSpecificOriginFilterConfigNegativeMaxAge());
+        corsFilter.doFilter(request, response, filterChain);
+
+        Assert.assertTrue(response.getHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
+                TestConfigs.HTTPS_WWW_APACHE_ORG));
+        Assert.assertNull(response.getHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE));
+        Assert.assertTrue((Boolean) request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+        Assert.assertTrue(request.getAttribute(
+                CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN).equals(
+                TestConfigs.HTTPS_WWW_APACHE_ORG));
+        Assert.assertTrue(request.getAttribute(
+                CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE).equals(
+                CORSFilter.CORSRequestType.PRE_FLIGHT.name().toLowerCase()));
+        Assert.assertTrue(request.getAttribute(
+                CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS).equals(
+                "Content-Type"));
+    }
+
+    @Test
     public void testDoFilterPreflightWithCredentials() throws IOException,
             ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();

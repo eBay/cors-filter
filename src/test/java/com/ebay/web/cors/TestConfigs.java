@@ -123,6 +123,24 @@ public class TestConfigs {
                 allowedOrigins, exposedHeaders, supportCredentials,
                 preflightMaxAge);
     }
+    
+    public static FilterConfig getSpecificOriginFilterConfigNegativeMaxAge() {
+        final String allowedOrigins =
+                HTTPS_WWW_APACHE_ORG + "," + HTTP_TOMCAT_APACHE_ORG;
+
+        final String allowedHttpHeaders =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials =
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
+        final String preflightMaxAge = "-1";
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge);
+    }
 
     public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
         final String allowedHttpHeaders =
