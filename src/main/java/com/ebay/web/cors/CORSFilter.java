@@ -380,7 +380,7 @@ public class CORSFilter implements Filter {
     /**
      * Controls access log logging.
      */
-    private boolean isLoggingEnabled;
+    private boolean loggingEnabled;
 
     // --------------------------------------------------------- Constructor(s)
     public CORSFilter() {
@@ -443,7 +443,7 @@ public class CORSFilter implements Filter {
                 DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE);
 
         this.filterConfig = filterConfig;
-        this.isLoggingEnabled = true;
+        this.loggingEnabled = true;
 
         if (filterConfig != null) {
             String allowedOrigins =
@@ -907,7 +907,7 @@ public class CORSFilter implements Filter {
     }
 
     private void log(String message) {
-        if (filterConfig != null && isLoggingEnabled) {
+        if (filterConfig != null && loggingEnabled) {
             filterConfig.getServletContext().log(message);
         }
     }
@@ -1019,7 +1019,7 @@ public class CORSFilter implements Filter {
     }
 
     public boolean isLoggingEnabled() {
-        return isLoggingEnabled;
+        return loggingEnabled;
     }
 
     public boolean isAnyOriginAllowed() {
