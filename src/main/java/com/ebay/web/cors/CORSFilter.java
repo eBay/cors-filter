@@ -285,6 +285,11 @@ public class CORSFilter implements Filter {
      */
     public static final String DEFAULT_EXPOSED_HEADERS = "";
 
+    /**
+     * By default, access log logging is turned off
+     */
+    public static final String DEFAULT_LOGGING_ENABLED = "false";
+
     // ----------------------------------------Filter Config Init param-name(s)
     /**
      * Key to retrieve allowed origins from {@link FilterConfig}.
@@ -321,7 +326,7 @@ public class CORSFilter implements Filter {
      */
     public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
             "cors.preflight.maxage";
-    
+
     /**
      * Key to retrieve access log logging flag.
      */
@@ -440,10 +445,11 @@ public class CORSFilter implements Filter {
         // Initialize defaults
         parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
                 DEFAULT_ALLOWED_HTTP_HEADERS, DEFAULT_EXPOSED_HEADERS,
-                DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE);
+                DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE,
+                DEFAULT_LOGGING_ENABLED);
 
         this.filterConfig = filterConfig;
-        this.loggingEnabled = true;
+        this.loggingEnabled = false;
 
         if (filterConfig != null) {
             String allowedOrigins =
@@ -459,10 +465,13 @@ public class CORSFilter implements Filter {
                             .getInitParameter(PARAM_CORS_SUPPORT_CREDENTIALS);
             String preflightMaxAge =
                     filterConfig.getInitParameter(PARAM_CORS_PREFLIGHT_MAXAGE);
+            String loggingEnabled =
+                    filterConfig.getInitParameter(PARAM_CORS_LOGGING_ENABLED);
 
             parseAndStore(allowedOrigins, allowedHttpMethods,
                     allowedHttpHeaders,
-                    exposedHeaders, supportsCredentials, preflightMaxAge);
+                    exposedHeaders, supportsCredentials, preflightMaxAge,
+                    loggingEnabled);
         }
     }
 
@@ -929,12 +938,15 @@ public class CORSFilter implements Filter {
      * @param preflightMaxAge
      *            The amount of seconds the user agent is allowed to cache the
      *            result of the pre-flight request.
+     * @param loggingEnabled
+     *            Flag to control logging to access log.
      * @throws ServletException
      */
     private void parseAndStore(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
-            final String preflightMaxAge) throws ServletException {
+            final String preflightMaxAge, final String loggingEnabled)
+            throws ServletException {
         if (allowedOrigins != null) {
             if (allowedOrigins.trim().equals("*")) {
                 this.anyOriginAllowed = true;
@@ -989,6 +1001,13 @@ public class CORSFilter implements Filter {
             } catch (NumberFormatException e) {
                 throw new ServletException("Unable to parse preflightMaxAge", e);
             }
+        }
+
+        if (loggingEnabled != null) {
+            // For any value other then 'true' this will be false.
+            boolean isLoggingEnabled =
+                    Boolean.parseBoolean(loggingEnabled);
+            this.loggingEnabled = isLoggingEnabled;
         }
     }
 
