@@ -233,15 +233,6 @@ public class CORSFilter implements Filter {
                     "Last-Modified", "Pragma"));
 
     /**
-     * A Simple HTTP request header, if the header values matches
-     * {@code SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES}. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final String SIMPLE_REQUEST_HEADER_CONTENT_TYPE =
-            "Content-Type";
-
-    /**
      * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
      * 
      * @see http://www.w3.org/TR/cors/#terminology
@@ -725,7 +716,7 @@ public class CORSFilter implements Filter {
     }
 
     public void destroy() {
-
+        // NOOP
     }
 
     // --------------------------------------------------------- Static methods
