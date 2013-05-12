@@ -25,15 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class CORSFilterTest {
     private FilterChain filterChain = new MockFilterChain();
-
-    @Before
-    public void setup() {
-    }
 
     /**
      * Tests if a GET request is treated as simple request.
@@ -132,6 +127,12 @@ public class CORSFilterTest {
                 CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
+    /**
+     * Test the presence of specific origin in response, when '*' is not used.
+     * 
+     * @throws IOException
+     * @throws ServletException
+     */
     @Test
     public void testDoFilterSimpleSpecificHeader() throws IOException,
             ServletException {
@@ -159,6 +160,13 @@ public class CORSFilterTest {
                 CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
+    /**
+     * Tests the prsence of the origin (and not '*') in the response, when
+     * supports credentials is enabled alongwith any origin, '*'.
+     * 
+     * @throws IOException
+     * @throws ServletException
+     */
     @Test
     public void testDoFilterSimpleAnyOriginAndSupportsCredentials()
             throws IOException, ServletException {
@@ -190,6 +198,12 @@ public class CORSFilterTest {
                 CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
+    /**
+     * Tests the presence of exposed headers in response, if configured.
+     * 
+     * @throws IOException
+     * @throws ServletException
+     */
     @Test
     public void testDoFilterSimpleWithExposedHeaders() throws IOException,
             ServletException {
@@ -221,6 +235,12 @@ public class CORSFilterTest {
                 CORSFilter.CORSRequestType.SIMPLE.name().toLowerCase()));
     }
 
+    /**
+     * Checks if an OPTIONS request is processed as pre-flight.
+     * 
+     * @throws IOException
+     * @throws ServletException
+     */
     @Test
     public void testDoFilterPreflight() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
