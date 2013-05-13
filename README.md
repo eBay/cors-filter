@@ -18,11 +18,11 @@ Include cors-filter jar in your classpath. And, add filter configuration to your
 ### Filter configuration parameters
 |param-name              |description                                                                                                  |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
-|cors.allowed.origins    | A list of origins that are allowed access to the resource. If any origin is allowed to access the resource, then a '*' can be specified. Otherwise, a whitelist of origins (comma separated) should be specified. Ex: http://www.w3.org, https://www.mysite.com. **Defaults:** Any origin ('*') is allowed to access the resource.|
-|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. Ex: GET,POST,PUT,OPTIONS. **Defaults:** GET,POST,HEAD,OPTIONS|
+|cors.allowed.origins    | A list of origins that are allowed to access the resource. If any origin is to be allowed to access the resource, then a '*' can be specified. Otherwise, a whitelist of comma separated origins should be specified. Ex: http://www.w3.org, https://www.apache.org. **Defaults:** Any origin ('*') is allowed to access the resource.|
+|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
 |cors.allowed.headers    | A comma separated list of request headers that are supported for cross-origin requests. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
 |cors.exposed.headers    | A comma separated list of header field names other than the simple response headers that the resource can expose. If included in pre-flight response, the browser will allow client code to read that. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
-|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. **Defaults: 1800** |
+|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. **Defaults:** 1800 |
 |cors.support.credentials| A flag that indicates whether the resource supports user credentials. **Defaults:** false |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
 
@@ -43,3 +43,9 @@ Here's a list of good resources to start with CORS:
 * [Mozilla's Server-Side Access Control](https://developer.mozilla.org/en-US/docs/Server-Side_Access_Control)
 * [Enable CORS](http://enable-cors.org)
 * [Other implementations](http://software.dzhuvinov.com/cors-filter.html)
+
+A list of good security resources around CORS:
+* [OWASP HTML 5 Security Cheatsheet and CORS](https://www.owasp.org/index.php/HTML5_Security_Cheat_Sheet#Cross_Origin_Resource_Sharing)
+* [OWASP CORS Preflight Scrutiny](https://www.owasp.org/index.php/CORS_RequestPreflighScrutiny)
+* [OWASP CORS Origin Scrutiny](https://www.owasp.org/index.php/CORS_OriginHeaderScrutiny)
+* [HTML 5 Security Wiki and CORS](https://code.google.com/p/html5security/wiki/CrossOriginRequestSecurity)
