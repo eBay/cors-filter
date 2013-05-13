@@ -262,7 +262,7 @@ public class CORSFilter implements Filter {
     public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
 
     /**
-     * By default, cookie based auth is turned off.
+     * By default, support credentials is turned on.
      */
     public static final String DEFAULT_SUPPORTS_CREDENTIALS = "true";
 
