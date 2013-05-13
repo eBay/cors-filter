@@ -2,11 +2,11 @@
 
 CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. CORS filter enables servers to support CORS. 
 
-A cross origin request is a HTTP request for a resource that is in a different domain than the domain of the resource where the request originates. For example, a request originating from a page served from www.ebay.com, to a resource on www.google.com.
+A cross origin request, is a HTTP request for a resource that is on a different origin than the origin of the resource where the request originates. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
 
-[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a URL that's different from the origin URL.
+[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a origin that's different from the source origin.
 
-By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards.
+By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
 ### How to use CORS ?
 Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filter configuration to your web.xml. Example:
