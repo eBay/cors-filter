@@ -2,7 +2,7 @@
 
 CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat.
 
-A cross origin request, is a HTTP request for a resource that is on a different origin than the origin of the resource where the request originates. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
+A cross origin request, is an HTTP request for a resource that serves from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
 
 [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a origin that's different from the source origin.
 
@@ -21,11 +21,23 @@ Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filt
   </filter-mapping>
 ```
 
-### Using CORS with Maven
+### Using CORS Filter in Your Maven Project
 Coming soon.
 
-### Configuring CORS filter
-The table below lists various parameters that can be used to configure CORS filter. If a parameter is not provided a default (documented below) is used.
+### Configuring CORS Filter
+The minimal configuration required to use CORS Filter is:
+```xml
+  <filter>
+    <filter-name>CORS Filter</filter-name>
+    <filter-class>com.ebay.web.cors.CORSFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CORS Filter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+```
+
+The table below lists various parameters that can be used to configure CORS Filter. If a parameter is not provided a default (documented below) is used.
 
 |param-name              |description                                                                                                  |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
@@ -33,7 +45,7 @@ The table below lists various parameters that can be used to configure CORS filt
 |cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will also be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
 |cors.allowed.headers    | A comma separated list of request headers that can be used when making an actual request. These header will also be returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
 |cors.exposed.headers    | A comma separated list of headers other than the simple response headers that browsers are allowed to access. These are the headers which will also be included as part of 'Access-Control-Expose-Headers' header in the pre-flight response. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
-|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. This will be included as part of 'Access-Control-Max-Age' header in the pre-flight response. A negative value will prevent CORS filter from adding this response header from pre-flight response. **Defaults:** 1800 |
+|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. This will be included as part of 'Access-Control-Max-Age' header in the pre-flight response. A negative value will prevent CORS Filter from adding this response header from pre-flight response. **Defaults:** 1800 |
 |cors.support.credentials| A flag that indicates whether the resource supports user credentials. This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials. **Defaults:** true |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
 
@@ -84,8 +96,8 @@ To override filter configuration defaults, one can specify init-params while con
   </filter-mapping>
 ```
 
-### Information added by CORS filter about request in HttpServletRequest object
-CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
+### Information added by CORS Filter about request in HttpServletRequest object
+CORS Filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
 
 * **cors.isCorsRequest**: Flag to determine if a request is a CORS request.
 * **cors.request.origin**: Origin URL.
