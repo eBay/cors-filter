@@ -443,26 +443,26 @@ public class CORSFilter implements Filter {
         this.loggingEnabled = false;
 
         if (filterConfig != null) {
-            String allowedOrigins =
+            String configAllowedOrigins =
                     filterConfig.getInitParameter(PARAM_CORS_ALLOWED_ORIGINS);
-            String allowedHttpMethods =
+            String configAllowedHttpMethods =
                     filterConfig.getInitParameter(PARAM_CORS_ALLOWED_METHODS);
-            String allowedHttpHeaders =
+            String configAllowedHttpHeaders =
                     filterConfig.getInitParameter(PARAM_CORS_ALLOWED_HEADERS);
-            String exposedHeaders =
+            String configExposedHeaders =
                     filterConfig.getInitParameter(PARAM_CORS_EXPOSED_HEADERS);
-            String supportsCredentials =
+            String configSupportsCredentials =
                     filterConfig
                             .getInitParameter(PARAM_CORS_SUPPORT_CREDENTIALS);
-            String preflightMaxAge =
+            String configPreflightMaxAge =
                     filterConfig.getInitParameter(PARAM_CORS_PREFLIGHT_MAXAGE);
-            String loggingEnabled =
+            String configLoggingEnabled =
                     filterConfig.getInitParameter(PARAM_CORS_LOGGING_ENABLED);
 
-            parseAndStore(allowedOrigins, allowedHttpMethods,
-                    allowedHttpHeaders,
-                    exposedHeaders, supportsCredentials, preflightMaxAge,
-                    loggingEnabled);
+            parseAndStore(configAllowedOrigins, configAllowedHttpMethods,
+                    configAllowedHttpHeaders,
+                    configExposedHeaders, configSupportsCredentials, configPreflightMaxAge,
+                    configLoggingEnabled);
         }
     }
 
