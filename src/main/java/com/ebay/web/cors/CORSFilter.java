@@ -16,6 +16,8 @@
 package com.ebay.web.cors;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -461,7 +463,8 @@ public class CORSFilter implements Filter {
 
             parseAndStore(configAllowedOrigins, configAllowedHttpMethods,
                     configAllowedHttpHeaders,
-                    configExposedHeaders, configSupportsCredentials, configPreflightMaxAge,
+                    configExposedHeaders, configSupportsCredentials,
+                    configPreflightMaxAge,
                     configLoggingEnabled);
         }
     }
@@ -861,6 +864,8 @@ public class CORSFilter implements Filter {
         if (originHeader != null) {
             if (originHeader.isEmpty()) {
                 requestType = CORSRequestType.INVALID_CORS;
+            } else if (!isValidOrigin(originHeader)) {
+                requestType = CORSRequestType.INVALID_CORS;
             } else {
                 String method = request.getMethod();
                 if (method != null && HTTP_METHODS.contains(method)) {
@@ -1067,4 +1072,35 @@ public class CORSFilter implements Filter {
         return allowedHttpHeaders;
     }
 
+    /**
+     * Checks if a given origin is valid or not. Criteria:
+     * <ul>
+     * <li>If an encoded character is present in origin, it's not valid.</li>
+     * <li>Origin should be a valid {@link URI}</li>
+     * </ul>
+     * 
+     * @param origin
+     * @see <a href="http://tools.ietf.org/html/rfc952">RFC952</a>
+     * @return
+     */
+    public static boolean isValidOrigin(String origin) {
+        // Checks for encoded characters. Helps prevent CRLF injection.
+        if (origin.contains("%")) {
+            return false;
+        }
+
+        URI originURI = null;
+
+        try {
+            originURI = new URI(origin);
+        } catch (URISyntaxException e) {
+            return false;
+        }
+
+        if (originURI.getScheme() == null) {
+            return false;
+        }
+
+        return true;
+    }
 }

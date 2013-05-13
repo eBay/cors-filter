@@ -535,7 +535,7 @@ public class CORSFilterTest {
     public void testCheckSimpleRequestTypeAnyOrigin() throws ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
-                TestConfigs.ANY_ORIGIN);
+                "http://www.w3.org");
         request.setMethod("GET");
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs
@@ -1153,6 +1153,87 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
 
+    @Test
+    public void testValidOrigin() {
+        Assert.assertTrue(CORSFilter.isValidOrigin("http://www.w3.org"));
+    }
+    
+    @Test
+    public void testInValidOriginCRLF() {
+        Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org\r\n"));
+    }
+    
+    @Test
+    public void testInValidOriginEncodedCRLF1() {
+        Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0d%0a"));
+    }
+    
+    @Test
+    public void testInValidOriginEncodedCRLF2() {
+        Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0D%0A"));
+    }
+    
+    @Test
+    public void testInValidOriginEncodedCRLF3() {
+        Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0%0d%0ad%0%0d%0aa"));
+    }
+    
+    @Test
+    public void testCheckInvalidCRLF1() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://www.w3.org\r\n");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+    }
+    
+    @Test
+    public void testCheckInvalidCRLF2() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://www.w3.org\r\n");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+    }
+    
+    @Test
+    public void testCheckInvalidCRLF3() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://www.w3.org%0d%0a");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+    }
+    
+    @Test
+    public void testCheckInvalidCRLF4() throws ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                "http://www.w3.org%0D%0A");
+        request.setMethod("GET");
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs
+                .getDefaultFilterConfig());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+    }
+    
     @Test
     public void testDestroy() {
         // Nothing to test.
