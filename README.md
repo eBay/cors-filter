@@ -1,9 +1,13 @@
 ## CORS Filter
 
-CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests, in web-browsers. CORS requires support from both browser and server, to work.
+CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both browser and server, to work.
+
+A cross origin request is a HTTP request for a resource that is in a different domain than the domain of the resource where the request originates. For example, a request originating from a page served from www.ebay.com, to a resource on www.google.com.
+
+
 
 ### How to use CORS ?
-Include cors-filter.jar in your classpath. And, add filter configuration to your web.xml. Example:
+Include cors-filter-x.x.x.jar in your classpath. And, add filter configuration to your web.xml. Example:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
@@ -22,10 +26,10 @@ Coming soon.
 |param-name              |description                                                                                                  |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
 |cors.allowed.origins    | A list of origins that are allowed to access the resource. A '*' can be specified to enable access to resource from any origin. Otherwise, a whitelist of comma separated origins should be specified. Ex: http://www.w3.org, https://www.apache.org. **Defaults:** Any origin ('*') is allowed to access the resource.|
-|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
-|cors.allowed.headers    | A comma separated list of request headers that can be used when making an actual request. These are returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
-|cors.exposed.headers    | A comma separated list of headers other than the simple response headers that browsers are allowed to access. These are the headers which will be included as part of 'Access-Control-Expose-Headers' header in a pre-flight response. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
-|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. **Defaults:** 1800 |
+|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will also be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
+|cors.allowed.headers    | A comma separated list of request headers that can be used when making an actual request. These header will also be returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
+|cors.exposed.headers    | A comma separated list of headers other than the simple response headers that browsers are allowed to access. These are the headers which will also be included as part of 'Access-Control-Expose-Headers' header in the pre-flight response. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
+|cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. This will be included as part of 'Access-Control-Max-Age' header in the pre-flight response. A negative value will prevent CORS filter from adding this response header from pre-flight response. **Defaults:** 1800 |
 |cors.support.credentials| A flag that indicates whether the resource supports user credentials. This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials. **Defaults:** true |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
 
@@ -79,10 +83,10 @@ To override filter configuration defaults, one can specify init-params while con
 ### Information added by CORS filter about request in HttpServletRequest object
 CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
 
-* **cors.isCorsRequest**: Flag to determine if a request is a CORS request
-* **cors.origin**: Origin URL
-* **cors.requestType**: simple or preflight or not_cors or invalid_cors
-* **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for pre-flight request.
+* **cors.isCorsRequest**: Flag to determine if a request is a CORS request.
+* **cors.request.origin**: Origin URL.
+* **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
+* **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
 
 ## References
 Here's a list of good resources to start with CORS:
@@ -93,6 +97,7 @@ Here's a list of good resources to start with CORS:
 * [Mozilla's Server-Side Access Control](https://developer.mozilla.org/en-US/docs/Server-Side_Access_Control)
 * [Enable CORS](http://enable-cors.org)
 * [Other implementations](http://software.dzhuvinov.com/cors-filter.html)
+* [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy)
 
 A list of good security resources around CORS:
 * [OWASP HTML 5 Security Cheatsheet and CORS](https://www.owasp.org/index.php/HTML5_Security_Cheat_Sheet#Cross_Origin_Resource_Sharing)
