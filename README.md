@@ -1,13 +1,15 @@
 ## CORS Filter
 
-CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both browser and server, to work.
+CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. CORS filter enables servers to support CORS. 
 
 A cross origin request is a HTTP request for a resource that is in a different domain than the domain of the resource where the request originates. For example, a request originating from a page served from www.ebay.com, to a resource on www.google.com.
 
+[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a URL that's different from the origin URL.
 
+By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards.
 
 ### How to use CORS ?
-Include cors-filter-x.x.x.jar in your classpath. And, add filter configuration to your web.xml. Example:
+Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filter configuration to your web.xml. Example:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
@@ -22,7 +24,9 @@ Include cors-filter-x.x.x.jar in your classpath. And, add filter configuration t
 ### Using CORS with Maven
 Coming soon.
 
-### Filter configuration parameters
+### Configuring CORS filter
+The table below lists various parameters that can be used to configure CORS filter. If a parameter is not provided a default (documented below) is used.
+
 |param-name              |description                                                                                                  |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
 |cors.allowed.origins    | A list of origins that are allowed to access the resource. A '*' can be specified to enable access to resource from any origin. Otherwise, a whitelist of comma separated origins should be specified. Ex: http://www.w3.org, https://www.apache.org. **Defaults:** Any origin ('*') is allowed to access the resource.|
