@@ -8,7 +8,7 @@ A cross origin request, is a HTTP request for a resource that is on a different 
 
 By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
-### How to use CORS ?
+### Quick start
 Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filter configuration to your web.xml. Example:
 ```xml
   <filter>
