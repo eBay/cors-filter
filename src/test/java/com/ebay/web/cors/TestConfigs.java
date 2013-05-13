@@ -89,6 +89,26 @@ public class TestConfigs {
                 preflightMaxAge, loggingEnabled);
     }
 
+    public static FilterConfig
+            getFilterConfigSpecificOriginAndSupportsCredentialsDisabled() {
+        final String allowedHttpHeaders =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS + ",PUT";
+        final String allowedOrigins =
+                HTTP_TOMCAT_APACHE_ORG + "," + HTTPS_WWW_APACHE_ORG;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials = "false";
+        final String preflightMaxAge =
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
+        final String loggingEnabled =
+                CORSFilter.DEFAULT_LOGGING_ENABLED;
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge, loggingEnabled);
+    }
+
     public static FilterConfig getFilterConfigWithExposedHeaders() {
         final String allowedHttpHeaders =
                 CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
