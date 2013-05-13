@@ -15,6 +15,11 @@ Include cors-filter jar in your classpath. And, add filter configuration to your
   </filter-mapping>
 ```
 
+### Filter configuration parameters
+|param-name              |description                                                                                                  |
+|------------------------|-------------------------------------------------------------------------------------------------------------|
+|cors.allowed.origins    | A list of origins that are allowed access to the resource. If any origin is allowed to access the resource, then a '*' can be specified. Otherwise, a whitelist of origins (comma separated) should be specified. Ex: http://www.w3.org, https://www.mysite.com. By default, any origin ('*') is allowed to access the resource.|
+
 ### Information added by CORS filter about request in HttpServletRequest object
 CORS filter adds information about a CORS request, in the HttpServletRequest object, for consumption downstream. Following attributes are set:
 
