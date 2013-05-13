@@ -1,6 +1,6 @@
 ## CORS Filter
 
-CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. CORS filter enables servers to support CORS. 
+CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat.
 
 A cross origin request, is a HTTP request for a resource that is on a different origin than the origin of the resource where the request originates. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
 
