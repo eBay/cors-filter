@@ -3,7 +3,7 @@
 CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests, in web-browsers. CORS requires support from both browser and server, to work.
 
 ### How to use CORS ?
-Include cors-filter jar in your classpath. And, add filter configuration to your web.xml. Example:
+Include cors-filter.jar in your classpath. And, add filter configuration to your web.xml. Example:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
@@ -15,22 +15,25 @@ Include cors-filter jar in your classpath. And, add filter configuration to your
   </filter-mapping>
 ```
 
+### Using CORS with Maven
+Coming soon.
+
 ### Filter configuration parameters
 |param-name              |description                                                                                                  |
 |------------------------|-------------------------------------------------------------------------------------------------------------|
-|cors.allowed.origins    | A list of origins that are allowed to access the resource. If any origin is to be allowed to access the resource, then a '*' can be specified. Otherwise, a whitelist of comma separated origins should be specified. Ex: http://www.w3.org, https://www.apache.org. **Defaults:** Any origin ('*') is allowed to access the resource.|
-|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
-|cors.allowed.headers    | A comma separated list of request headers that are supported for cross-origin requests. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
-|cors.exposed.headers    | A comma separated list of header field names other than the simple response headers that the resource can expose. If included in pre-flight response, the browser will allow client code to read that. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
+|cors.allowed.origins    | A list of origins that are allowed to access the resource. A '*' can be specified to enable access to resource from any origin. Otherwise, a whitelist of comma separated origins should be specified. Ex: http://www.w3.org, https://www.apache.org. **Defaults:** Any origin ('*') is allowed to access the resource.|
+|cors.allowed.methods    | A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response. Ex: GET,POST. **Defaults:** GET,POST,HEAD,OPTIONS|
+|cors.allowed.headers    | A comma separated list of request headers that can be used when making an actual request. These are returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response. Ex: Origin,Accept. **Defaults:** Origin,Accept,X-Requested-With,Content-Type|
+|cors.exposed.headers    | A comma separated list of headers other than the simple response headers that browsers are allowed to access. These are the headers which will be included as part of 'Access-Control-Expose-Headers' header in a pre-flight response. Ex: X-CUSTOM-HEADER-PING,X-CUSTOM-HEADER-PONG. **Default:** None |
 |cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. **Defaults:** 1800 |
-|cors.support.credentials| A flag that indicates whether the resource supports user credentials. **Defaults:** false |
+|cors.support.credentials| A flag that indicates whether the resource supports user credentials. This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials. **Defaults:** true |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
 
 To override filter configuration defaults, one can specify init-params while configuring filter in web.xml. Example:
 ```xml
 <filter>
     <filter-name>CORS Filter</filter-name>
-    <filter-class>org.apache.catalina.filters.CORSFilter</filter-class>
+    <filter-class>com.ebay.web.cors.CORSFilter</filter-class>
     <init-param>
       <description>A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.</description>
       <param-name>cors.allowed.origins</param-name>

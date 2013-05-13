@@ -51,7 +51,7 @@ public class CORSFilterTest {
 
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
-                "*"));
+                "https://www.apache.org"));
         Assert.assertTrue((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
         Assert.assertTrue(request.getAttribute(
@@ -84,7 +84,7 @@ public class CORSFilterTest {
 
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
-                "*"));
+                "https://www.apache.org"));
         Assert.assertTrue((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
         Assert.assertTrue(request.getAttribute(
@@ -116,7 +116,7 @@ public class CORSFilterTest {
 
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
-                "*"));
+                "https://www.apache.org"));
         Assert.assertTrue((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
         Assert.assertTrue(request.getAttribute(
@@ -221,7 +221,7 @@ public class CORSFilterTest {
 
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
-                "*"));
+                "https://www.apache.org"));
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS)
                 .equals(TestConfigs.EXPOSED_HEADERS));
@@ -431,7 +431,7 @@ public class CORSFilterTest {
 
         Assert.assertTrue(response.getHeader(
                 CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
-                "*"));
+                "https://www.apache.org"));
         Assert.assertTrue((Boolean) request
                 .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
         Assert.assertTrue(request.getAttribute(
@@ -1108,7 +1108,7 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsFilter.isAnyOriginAllowed());
         Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
-        Assert.assertFalse(corsFilter.isSupportsCredentials());
+        Assert.assertTrue(corsFilter.isSupportsCredentials());
         Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
         Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
@@ -1148,7 +1148,7 @@ public class CORSFilterTest {
         Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsFilter.isAnyOriginAllowed());
         Assert.assertTrue(corsFilter.getExposedHeaders().size() == 0);
-        Assert.assertFalse(corsFilter.isSupportsCredentials());
+        Assert.assertTrue(corsFilter.isSupportsCredentials());
         Assert.assertTrue(corsFilter.getPreflightMaxAge() == 1800);
         Assert.assertTrue(corsFilter.isLoggingEnabled() == false);
     }
@@ -1157,27 +1157,28 @@ public class CORSFilterTest {
     public void testValidOrigin() {
         Assert.assertTrue(CORSFilter.isValidOrigin("http://www.w3.org"));
     }
-    
+
     @Test
     public void testInValidOriginCRLF() {
         Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org\r\n"));
     }
-    
+
     @Test
     public void testInValidOriginEncodedCRLF1() {
         Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0d%0a"));
     }
-    
+
     @Test
     public void testInValidOriginEncodedCRLF2() {
         Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0D%0A"));
     }
-    
+
     @Test
     public void testInValidOriginEncodedCRLF3() {
-        Assert.assertFalse(CORSFilter.isValidOrigin("http://www.w3.org%0%0d%0ad%0%0d%0aa"));
+        Assert.assertFalse(CORSFilter
+                .isValidOrigin("http://www.w3.org%0%0d%0ad%0%0d%0aa"));
     }
-    
+
     @Test
     public void testCheckInvalidCRLF1() throws ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -1189,9 +1190,10 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
-    
+
     @Test
     public void testCheckInvalidCRLF2() throws ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -1203,9 +1205,10 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
-    
+
     @Test
     public void testCheckInvalidCRLF3() throws ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -1217,9 +1220,10 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
-    
+
     @Test
     public void testCheckInvalidCRLF4() throws ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -1231,9 +1235,10 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
-    
+
     @Test
     public void testDestroy() {
         // Nothing to test.

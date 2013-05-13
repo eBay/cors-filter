@@ -264,7 +264,7 @@ public class CORSFilter implements Filter {
     /**
      * By default, cookie based auth is turned off.
      */
-    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "false";
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "true";
 
     /**
      * By default, following headers are supported:
