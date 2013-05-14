@@ -4,9 +4,30 @@
 
 	<groupId>com.ebay.web</groupId>
 	<artifactId>cors-filter</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<version>1.0.0-SNAPSHOT</version>
 	<name>cors-filter</name>
+	<description>This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat</description>
+	<url>https://github.com/ebay/cors-filter</url>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<tag>master</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Mohit Soni</name>
+			<email>mosoni@ebay.com</email>
+		</developer>
+	</developers>
 
 	<dependencies>
 		<dependency>
