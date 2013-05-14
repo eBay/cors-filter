@@ -851,18 +851,39 @@ public class CORSFilter implements Filter {
         return supportsCredentials;
     }
 
+    /**
+     * Returns the preflight response cache time in seconds.
+     * 
+     * @return Time to cache in seconds.
+     */
     public long getPreflightMaxAge() {
         return preflightMaxAge;
     }
 
+    /**
+     * Returns the {@link Set} of allowed origins that are allowed to make
+     * requests.
+     * 
+     * @return {@link Set}
+     */
     public Set<String> getAllowedOrigins() {
         return allowedOrigins;
     }
 
+    /**
+     * Returns a {@link Set} of HTTP methods that are allowed to make requests.
+     * 
+     * @return {@link Set}
+     */
     public Set<String> getAllowedHttpMethods() {
         return allowedHttpMethods;
     }
 
+    /**
+     * Returns a {@link Set} of headers support by resource.
+     * 
+     * @return {@link Set}
+     */
     public Set<String> getAllowedHttpHeaders() {
         return allowedHttpHeaders;
     }
