@@ -34,17 +34,17 @@ public class MockHttpServletResponse implements HttpServletResponse {
 
     public String getCharacterEncoding() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getContentType() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public ServletOutputStream getOutputStream() throws IOException {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public PrintWriter getWriter() throws IOException {
@@ -55,11 +55,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setCharacterEncoding(String charset) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void setContentLength(int len) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void setContentType(String type) {
@@ -67,25 +67,22 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setBufferSize(int size) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public int getBufferSize() {
-
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public void flushBuffer() throws IOException {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void resetBuffer() {
-
     }
 
     public boolean isCommitted() {
-
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public void reset() {
@@ -93,41 +90,40 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setLocale(Locale loc) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public Locale getLocale() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public void addCookie(Cookie cookie) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean containsHeader(String name) {
-
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public String encodeURL(String url) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String encodeRedirectURL(String url) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String encodeUrl(String url) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String encodeRedirectUrl(String url) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public void sendError(int sc, String msg) throws IOException {
@@ -139,15 +135,15 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void sendRedirect(String location) throws IOException {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void setDateHeader(String name, long date) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void addDateHeader(String name, long date) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public String getHeader(String name) {
@@ -174,11 +170,11 @@ public class MockHttpServletResponse implements HttpServletResponse {
     }
 
     public void setIntHeader(String name, int value) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void addIntHeader(String name, int value) {
-
+        throw new RuntimeException("Not implemented");
     }
 
     public void setStatus(int sc) {

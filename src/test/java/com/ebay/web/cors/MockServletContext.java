@@ -29,128 +29,115 @@ import javax.servlet.ServletException;
 public class MockServletContext implements ServletContext {
 
     public String getContextPath() {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public ServletContext getContext(String uripath) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public int getMajorVersion() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public int getMinorVersion() {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getMimeType(String file) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Set getResourcePaths(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public URL getResource(String path) throws MalformedURLException {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public InputStream getResourceAsStream(String path) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public RequestDispatcher getRequestDispatcher(String path) {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public RequestDispatcher getNamedDispatcher(String name) {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Servlet getServlet(String name) throws ServletException {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getServlets() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getServletNames() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public void log(String msg) {
-        // TODO Auto-generated method stub
-        
+        // NOOP
     }
 
     public void log(Exception exception, String msg) {
-        // TODO Auto-generated method stub
-        
+        // NOOP
     }
 
     public void log(String message, Throwable throwable) {
-        // TODO Auto-generated method stub
-        
+        // NOOP
     }
 
     public String getRealPath(String path) {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public String getServerInfo() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public String getInitParameter(String name) {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getInitParameterNames() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Object getAttribute(String name) {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getAttributeNames() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
     public void setAttribute(String name, Object object) {
-        // TODO Auto-generated method stub
-        
+        throw new RuntimeException("Not implemented");
     }
 
     public void removeAttribute(String name) {
-        // TODO Auto-generated method stub
-        
+        throw new RuntimeException("Not implemented");
     }
 
     public String getServletContextName() {
-        // TODO Auto-generated method stub
-        return null;
+
+        throw new RuntimeException("Not implemented");
     }
 
 }

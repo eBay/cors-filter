@@ -52,7 +52,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public String getCharacterEncoding() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public void setCharacterEncoding(String env)
@@ -62,7 +62,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public int getContentLength() {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getContentType() {
@@ -75,62 +75,62 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public ServletInputStream getInputStream() throws IOException {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getParameter(String name) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getParameterNames() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String[] getParameterValues(String name) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Map getParameterMap() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getProtocol() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getScheme() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getServerName() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public int getServerPort() {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public BufferedReader getReader() throws IOException {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRemoteAddr() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRemoteHost() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public void setAttribute(String name, Object o) {
@@ -143,62 +143,62 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public Locale getLocale() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getLocales() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isSecure() {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public RequestDispatcher getRequestDispatcher(String path) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRealPath(String path) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public int getRemotePort() {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getLocalName() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getLocalAddr() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public int getLocalPort() {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getAuthType() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Cookie[] getCookies() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public long getDateHeader(String name) {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getHeader(String name) {
@@ -218,7 +218,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public Enumeration getHeaders(String name) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public Enumeration getHeaderNames() {
@@ -227,7 +227,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public int getIntHeader(String name) {
 
-        return 0;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getMethod() {
@@ -240,87 +240,87 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     public String getPathInfo() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getPathTranslated() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getContextPath() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getQueryString() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRemoteUser() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isUserInRole(String role) {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public Principal getUserPrincipal() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRequestedSessionId() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getRequestURI() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public StringBuffer getRequestURL() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public String getServletPath() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public HttpSession getSession(boolean create) {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public HttpSession getSession() {
 
-        return null;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isRequestedSessionIdValid() {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isRequestedSessionIdFromCookie() {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isRequestedSessionIdFromURL() {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
     public boolean isRequestedSessionIdFromUrl() {
 
-        return false;
+        throw new RuntimeException("Not implemented");
     }
 
 }
