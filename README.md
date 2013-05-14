@@ -127,9 +127,6 @@ CORS Filter adds information about a CORS request, in the HttpServletRequest obj
 * **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
 * **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
 
-### How it works ?
-
-
 ## References
 Here's a list of good resources to start with CORS:
 
