@@ -1,15 +1,19 @@
 ## CORS Filter
 
-CORS (Cross Origin Resource Sharing) is a mechanism supported by W3C to enable cross domain requests. CORS requires support from both server and browser, to work. This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat.
+[CORS](http://www.w3.org/TR/cors/) (Cross Origin Resource Sharing) is a mechanism to enable cross domain requests. W3C defines the standards that enable this mechanism. CORS requires support from both the server and the browser in order to work. This is a Java servlet filter implementation of server-side CORS for Java web containers such as Apache Tomcat. Salient features:
 
-A cross origin request, is an HTTP request for a resource that serves from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
+* Easy to integrate and use - enable CORS capability with a few lines in your web.xml!
+* Fixes known vulnerabilities in the CORS spec.
 
-[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a origin that's different from the source origin.
+### Background on CORS
+A cross origin request, is a HTTP request for a resource that is served from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
+
+[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on an origin that's different from the source origin.
 
 By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
 ### Quick Start
-Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filter configuration to your web.xml. Example:
+Include cors-filter-x.x.x.jar in your web-application's classpath. Then, add the filter configuration to your web.xml. Example:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
@@ -22,7 +26,7 @@ Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filt
 ```
 
 ### Using CORS Filter in Your Maven Project
-Add following repositories to your pom.xml
+Add the following repositories to your pom.xml
 ```xml
   <repositories>
     <repository>
@@ -36,7 +40,7 @@ Add following repositories to your pom.xml
   </repositories>
 ```
 
-Then add following as a dependency:
+Then add the cors-filter as a dependency:
 ```xml
   <dependency>
     <groupId>org.ebaysf.web</groupId>
@@ -45,7 +49,7 @@ Then add following as a dependency:
   </dependency>
 ```
 
-And, add filter configuration in web.xml as demonstrated in Quick Start section.
+On the server, add the filter configuration in web.xml as demonstrated in the Quick Start section.
 
 ### Configuring CORS Filter
 The minimal configuration required to use CORS Filter is:
@@ -72,7 +76,7 @@ The table below lists various parameters that can be used to configure CORS Filt
 |cors.support.credentials| A flag that indicates whether the resource supports user credentials. This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials. **Defaults:** true |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
 
-To override filter configuration defaults, one can specify init-params while configuring filter in web.xml. Example:
+To override filter configuration defaults, specify them in the init-params while configuring the filter in web.xml. Example:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
