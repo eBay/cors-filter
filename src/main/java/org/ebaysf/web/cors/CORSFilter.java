@@ -612,9 +612,17 @@ public class CORSFilter implements Filter {
                 String method = request.getMethod();
                 if (method != null && HTTP_METHODS.contains(method)) {
                     if ("OPTIONS".equals(method)) {
-                        requestType = CORSRequestType.PRE_FLIGHT;
-                    } else if (COMPLEX_HTTP_METHODS.contains(method)) {
-                        requestType = CORSRequestType.ACTUAL;
+                        String accessControlRequestMethodHeader =
+                                request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
+                        if (accessControlRequestMethodHeader != null
+                                && !accessControlRequestMethodHeader.isEmpty()) {
+                            requestType = CORSRequestType.PRE_FLIGHT;
+                        } else if (accessControlRequestMethodHeader != null
+                                && accessControlRequestMethodHeader.isEmpty()) {
+                            requestType = CORSRequestType.INVALID_CORS;
+                        } else {
+                            requestType = CORSRequestType.ACTUAL;
+                        }
                     } else if ("GET".equals(method) || "HEAD".equals(method)) {
                         requestType = CORSRequestType.SIMPLE;
                     } else if ("POST".equals(method)) {
@@ -628,6 +636,8 @@ public class CORSFilter implements Filter {
                                 requestType = CORSRequestType.ACTUAL;
                             }
                         }
+                    } else if (COMPLEX_HTTP_METHODS.contains(method)) {
+                        requestType = CORSRequestType.ACTUAL;
                     }
                 }
             }

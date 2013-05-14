@@ -24,7 +24,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ebaysf.web.cors.CORSFilter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -786,7 +785,6 @@ public class CORSFilterTest {
     public void testCheckPreFlightRequestTypeNoACRM() throws ServletException,
             IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        MockHttpServletResponse response = new MockHttpServletResponse();
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTP_TOMCAT_APACHE_ORG);
 
@@ -794,9 +792,9 @@ public class CORSFilterTest {
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs
                 .getDefaultFilterConfig());
-        corsFilter.doFilter(request, response, filterChain);
-        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
-                response.getStatus());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.ACTUAL, requestType);
     }
 
     /**
@@ -810,7 +808,6 @@ public class CORSFilterTest {
     public void testCheckPreFlightRequestTypeEmptyACRM()
             throws ServletException, IOException {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        MockHttpServletResponse response = new MockHttpServletResponse();
         request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
                 TestConfigs.HTTP_TOMCAT_APACHE_ORG);
         request.setHeader(
@@ -820,9 +817,9 @@ public class CORSFilterTest {
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs
                 .getDefaultFilterConfig());
-        corsFilter.doFilter(request, response, filterChain);
-        Assert.assertEquals(HttpServletResponse.SC_FORBIDDEN,
-                response.getStatus());
+        CORSFilter.CORSRequestType requestType =
+                corsFilter.checkRequestType(request);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
     }
 
     /**
