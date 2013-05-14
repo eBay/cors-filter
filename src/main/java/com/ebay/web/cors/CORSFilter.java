@@ -389,6 +389,7 @@ public class CORSFilter implements Filter {
     }
 
     // --------------------------------------------------------- Public methods
+    @Override
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException,
@@ -433,7 +434,8 @@ public class CORSFilter implements Filter {
             break;
         }
     }
-
+    
+    @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         // Initialize defaults
         parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
@@ -726,6 +728,7 @@ public class CORSFilter implements Filter {
         return;
     }
 
+    @Override
     public void destroy() {
         // NOOP
     }
@@ -1074,18 +1077,37 @@ public class CORSFilter implements Filter {
     }
 
     // -------------------------------------------------------------- Accessors
+    /**
+     * Determines if logging is enabled or not.
+     * 
+     * @return <code>true</code> if it's enabled; false otherwise.
+     */
     public boolean isLoggingEnabled() {
         return loggingEnabled;
     }
 
+    /**
+     * Determines if any origin is allowed to make CORS request.
+     * 
+     * @return <code>true</code> if it's enabled; false otherwise.
+     */
     public boolean isAnyOriginAllowed() {
         return anyOriginAllowed;
     }
 
+    /**
+     * Returns a {@link Set} of headers that should be exposed by browser.
+     * 
+     * @return
+     */
     public Set<String> getExposedHeaders() {
         return exposedHeaders;
     }
 
+    /**
+     * Determines is supports credentials is enabled 
+     * @return
+     */
     public boolean isSupportsCredentials() {
         return supportsCredentials;
     }
