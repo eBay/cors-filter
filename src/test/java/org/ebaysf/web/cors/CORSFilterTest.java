@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.ebay.web.cors;
+package org.ebaysf.web.cors;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -24,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ebaysf.web.cors.CORSFilter;
 import org.junit.Assert;
 import org.junit.Test;
 

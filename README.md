@@ -13,7 +13,7 @@ Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filt
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
-    <filter-class>com.ebay.web.cors.CORSFilter</filter-class>
+    <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>CORS Filter</filter-name>
@@ -29,7 +29,7 @@ The minimal configuration required to use CORS Filter is:
 ```xml
   <filter>
     <filter-name>CORS Filter</filter-name>
-    <filter-class>com.ebay.web.cors.CORSFilter</filter-class>
+    <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>CORS Filter</filter-name>
@@ -53,7 +53,7 @@ To override filter configuration defaults, one can specify init-params while con
 ```xml
 <filter>
     <filter-name>CORS Filter</filter-name>
-    <filter-class>com.ebay.web.cors.CORSFilter</filter-class>
+    <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
     <init-param>
       <description>A comma separated list of allowed origins. Note: An '*' cannot be used for an allowed origin when using credentials.</description>
       <param-name>cors.allowed.origins</param-name>
