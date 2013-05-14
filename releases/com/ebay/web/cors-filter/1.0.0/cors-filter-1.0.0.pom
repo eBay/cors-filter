@@ -46,4 +46,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>repo</id>
+			<url>https://github.scm.corp.ebay.com/mosoni/cors-filter/tree/artifacts/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-repo</id>
+			<url>https://github.scm.corp.ebay.com/mosoni/cors-filter/tree/artifacts/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
