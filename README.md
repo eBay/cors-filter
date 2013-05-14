@@ -22,7 +22,28 @@ Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filt
 ```
 
 ### Using CORS Filter in Your Maven Project
-Coming soon.
+Add following repositories to your pom.xml
+```xml
+  <repositories>
+    <repository>
+      <id>cors-filter-snapshots</id>
+      <url>https://github.com/eBay/cors-filter/raw/artifacts/snapshots</url>
+    </repository>
+    <repository>
+      <id>cors-filter-releases</id>
+      <url>https://github.com/eBay/cors-filter/raw/artifacts/releases</url>
+    </repository>
+  </repositories>
+```
+
+Then add following as a dependency:
+```xml
+  <dependency>
+    <groupId>org.ebaysf.web</groupId>
+    <artifactId>cors-filter</artifactId>
+    <version>1.0.0</version>
+  </dependency>
+```
 
 ### Configuring CORS Filter
 The minimal configuration required to use CORS Filter is:
