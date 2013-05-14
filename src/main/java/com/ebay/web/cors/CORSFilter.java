@@ -64,268 +64,6 @@ import javax.servlet.http.HttpServletResponse;
  * 
  */
 public class CORSFilter implements Filter {
-    // -------------------------------------------------- CORS Response Headers
-    /**
-     * The Access-Control-Allow-Origin header indicates whether a resource can
-     * be shared based by returning the value of the Origin request header in
-     * the response.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN =
-            "Access-Control-Allow-Origin";
-
-    /**
-     * The Access-Control-Allow-Credentials header indicates whether the
-     * response to request can be exposed when the omit credentials flag is
-     * unset. When part of the response to a preflight request it indicates that
-     * the actual request can include user credentials.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS =
-            "Access-Control-Allow-Credentials";
-
-    /**
-     * The Access-Control-Expose-Headers header indicates which headers are safe
-     * to expose to the API of a CORS API specification
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS =
-            "Access-Control-Expose-Headers";
-
-    /**
-     * The Access-Control-Max-Age header indicates how long the results of a
-     * preflight request can be cached in a preflight result cache.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE =
-            "Access-Control-Max-Age";
-
-    /**
-     * The Access-Control-Allow-Methods header indicates, as part of the
-     * response to a preflight request, which methods can be used during the
-     * actual request.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS =
-            "Access-Control-Allow-Methods";
-
-    /**
-     * The Access-Control-Allow-Headers header indicates, as part of the
-     * response to a preflight request, which header field names can be used
-     * during the actual request.
-     */
-    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS =
-            "Access-Control-Allow-Headers";
-
-    // -------------------------------------------------- CORS Request Headers
-    /**
-     * The Origin header indicates where the cross-origin request or preflight
-     * request originates from.
-     */
-    public static final String REQUEST_HEADER_ORIGIN = "Origin";
-
-    /**
-     * The Access-Control-Request-Method header indicates which method will be
-     * used in the actual request as part of the preflight request.
-     */
-    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD =
-            "Access-Control-Request-Method";
-
-    /**
-     * The Access-Control-Request-Headers header indicates which headers will be
-     * used in the actual request as part of the preflight request.
-     */
-    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS =
-            "Access-Control-Request-Headers";
-
-    // ----------------------------------------------------- Request attributes
-    /**
-     * The prefix to a CORS request attribute.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_PREFIX = "cors.";
-
-    /**
-     * Attribute that contains the origin of the request.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.origin";
-
-    /**
-     * Boolean value, suggesting if the request is a CORS request or not.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "isCorsRequest";
-
-    /**
-     * Type of CORS request, of type {@link CORSRequestType}.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.type";
-
-    /**
-     * Request headers sent as 'Access-Control-Request-Headers' header, for
-     * pre-flight request.
-     */
-    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS =
-            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.headers";
-
-    // -------------------------------------------------------------- Constants
-    /**
-     * Enumerates varies types of CORS requests. Also, provides utility methods
-     * to determine the request type.
-     */
-    public static enum CORSRequestType {
-        /**
-         * A simple HTTP request, i.e. it shouldn't be pre-flighted.
-         */
-        SIMPLE,
-        /**
-         * A HTTP request that needs to be pre-flighted.
-         */
-        ACTUAL,
-        /**
-         * A pre-flight CORS request, to get meta information, before a
-         * non-simple HTTP request is sent.
-         */
-        PRE_FLIGHT,
-        /**
-         * Not a CORS request, but a normal request.
-         */
-        NOT_CORS,
-        /**
-         * An invalid CORS request, i.e. it qualifies to be a CORS request, but
-         * fails to be a valid one.
-         */
-        INVALID_CORS;
-    }
-
-    /**
-     * {@link Collection} of HTTP methods. Case sensitive.
-     * 
-     * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
-     */
-    public static final Set<String> HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
-                    "TRACE", "CONNECT"));
-    /**
-     * {@link Collection} of non-simple HTTP methods. Case sensitive.
-     */
-    public static final Set<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
-    /**
-     * {@link Collection} of Simple HTTP methods. Case sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("GET", "POST", "HEAD"));
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS =
-            new HashSet<String>(Arrays.asList("Accept", "Accept-Language",
-                    "Content-Language"));
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS =
-            new HashSet<String>(Arrays.asList("Cache-Control",
-                    "Content-Language", "Content-Type", "Expires",
-                    "Last-Modified", "Pragma"));
-
-    /**
-     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
-     * 
-     * @see http://www.w3.org/TR/cors/#terminology
-     */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES =
-            new HashSet<String>(Arrays.asList(
-                    "application/x-www-form-urlencoded", "multipart/form-data",
-                    "text/plain"));
-
-    // ------------------------------------------------ Configuration Defaults
-    /**
-     * By default, all origins are allowed to make requests.
-     */
-    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
-
-    /**
-     * By default, following methods are supported: GET, POST, HEAD and OPTIONS.
-     */
-    public static final String DEFAULT_ALLOWED_HTTP_METHODS =
-            "GET,POST,HEAD,OPTIONS";
-
-    /**
-     * By default, time duration to cache pre-flight response is 30 mins.
-     */
-    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
-
-    /**
-     * By default, support credentials is turned on.
-     */
-    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "true";
-
-    /**
-     * By default, following headers are supported:
-     * Origin,Accept,X-Requested-With, and Content-Type.
-     */
-    public static final String DEFAULT_ALLOWED_HTTP_HEADERS =
-            "Origin,Accept,X-Requested-With,Content-Type";
-
-    /**
-     * By default, none of the headers are exposed in response.
-     */
-    public static final String DEFAULT_EXPOSED_HEADERS = "";
-
-    /**
-     * By default, access log logging is turned off
-     */
-    public static final String DEFAULT_LOGGING_ENABLED = "false";
-
-    // ----------------------------------------Filter Config Init param-name(s)
-    /**
-     * Key to retrieve allowed origins from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_ALLOWED_ORIGINS =
-            "cors.allowed.origins";
-
-    /**
-     * Key to retrieve support credentials from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_SUPPORT_CREDENTIALS =
-            "cors.support.credentials";
-
-    /**
-     * Key to retrieve exposed headers from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_EXPOSED_HEADERS =
-            "cors.exposed.headers";
-
-    /**
-     * Key to retrieve allowed headers from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_ALLOWED_HEADERS =
-            "cors.allowed.headers";
-
-    /**
-     * Key to retrieve allowed methods from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_ALLOWED_METHODS =
-            "cors.allowed.methods";
-
-    /**
-     * Key to retrieve preflight max age from {@link FilterConfig}.
-     */
-    public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
-            "cors.preflight.maxage";
-
-    /**
-     * Key to retrieve access log logging flag.
-     */
-    public static final String PARAM_CORS_LOGGING_ENABLED =
-            "cors.logging.enabled";
-
     // ----------------------------------------------------- Instance variables
     /**
      * Holds filter configuration.
@@ -434,7 +172,7 @@ public class CORSFilter implements Filter {
             break;
         }
     }
-    
+
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         // Initialize defaults
@@ -1105,7 +843,8 @@ public class CORSFilter implements Filter {
     }
 
     /**
-     * Determines is supports credentials is enabled 
+     * Determines is supports credentials is enabled
+     * 
      * @return
      */
     public boolean isSupportsCredentials() {
@@ -1127,4 +866,266 @@ public class CORSFilter implements Filter {
     public Set<String> getAllowedHttpHeaders() {
         return allowedHttpHeaders;
     }
+
+    // -------------------------------------------------- CORS Response Headers
+    /**
+     * The Access-Control-Allow-Origin header indicates whether a resource can
+     * be shared based by returning the value of the Origin request header in
+     * the response.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN =
+            "Access-Control-Allow-Origin";
+
+    /**
+     * The Access-Control-Allow-Credentials header indicates whether the
+     * response to request can be exposed when the omit credentials flag is
+     * unset. When part of the response to a preflight request it indicates that
+     * the actual request can include user credentials.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS =
+            "Access-Control-Allow-Credentials";
+
+    /**
+     * The Access-Control-Expose-Headers header indicates which headers are safe
+     * to expose to the API of a CORS API specification
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS =
+            "Access-Control-Expose-Headers";
+
+    /**
+     * The Access-Control-Max-Age header indicates how long the results of a
+     * preflight request can be cached in a preflight result cache.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE =
+            "Access-Control-Max-Age";
+
+    /**
+     * The Access-Control-Allow-Methods header indicates, as part of the
+     * response to a preflight request, which methods can be used during the
+     * actual request.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS =
+            "Access-Control-Allow-Methods";
+
+    /**
+     * The Access-Control-Allow-Headers header indicates, as part of the
+     * response to a preflight request, which header field names can be used
+     * during the actual request.
+     */
+    public static final String RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS =
+            "Access-Control-Allow-Headers";
+
+    // -------------------------------------------------- CORS Request Headers
+    /**
+     * The Origin header indicates where the cross-origin request or preflight
+     * request originates from.
+     */
+    public static final String REQUEST_HEADER_ORIGIN = "Origin";
+
+    /**
+     * The Access-Control-Request-Method header indicates which method will be
+     * used in the actual request as part of the preflight request.
+     */
+    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD =
+            "Access-Control-Request-Method";
+
+    /**
+     * The Access-Control-Request-Headers header indicates which headers will be
+     * used in the actual request as part of the preflight request.
+     */
+    public static final String REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS =
+            "Access-Control-Request-Headers";
+
+    // ----------------------------------------------------- Request attributes
+    /**
+     * The prefix to a CORS request attribute.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_PREFIX = "cors.";
+
+    /**
+     * Attribute that contains the origin of the request.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_ORIGIN =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.origin";
+
+    /**
+     * Boolean value, suggesting if the request is a CORS request or not.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "isCorsRequest";
+
+    /**
+     * Type of CORS request, of type {@link CORSRequestType}.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.type";
+
+    /**
+     * Request headers sent as 'Access-Control-Request-Headers' header, for
+     * pre-flight request.
+     */
+    public static final String HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS =
+            HTTP_REQUEST_ATTRIBUTE_PREFIX + "request.headers";
+
+    // -------------------------------------------------------------- Constants
+    /**
+     * Enumerates varies types of CORS requests. Also, provides utility methods
+     * to determine the request type.
+     */
+    public static enum CORSRequestType {
+        /**
+         * A simple HTTP request, i.e. it shouldn't be pre-flighted.
+         */
+        SIMPLE,
+        /**
+         * A HTTP request that needs to be pre-flighted.
+         */
+        ACTUAL,
+        /**
+         * A pre-flight CORS request, to get meta information, before a
+         * non-simple HTTP request is sent.
+         */
+        PRE_FLIGHT,
+        /**
+         * Not a CORS request, but a normal request.
+         */
+        NOT_CORS,
+        /**
+         * An invalid CORS request, i.e. it qualifies to be a CORS request, but
+         * fails to be a valid one.
+         */
+        INVALID_CORS;
+    }
+
+    /**
+     * {@link Collection} of HTTP methods. Case sensitive.
+     * 
+     * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
+     */
+    public static final Set<String> HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
+                    "TRACE", "CONNECT"));
+    /**
+     * {@link Collection} of non-simple HTTP methods. Case sensitive.
+     */
+    public static final Set<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
+    /**
+     * {@link Collection} of Simple HTTP methods. Case sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
+            Arrays.asList("GET", "POST", "HEAD"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS =
+            new HashSet<String>(Arrays.asList("Accept", "Accept-Language",
+                    "Content-Language"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS =
+            new HashSet<String>(Arrays.asList("Cache-Control",
+                    "Content-Language", "Content-Type", "Expires",
+                    "Last-Modified", "Pragma"));
+
+    /**
+     * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
+     * 
+     * @see http://www.w3.org/TR/cors/#terminology
+     */
+    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES =
+            new HashSet<String>(Arrays.asList(
+                    "application/x-www-form-urlencoded", "multipart/form-data",
+                    "text/plain"));
+
+    // ------------------------------------------------ Configuration Defaults
+    /**
+     * By default, all origins are allowed to make requests.
+     */
+    public static final String DEFAULT_ALLOWED_ORIGINS = "*";
+
+    /**
+     * By default, following methods are supported: GET, POST, HEAD and OPTIONS.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_METHODS =
+            "GET,POST,HEAD,OPTIONS";
+
+    /**
+     * By default, time duration to cache pre-flight response is 30 mins.
+     */
+    public static final String DEFAULT_PREFLIGHT_MAXAGE = "1800";
+
+    /**
+     * By default, support credentials is turned on.
+     */
+    public static final String DEFAULT_SUPPORTS_CREDENTIALS = "true";
+
+    /**
+     * By default, following headers are supported:
+     * Origin,Accept,X-Requested-With, and Content-Type.
+     */
+    public static final String DEFAULT_ALLOWED_HTTP_HEADERS =
+            "Origin,Accept,X-Requested-With,Content-Type";
+
+    /**
+     * By default, none of the headers are exposed in response.
+     */
+    public static final String DEFAULT_EXPOSED_HEADERS = "";
+
+    /**
+     * By default, access log logging is turned off
+     */
+    public static final String DEFAULT_LOGGING_ENABLED = "false";
+
+    // ----------------------------------------Filter Config Init param-name(s)
+    /**
+     * Key to retrieve allowed origins from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_ORIGINS =
+            "cors.allowed.origins";
+
+    /**
+     * Key to retrieve support credentials from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_SUPPORT_CREDENTIALS =
+            "cors.support.credentials";
+
+    /**
+     * Key to retrieve exposed headers from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_EXPOSED_HEADERS =
+            "cors.exposed.headers";
+
+    /**
+     * Key to retrieve allowed headers from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_HEADERS =
+            "cors.allowed.headers";
+
+    /**
+     * Key to retrieve allowed methods from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_ALLOWED_METHODS =
+            "cors.allowed.methods";
+
+    /**
+     * Key to retrieve preflight max age from {@link FilterConfig}.
+     */
+    public static final String PARAM_CORS_PREFLIGHT_MAXAGE =
+            "cors.preflight.maxage";
+
+    /**
+     * Key to retrieve access log logging flag.
+     */
+    public static final String PARAM_CORS_LOGGING_ENABLED =
+            "cors.logging.enabled";
 }
