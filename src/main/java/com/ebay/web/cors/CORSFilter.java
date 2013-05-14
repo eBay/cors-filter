@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p>
  * A {@link Filter} that enable client-side cross-origin requests by
  * implementing W3C's CORS (<b>C</b>ross-<b>O</b>rigin <b>R</b>esource
- * <b>S</b>haring) speficiation for resources. Each {@link HttpServletRequest}
+ * <b>S</b>haring) specification for resources. Each {@link HttpServletRequest}
  * request is inspected as per specification, and appropriate response headers
  * are added to {@link HttpServletResponse}.
  * </p>
@@ -469,6 +469,7 @@ public class CORSFilter implements Filter {
         }
     }
 
+    // --------------------------------------------------------------- Handlers
     /**
      * Handles a CORS request of type {@link CORSRequestType}.SIMPLE.
      * 
@@ -729,7 +730,7 @@ public class CORSFilter implements Filter {
         // NOOP
     }
 
-    // --------------------------------------------------------- Static methods
+    // -------------------------------------------------------- Utility methods
     /**
      * Decorates the {@link HttpServletRequest}, with CORS attributes.
      * <ul>
@@ -1040,38 +1041,6 @@ public class CORSFilter implements Filter {
         return set;
     }
 
-    public boolean isLoggingEnabled() {
-        return loggingEnabled;
-    }
-
-    public boolean isAnyOriginAllowed() {
-        return anyOriginAllowed;
-    }
-
-    public Set<String> getExposedHeaders() {
-        return exposedHeaders;
-    }
-
-    public boolean isSupportsCredentials() {
-        return supportsCredentials;
-    }
-
-    public long getPreflightMaxAge() {
-        return preflightMaxAge;
-    }
-
-    public Set<String> getAllowedOrigins() {
-        return allowedOrigins;
-    }
-
-    public Set<String> getAllowedHttpMethods() {
-        return allowedHttpMethods;
-    }
-
-    public Set<String> getAllowedHttpHeaders() {
-        return allowedHttpHeaders;
-    }
-
     /**
      * Checks if a given origin is valid or not. Criteria:
      * <ul>
@@ -1102,5 +1071,38 @@ public class CORSFilter implements Filter {
         }
 
         return true;
+    }
+
+    // -------------------------------------------------------------- Accessors
+    public boolean isLoggingEnabled() {
+        return loggingEnabled;
+    }
+
+    public boolean isAnyOriginAllowed() {
+        return anyOriginAllowed;
+    }
+
+    public Set<String> getExposedHeaders() {
+        return exposedHeaders;
+    }
+
+    public boolean isSupportsCredentials() {
+        return supportsCredentials;
+    }
+
+    public long getPreflightMaxAge() {
+        return preflightMaxAge;
+    }
+
+    public Set<String> getAllowedOrigins() {
+        return allowedOrigins;
+    }
+
+    public Set<String> getAllowedHttpMethods() {
+        return allowedHttpMethods;
+    }
+
+    public Set<String> getAllowedHttpHeaders() {
+        return allowedHttpHeaders;
     }
 }
