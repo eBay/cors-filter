@@ -8,7 +8,7 @@ A cross origin request, is an HTTP request for a resource that serves from a dif
 
 By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
-### Quick start
+### Quick Start
 Include cors-filter-x.x.x.jar in your web-application's classpath. And, add filter configuration to your web.xml. Example:
 ```xml
   <filter>
@@ -45,6 +45,8 @@ Then add following as a dependency:
   </dependency>
 ```
 
+And, add filter configuration in web.xml as demonstrated in Quick Start section.
+
 ### Configuring CORS Filter
 The minimal configuration required to use CORS Filter is:
 ```xml
@@ -72,7 +74,7 @@ The table below lists various parameters that can be used to configure CORS Filt
 
 To override filter configuration defaults, one can specify init-params while configuring filter in web.xml. Example:
 ```xml
-<filter>
+  <filter>
     <filter-name>CORS Filter</filter-name>
     <filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
     <init-param>
@@ -124,6 +126,9 @@ CORS Filter adds information about a CORS request, in the HttpServletRequest obj
 * **cors.request.origin**: Origin URL.
 * **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
 * **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
+
+### How it works ?
+
 
 ## References
 Here's a list of good resources to start with CORS:
