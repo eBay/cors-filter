@@ -32,10 +32,6 @@ Add the following repositories to your pom.xml
 ```xml
   <repositories>
     <repository>
-      <id>cors-filter-snapshots</id>
-      <url>https://github.com/eBay/cors-filter/raw/artifacts/snapshots</url>
-    </repository>
-    <repository>
       <id>cors-filter-releases</id>
       <url>https://github.com/eBay/cors-filter/raw/artifacts/releases</url>
     </repository>
