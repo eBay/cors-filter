@@ -1,15 +1,18 @@
 ## CORS Filter
 
+* [Introduction](#introduction)
+* [Quick Start](#quick-start)
+* [Using CORS Filter in Your Maven Project](using-cors-filter-in-your-maven-project)
+* [Configuring CORS Filter](configuring-cors-filter)
+* [Information added by CORS Filter about request in HttpServletRequest object](information-added-by-cors-filter-about-request-in-httpservletrequest-object)
+* [Background on CORS](#background-on-cors)
+* [How it works](#how-it-works)
+* [References](#references)
+
+### Introduction
 [CORS](http://www.w3.org/TR/cors/) (Cross Origin Resource Sharing) is a mechanism to enable cross origin requests. W3C defines the standards that enable this mechanism. CORS requires support from both the server and the browser in order to work. This is a Java Servlet Filter implementation of server-side CORS for Java web containers such as Apache Tomcat. Salient features:
 * Easy to integrate and use - enable CORS capability with a few lines in your web.xml!
 * Protects against CRLF injection / response splitting attacks.
-
-### Background on CORS
-A cross origin request, is a HTTP request for a resource that serves from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
-
-[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a origin that's different from the source origin.
-
-By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
 ### Quick Start
 Include cors-filter-x.x.x.jar in your web-application's classpath. Then, add the filter configuration to your web.xml. Example:
@@ -130,7 +133,14 @@ CORS Filter adds information about a CORS request, in the HttpServletRequest obj
 * **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
 * **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
 
-### How it works ?
+### Background on CORS
+A cross origin request, is a HTTP request for a resource that serves from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
+
+[Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy) in browsers prevents XMLHttpRequest to make a request to a resource, on a origin that's different from the source origin.
+
+By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
+
+### How it works
 ![CORS Flowchart](https://github.scm.corp.ebay.com/mosoni/cors-filter/raw/master/cors-flowchart.png)
 
 ## References
