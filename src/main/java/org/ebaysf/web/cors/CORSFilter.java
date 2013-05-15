@@ -118,6 +118,11 @@ public class CORSFilter implements Filter {
      */
     private boolean loggingEnabled;
 
+    /**
+     * Determines if the request should be decorated or not.
+     */
+    private boolean decorateRequest;
+
     // --------------------------------------------------------- Constructor(s)
     public CORSFilter() {
         this.allowedOrigins = new HashSet<String>();
@@ -147,8 +152,9 @@ public class CORSFilter implements Filter {
         CORSFilter.CORSRequestType requestType = checkRequestType(request);
 
         // Adds CORS specific attributes to request.
-        CORSFilter.decorateCORSProperties(request, requestType);
-
+        if (decorateRequest) {
+            CORSFilter.decorateCORSProperties(request, requestType);
+        }
         switch (requestType) {
         case SIMPLE:
             // Handles a Simple CORS request.
@@ -179,7 +185,7 @@ public class CORSFilter implements Filter {
         parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
                 DEFAULT_ALLOWED_HTTP_HEADERS, DEFAULT_EXPOSED_HEADERS,
                 DEFAULT_SUPPORTS_CREDENTIALS, DEFAULT_PREFLIGHT_MAXAGE,
-                DEFAULT_LOGGING_ENABLED);
+                DEFAULT_LOGGING_ENABLED, DEFAULT_DECORATE_REQUEST);
 
         this.filterConfig = filterConfig;
         this.loggingEnabled = false;
@@ -200,12 +206,14 @@ public class CORSFilter implements Filter {
                     filterConfig.getInitParameter(PARAM_CORS_PREFLIGHT_MAXAGE);
             String configLoggingEnabled =
                     filterConfig.getInitParameter(PARAM_CORS_LOGGING_ENABLED);
+            String configDecorateRequest =
+                    filterConfig.getInitParameter(PARAM_CORS_REQUEST_DECORATE);
 
             parseAndStore(configAllowedOrigins, configAllowedHttpMethods,
                     configAllowedHttpHeaders,
                     configExposedHeaders, configSupportsCredentials,
                     configPreflightMaxAge,
-                    configLoggingEnabled);
+                    configLoggingEnabled, configDecorateRequest);
         }
     }
 
@@ -700,7 +708,8 @@ public class CORSFilter implements Filter {
     private void parseAndStore(final String allowedOrigins,
             final String allowedHttpMethods, final String allowedHttpHeaders,
             final String exposedHeaders, final String supportsCredentials,
-            final String preflightMaxAge, final String loggingEnabled)
+            final String preflightMaxAge, final String loggingEnabled,
+            final String decorateRequest)
             throws ServletException {
         if (allowedOrigins != null) {
             if (allowedOrigins.trim().equals("*")) {
@@ -763,6 +772,13 @@ public class CORSFilter implements Filter {
             boolean isLoggingEnabled =
                     Boolean.parseBoolean(loggingEnabled);
             this.loggingEnabled = isLoggingEnabled;
+        }
+
+        if (decorateRequest != null) {
+            // For any value other then 'true' this will be false.
+            boolean shouldDecorateRequest =
+                    Boolean.parseBoolean(decorateRequest);
+            this.decorateRequest = shouldDecorateRequest;
         }
     }
 
@@ -1117,6 +1133,11 @@ public class CORSFilter implements Filter {
      */
     public static final String DEFAULT_LOGGING_ENABLED = "false";
 
+    /**
+     * By default, request is decorated with CORS attributes.
+     */
+    public static final String DEFAULT_DECORATE_REQUEST = "true";
+
     // ----------------------------------------Filter Config Init param-name(s)
     /**
      * Key to retrieve allowed origins from {@link FilterConfig}.
@@ -1159,4 +1180,10 @@ public class CORSFilter implements Filter {
      */
     public static final String PARAM_CORS_LOGGING_ENABLED =
             "cors.logging.enabled";
+
+    /**
+     * Key to determine if request should be decorated.
+     */
+    public static final String PARAM_CORS_REQUEST_DECORATE =
+            "cors.request.decorate";
 }

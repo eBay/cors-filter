@@ -819,7 +819,8 @@ public class CORSFilterTest {
                 .getDefaultFilterConfig());
         CORSFilter.CORSRequestType requestType =
                 corsFilter.checkRequestType(request);
-        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS, requestType);
+        Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
+                requestType);
     }
 
     /**
@@ -1380,6 +1381,32 @@ public class CORSFilterTest {
                 corsFilter.checkRequestType(request);
         Assert.assertEquals(CORSFilter.CORSRequestType.INVALID_CORS,
                 requestType);
+    }
+
+    @Test
+    public void testDecorateRequestDisabled() throws IOException,
+            ServletException {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setHeader(CORSFilter.REQUEST_HEADER_ORIGIN,
+                TestConfigs.HTTPS_WWW_APACHE_ORG);
+        request.setMethod("GET");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        CORSFilter corsFilter = new CORSFilter();
+        corsFilter.init(TestConfigs.getFilterConfigDecorateRequestDisabled());
+        corsFilter.doFilter(request, response, filterChain);
+
+        Assert.assertTrue(response.getHeader(
+                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(
+                "https://www.apache.org"));
+        Assert.assertNull(request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_IS_CORS_REQUEST));
+        Assert.assertNull(request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_ORIGIN));
+        Assert.assertNull(request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_HEADERS));
+        Assert.assertNull(request
+                .getAttribute(CORSFilter.HTTP_REQUEST_ATTRIBUTE_REQUEST_TYPE));
     }
 
     @Test

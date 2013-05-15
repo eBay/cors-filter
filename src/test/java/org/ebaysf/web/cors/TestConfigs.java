@@ -48,10 +48,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getFilterConfigAnyOriginAndSupportsCredentials() {
@@ -66,10 +67,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig
@@ -85,10 +87,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig
@@ -105,10 +108,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getFilterConfigWithExposedHeaders() {
@@ -124,10 +128,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getSecureFilterConfig() {
@@ -141,14 +146,16 @@ public class TestConfigs {
         final String preflightMaxAge =
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled = "true";
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getNullFilterConfig() {
-        return generateFilterConfig(null, null, null, null, null, null, null);
+        return generateFilterConfig(null, null, null, null, null, null, null,
+                null);
     }
 
     public static FilterConfig getSpecificOriginFilterConfig() {
@@ -166,10 +173,11 @@ public class TestConfigs {
                 CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
 
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getSpecificOriginFilterConfigNegativeMaxAge() {
@@ -186,9 +194,11 @@ public class TestConfigs {
         final String preflightMaxAge = "-1";
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
+
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getFilterConfigInvalidMaxPreflightAge() {
@@ -203,9 +213,11 @@ public class TestConfigs {
         final String preflightMaxAge = "abc";
         final String loggingEnabled =
                 CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = CORSFilter.DEFAULT_DECORATE_REQUEST;
+
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     public static FilterConfig getEmptyFilterConfig() {
@@ -216,16 +228,38 @@ public class TestConfigs {
         final String supportCredentials = "";
         final String preflightMaxAge = "";
         final String loggingEnabled = "";
+        final String decorateRequest = "";
+
         return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
                 allowedOrigins, exposedHeaders, supportCredentials,
-                preflightMaxAge, loggingEnabled);
+                preflightMaxAge, loggingEnabled, decorateRequest);
+    }
+
+    public static FilterConfig getFilterConfigDecorateRequestDisabled() {
+        final String allowedHttpHeaders =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_HEADERS;
+        final String allowedHttpMethods =
+                CORSFilter.DEFAULT_ALLOWED_HTTP_METHODS;
+        final String allowedOrigins = CORSFilter.DEFAULT_ALLOWED_ORIGINS;
+        final String exposedHeaders = CORSFilter.DEFAULT_EXPOSED_HEADERS;
+        final String supportCredentials =
+                CORSFilter.DEFAULT_SUPPORTS_CREDENTIALS;
+        final String preflightMaxAge =
+                CORSFilter.DEFAULT_PREFLIGHT_MAXAGE;
+        final String loggingEnabled =
+                CORSFilter.DEFAULT_LOGGING_ENABLED;
+        final String decorateRequest = "false";
+
+        return generateFilterConfig(allowedHttpHeaders, allowedHttpMethods,
+                allowedOrigins, exposedHeaders, supportCredentials,
+                preflightMaxAge, loggingEnabled, decorateRequest);
     }
 
     private static FilterConfig generateFilterConfig(
             final String allowedHttpHeaders, final String allowedHttpMethods,
             final String allowedOrigins, final String exposedHeaders,
             final String supportCredentials, final String preflightMaxAge,
-            final String loggingEnabled) {
+            final String loggingEnabled, final String decorateRequest) {
         FilterConfig filterConfig = new FilterConfig() {
 
             public String getFilterName() {
@@ -258,6 +292,9 @@ public class TestConfigs {
                 } else if (CORSFilter.PARAM_CORS_LOGGING_ENABLED
                         .equalsIgnoreCase(name)) {
                     return loggingEnabled;
+                } else if (CORSFilter.PARAM_CORS_REQUEST_DECORATE
+                        .equalsIgnoreCase(name)) {
+                    return decorateRequest;
                 }
                 return null;
             }
