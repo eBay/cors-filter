@@ -63,7 +63,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see <a href="http://www.w3.org/TR/cors/">CORS specification</a>
  * 
  */
-public class CORSFilter implements Filter {
+public final class CORSFilter implements Filter {
     // ----------------------------------------------------- Instance variables
     /**
      * Holds filter configuration.
@@ -74,7 +74,7 @@ public class CORSFilter implements Filter {
      * A {@link Collection} of origins consisting of zero or more origins that
      * are allowed access to the resource.
      */
-    private final Set<String> allowedOrigins;
+    private final Collection<String> allowedOrigins;
 
     /**
      * Determines if any origin is allowed to make request.
@@ -85,20 +85,20 @@ public class CORSFilter implements Filter {
      * A {@link Collection} of methods consisting of zero or more methods that
      * are supported by the resource.
      */
-    private final Set<String> allowedHttpMethods;
+    private final Collection<String> allowedHttpMethods;
 
     /**
      * A {@link Collection} of headers consisting of zero or more header field
      * names that are supported by the resource.
      */
-    private final Set<String> allowedHttpHeaders;
+    private final Collection<String> allowedHttpHeaders;
 
     /**
      * A {@link Collection} of exposed headers consisting of zero or more header
      * field names of headers other than the simple response headers that the
      * resource might use and can be exposed.
      */
-    private Set<String> exposedHeaders;
+    private Collection<String> exposedHeaders;
 
     /**
      * A supports credentials flag that indicates whether the resource supports
@@ -568,7 +568,7 @@ public class CORSFilter implements Filter {
      * @return The joined {@link String}; <code>null</code> if elements
      *         {@link Set} is null.
      */
-    public static String join(final Set<String> elements,
+    public static String join(final Collection<String> elements,
             final String joinSeparator) {
         String separator = ",";
         if (elements == null) {
@@ -864,7 +864,7 @@ public class CORSFilter implements Filter {
      * 
      * @return
      */
-    public Set<String> getExposedHeaders() {
+    public Collection<String> getExposedHeaders() {
         return exposedHeaders;
     }
 
@@ -892,7 +892,7 @@ public class CORSFilter implements Filter {
      * 
      * @return {@link Set}
      */
-    public Set<String> getAllowedOrigins() {
+    public Collection<String> getAllowedOrigins() {
         return allowedOrigins;
     }
 
@@ -901,7 +901,7 @@ public class CORSFilter implements Filter {
      * 
      * @return {@link Set}
      */
-    public Set<String> getAllowedHttpMethods() {
+    public Collection<String> getAllowedHttpMethods() {
         return allowedHttpMethods;
     }
 
@@ -910,7 +910,7 @@ public class CORSFilter implements Filter {
      * 
      * @return {@link Set}
      */
-    public Set<String> getAllowedHttpHeaders() {
+    public Collection<String> getAllowedHttpHeaders() {
         return allowedHttpHeaders;
     }
 
@@ -1049,20 +1049,20 @@ public class CORSFilter implements Filter {
      * 
      * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
      */
-    public static final Set<String> HTTP_METHODS = new HashSet<String>(
+    public static final Collection<String> HTTP_METHODS = new HashSet<String>(
             Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
                     "TRACE", "CONNECT"));
     /**
      * {@link Collection} of non-simple HTTP methods. Case sensitive.
      */
-    public static final Set<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
+    public static final Collection<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
             Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
     /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
      * @see http://www.w3.org/TR/cors/#terminology
      */
-    public static final Set<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
+    public static final Collection<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
             Arrays.asList("GET", "POST", "HEAD"));
 
     /**
@@ -1070,7 +1070,7 @@ public class CORSFilter implements Filter {
      * 
      * @see http://www.w3.org/TR/cors/#terminology
      */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_HEADERS =
+    public static final Collection<String> SIMPLE_HTTP_REQUEST_HEADERS =
             new HashSet<String>(Arrays.asList("Accept", "Accept-Language",
                     "Content-Language"));
 
@@ -1079,7 +1079,7 @@ public class CORSFilter implements Filter {
      * 
      * @see http://www.w3.org/TR/cors/#terminology
      */
-    public static final Set<String> SIMPLE_HTTP_RESPONSE_HEADERS =
+    public static final Collection<String> SIMPLE_HTTP_RESPONSE_HEADERS =
             new HashSet<String>(Arrays.asList("Cache-Control",
                     "Content-Language", "Content-Type", "Expires",
                     "Last-Modified", "Pragma"));
@@ -1089,7 +1089,7 @@ public class CORSFilter implements Filter {
      * 
      * @see http://www.w3.org/TR/cors/#terminology
      */
-    public static final Set<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES =
+    public static final Collection<String> SIMPLE_HTTP_REQUEST_CONTENT_TYPE_VALUES =
             new HashSet<String>(Arrays.asList(
                     "application/x-www-form-urlencoded", "multipart/form-data",
                     "text/plain"));
