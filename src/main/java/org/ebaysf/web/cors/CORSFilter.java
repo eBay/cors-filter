@@ -1055,15 +1055,17 @@ public final class CORSFilter implements Filter {
     /**
      * {@link Collection} of non-simple HTTP methods. Case sensitive.
      */
-    public static final Collection<String> COMPLEX_HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
+    public static final Collection<String> COMPLEX_HTTP_METHODS =
+            new HashSet<String>(
+                    Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
     /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
      * @see http://www.w3.org/TR/cors/#terminology
      */
-    public static final Collection<String> SIMPLE_HTTP_METHODS = new HashSet<String>(
-            Arrays.asList("GET", "POST", "HEAD"));
+    public static final Collection<String> SIMPLE_HTTP_METHODS =
+            new HashSet<String>(
+                    Arrays.asList("GET", "POST", "HEAD"));
 
     /**
      * {@link Collection} of Simple HTTP request headers. Case in-sensitive.
@@ -1118,10 +1120,13 @@ public final class CORSFilter implements Filter {
 
     /**
      * By default, following headers are supported:
-     * Origin,Accept,X-Requested-With, and Content-Type.
+     * Origin,Accept,X-Requested-With, Content-Type,
+     * Access-Control-Request-Method, and Access-Control-Request-Headers.
      */
     public static final String DEFAULT_ALLOWED_HTTP_HEADERS =
-            "Origin,Accept,X-Requested-With,Content-Type";
+            "Origin,Accept,X-Requested-With,Content-Type,"
+                    +
+                    "Access-Control-Request-Method,Access-Control-Request-Headers";
 
     /**
      * By default, none of the headers are exposed in response.

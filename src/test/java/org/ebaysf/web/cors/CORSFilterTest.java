@@ -1247,7 +1247,7 @@ public class CORSFilterTest {
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs
                 .getDefaultFilterConfig());
-        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 6);
         Assert.assertTrue(corsFilter.getAllowedHttpMethods().size() == 4);
         Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsFilter.isAnyOriginAllowed());
@@ -1287,7 +1287,7 @@ public class CORSFilterTest {
     public void testWithStringParserNull() throws ServletException {
         CORSFilter corsFilter = new CORSFilter();
         corsFilter.init(TestConfigs.getNullFilterConfig());
-        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 4);
+        Assert.assertTrue(corsFilter.getAllowedHttpHeaders().size() == 6);
         Assert.assertTrue(corsFilter.getAllowedHttpMethods().size() == 4);
         Assert.assertTrue(corsFilter.getAllowedOrigins().size() == 0);
         Assert.assertTrue(corsFilter.isAnyOriginAllowed());
