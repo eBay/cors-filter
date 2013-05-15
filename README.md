@@ -150,7 +150,7 @@ Here's a list of good resources to start with CORS:
 * [Mozilla's HTTP access control (CORS)](https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS)
 * [Mozilla's Server-Side Access Control](https://developer.mozilla.org/en-US/docs/Server-Side_Access_Control)
 * [Enable CORS](http://enable-cors.org)
-* [Other implementations](http://software.dzhuvinov.com/cors-filter.html)
+* [Other](http://dev.eclipse.org/svnroot/rt/org.eclipse.jetty/jetty/trunk/jetty-servlets/src/main/java/org/eclipse/jetty/servlets/CrossOriginFilter.java) [implementations](http://software.dzhuvinov.com/cors-filter.html)
 * [Same origin policy](http://en.wikipedia.org/wiki/Same_origin_policy)
 
 A list of good security resources around CORS:
