@@ -77,6 +77,7 @@ The table below lists various parameters that can be used to configure CORS Filt
 |cors.preflight.maxage   | The amount of seconds, browser is allowed to cache the result of the pre-flight request. This will be included as part of 'Access-Control-Max-Age' header in the pre-flight response. A negative value will prevent CORS Filter from adding this response header from pre-flight response. **Defaults:** 1800 |
 |cors.support.credentials| A flag that indicates whether the resource supports user credentials. This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a pre-flight response. It helps browser determine whether or not an actual request can be made using credentials. **Defaults:** true |
 |cors.logging.enabled    | A flag to control logging to container logs. **Defaults:** false|
+|cors.request.decorate   | A flag to control if the request should be decorated or not. **Defaults:** true|
 
 To override filter configuration defaults, specify them in the init-params while configuring the filter in web.xml. Example:
 ```xml
@@ -132,6 +133,8 @@ CORS Filter adds information about a CORS request, in the HttpServletRequest obj
 * **cors.request.origin**: Origin URL.
 * **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
 * **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
+
+To prevent CORS Filter from setting above attributes, set 'cors.request.decorate' init-param to false.
 
 ### Background on CORS
 A cross origin request, is a HTTP request for a resource that serves from a different origin than the origin of the application that is requesting the resource. For example, a request originating from a page served from http://www.ebay.com, to a resource on http://www.google.com.
