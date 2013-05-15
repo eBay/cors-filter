@@ -140,7 +140,7 @@ A cross origin request, is a HTTP request for a resource that serves from a diff
 By enabling CORS support on server side, a resource can support cross-origin requests in a way that's supported by W3C standards. For more details, please refer: [W3C CORS](http://www.w3.org/TR/cors/)
 
 ### How it works
-![CORS Flowchart](https://github.scm.corp.ebay.com/mosoni/cors-filter/raw/master/cors-flowchart.png)
+![CORS Flowchart](https://github.com/ebay/cors-filter/raw/master/cors-flowchart.png)
 
 ## References
 Here's a list of good resources to start with CORS:
