@@ -1,4 +1,5 @@
 ## CORS Filter
+[![Build Status](https://travis-ci.org/eBay/cors-filter.png?branch=master)](https://travis-ci.org/eBay/cors-filter)
 
 * [Introduction](#introduction)
 * [Quick Start](#quick-start)
