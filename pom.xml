@@ -10,6 +10,12 @@
 	<description>This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat</description>
 	<url>https://github.com/ebay/cors-filter</url>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -20,11 +26,11 @@
 
 	<scm>
 		<tag>master</tag>
-		<url>https://github.com/eBay/cors-filter.git</url>
-		<connection>git://github.com/eBay/cors-filter.git</connection>
-		<developerConnection>git://github.com/eBay/cors-filter.git</developerConnection>
+		<url>git@github.com:eBay/cors-filter.git</url>
+		<connection>scm:git://github.com/eBay/cors-filter.git</connection>
+		<developerConnection>scm:git://github.com/eBay/cors-filter.git</developerConnection>
 	</scm>
-	
+
 	<issueManagement>
 		<system>Github issues</system>
 		<url>https://github.com/eBay/cors-filter/issues</url>
