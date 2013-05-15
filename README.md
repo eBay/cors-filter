@@ -2,9 +2,9 @@
 
 * [Introduction](#introduction)
 * [Quick Start](#quick-start)
-* [Using CORS Filter in Your Maven Project](using-cors-filter-in-your-maven-project)
-* [Configuring CORS Filter](configuring-cors-filter)
-* [Information added by CORS Filter about request in HttpServletRequest object](information-added-by-cors-filter-about-request-in-httpservletrequest-object)
+* [Using CORS Filter in Your Maven Project](#using-cors-filter-in-your-maven-project)
+* [Configuring CORS Filter](#configuring-cors-filter)
+* [Information added by CORS Filter about request in HttpServletRequest object](#information-added-by-cors-filter-about-request-in-httpservletrequest-object)
 * [Background on CORS](#background-on-cors)
 * [How it works](#how-it-works)
 * [References](#references)
