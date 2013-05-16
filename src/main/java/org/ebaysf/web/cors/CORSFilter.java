@@ -98,7 +98,7 @@ public final class CORSFilter implements Filter {
      * field names of headers other than the simple response headers that the
      * resource might use and can be exposed.
      */
-    private Collection<String> exposedHeaders;
+    private final Collection<String> exposedHeaders;
 
     /**
      * A supports credentials flag that indicates whether the resource supports
