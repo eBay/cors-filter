@@ -685,7 +685,8 @@ public final class CORSFilter implements Filter {
     }
 
     /**
-     * Parses each param-value and populates configuration variables.
+     * Parses each param-value and populates configuration variables. If a param
+     * is provided, it overrides the default.
      * 
      * @param allowedOrigins
      *            A {@link String} of comma separated origins.
