@@ -27,8 +27,8 @@
 	<scm>
 		<tag>master</tag>
 		<url>git@github.com:eBay/cors-filter.git</url>
-		<connection>scm:git://github.com/eBay/cors-filter.git</connection>
-		<developerConnection>scm:git://github.com/eBay/cors-filter.git</developerConnection>
+		<connection>scm:git:git@github.com:eBay/cors-filter.git</connection>
+		<developerConnection>scm:git:git@github.com:eBay/cors-filter.git</developerConnection>
 	</scm>
 
 	<issueManagement>
