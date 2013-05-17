@@ -3,7 +3,7 @@
 
 	<groupId>org.ebaysf.web</groupId>
 	<artifactId>cors-filter</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>cors-filter</name>
 	<description>This is a Java servlet filter implementation of server-side CORS for web containers such as Apache Tomcat</description>
