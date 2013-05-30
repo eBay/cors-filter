@@ -15,6 +15,8 @@
 * Easy to integrate and use - enable CORS capability with a few lines in your web.xml!
 * Protects against CRLF injection / response splitting attacks.
 
+Here's a link to a demo application running on google app engine: http://corsdemo.appspot.com/
+
 ### Quick Start
 Include cors-filter-x.x.x.jar in your web-application's classpath. Then, add the filter configuration to your web.xml. Example:
 ```xml
