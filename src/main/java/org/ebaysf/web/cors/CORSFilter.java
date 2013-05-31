@@ -1042,7 +1042,7 @@ public final class CORSFilter implements Filter {
          * An invalid CORS request, i.e. it qualifies to be a CORS request, but
          * fails to be a valid one.
          */
-        INVALID_CORS;
+        INVALID_CORS
     }
 
     /**
