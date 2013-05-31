@@ -451,8 +451,7 @@ public final class CORSFilter implements Filter {
      * @throws ServletException
      */
     public void handleInvalidCORS(final HttpServletRequest request,
-            final HttpServletResponse response, final FilterChain filterChain)
-            throws IOException, ServletException {
+            final HttpServletResponse response, final FilterChain filterChain){
         String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         String method = request.getMethod();
         String accessControlRequestHeaders =
