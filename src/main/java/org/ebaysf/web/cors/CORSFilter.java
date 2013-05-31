@@ -742,9 +742,7 @@ public final class CORSFilter implements Filter {
 
         if (supportsCredentials != null) {
             // For any value other then 'true' this will be false.
-            boolean isSupportsCredentials =
-                    Boolean.parseBoolean(supportsCredentials);
-            this.supportsCredentials = isSupportsCredentials;
+            this.supportsCredentials = Boolean.parseBoolean(supportsCredentials);
         }
 
         if (preflightMaxAge != null) {
@@ -761,16 +759,12 @@ public final class CORSFilter implements Filter {
 
         if (loggingEnabled != null) {
             // For any value other then 'true' this will be false.
-            boolean isLoggingEnabled =
-                    Boolean.parseBoolean(loggingEnabled);
-            this.loggingEnabled = isLoggingEnabled;
+            this.loggingEnabled = Boolean.parseBoolean(loggingEnabled);
         }
 
         if (decorateRequest != null) {
             // For any value other then 'true' this will be false.
-            boolean shouldDecorateRequest =
-                    Boolean.parseBoolean(decorateRequest);
-            this.decorateRequest = shouldDecorateRequest;
+            this.decorateRequest = Boolean.parseBoolean(decorateRequest);
         }
     }
 
