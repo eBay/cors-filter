@@ -758,7 +758,7 @@ public final class CORSFilter implements Filter {
 
         if (preflightMaxAge != null) {
             try {
-                if (preflightMaxAge.isEmpty() == false) {
+                if (!preflightMaxAge.isEmpty()) {
                     this.preflightMaxAge = Long.parseLong(preflightMaxAge);
                 } else {
                     this.preflightMaxAge = 0L;
