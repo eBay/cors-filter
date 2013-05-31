@@ -338,8 +338,8 @@ public final class CORSFilter implements Filter {
         String accessControlRequestMethod =
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
         if (accessControlRequestMethod == null
-                || (accessControlRequestMethod != null && HTTP_METHODS
-                        .contains(accessControlRequestMethod.trim()) == false)) {
+                || (!HTTP_METHODS
+                .contains(accessControlRequestMethod.trim()))) {
             handleInvalidCORS(request, response, filterChain);
             return;
         } else {
