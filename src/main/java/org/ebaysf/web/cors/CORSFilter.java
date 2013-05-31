@@ -789,7 +789,7 @@ public final class CORSFilter implements Filter {
      * @return Set<String>
      */
     private Set<String> parseStringToSet(final String data) {
-        String[] splits = null;
+        String[] splits;
 
         if (data != null && data.length() > 0) {
             splits = data.split(",");
@@ -824,7 +824,7 @@ public final class CORSFilter implements Filter {
             return false;
         }
 
-        URI originURI = null;
+        URI originURI;
 
         try {
             originURI = new URI(origin);
