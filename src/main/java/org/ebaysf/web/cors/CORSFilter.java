@@ -669,11 +669,7 @@ public final class CORSFilter implements Filter {
 
         // If 'Origin' header is a case-sensitive match of any of allowed
         // origins, then return true, else return false.
-        if (allowedOrigins.contains(origin)) {
-            return true;
-        }
-
-        return false;
+        return allowedOrigins.contains(origin);
     }
 
     private void log(String message) {
@@ -831,12 +827,9 @@ public final class CORSFilter implements Filter {
         } catch (URISyntaxException e) {
             return false;
         }
+        // If scheme for URI is null, return false. Return true otherwise.
+        return originURI.getScheme() != null;
 
-        if (originURI.getScheme() == null) {
-            return false;
-        }
-
-        return true;
     }
 
     // -------------------------------------------------------------- Accessors
