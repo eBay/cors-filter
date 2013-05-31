@@ -470,8 +470,6 @@ public final class CORSFilter implements Filter {
         response.resetBuffer();
 
         log(message);
-
-        return;
     }
 
     @Override
