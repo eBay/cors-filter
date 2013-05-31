@@ -577,10 +577,7 @@ public final class CORSFilter implements Filter {
         }
         StringBuilder buffer = new StringBuilder();
         boolean isFirst = true;
-        Iterator<String> iterator = elements.iterator();
-        while (iterator.hasNext()) {
-            Object element = iterator.next();
-
+        for (String element : elements) {
             if (!isFirst) {
                 buffer.append(separator);
             } else {
