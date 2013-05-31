@@ -21,7 +21,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -339,7 +338,7 @@ public final class CORSFilter implements Filter {
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
         if (accessControlRequestMethod == null
                 || (!HTTP_METHODS
-                .contains(accessControlRequestMethod.trim()))) {
+                        .contains(accessControlRequestMethod.trim()))) {
             handleInvalidCORS(request, response, filterChain);
             return;
         } else {
@@ -451,7 +450,7 @@ public final class CORSFilter implements Filter {
      * @throws ServletException
      */
     public void handleInvalidCORS(final HttpServletRequest request,
-            final HttpServletResponse response, final FilterChain filterChain){
+            final HttpServletResponse response, final FilterChain filterChain) {
         String origin = request.getHeader(CORSFilter.REQUEST_HEADER_ORIGIN);
         String method = request.getMethod();
         String accessControlRequestHeaders =
@@ -741,7 +740,8 @@ public final class CORSFilter implements Filter {
 
         if (supportsCredentials != null) {
             // For any value other then 'true' this will be false.
-            this.supportsCredentials = Boolean.parseBoolean(supportsCredentials);
+            this.supportsCredentials =
+                    Boolean.parseBoolean(supportsCredentials);
         }
 
         if (preflightMaxAge != null) {
