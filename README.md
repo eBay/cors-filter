@@ -99,7 +99,7 @@ To override filter configuration defaults, specify them in the init-params while
       <param-value>true</param-value>
     </init-param>
     <init-param>
-      <description>A flag control logging</description>
+      <description>A flag to control logging</description>
       <param-name>cors.logging.enabled</param-name>
       <param-value>true</param-value>
     </init-param>
@@ -120,7 +120,12 @@ CORS Filter adds information about a CORS request, in the HttpServletRequest obj
 
 * **cors.isCorsRequest**: Flag to determine if a request is a CORS request.
 * **cors.request.origin**: Origin URL.
-* **cors.request.type**: Type of CORS request. Possible values: SIMPLE or ACTUAL or PRE_FLIGHT or NOT_CORS or INVALID_CORS.
+* **cors.request.type**: Type of CORS request. Possible values: 
+  * SIMPLE: A request which is not preceded by a pre-flight request.
+  * ACTUAL: A request which is preceded by a pre-flight request.
+  * PRE_FLIGHT: A pre-flight request.
+  * NOT_CORS: A normal same-origin request.
+  * INVALID_CORS: A cross-origin request, which is invalid.
 * **cors.request.headers**: Request headers sent as 'Access-Control-Request-Headers' header, for a pre-flight request.
 
 To prevent CORS Filter from setting above attributes, set 'cors.request.decorate' init-param to false.
