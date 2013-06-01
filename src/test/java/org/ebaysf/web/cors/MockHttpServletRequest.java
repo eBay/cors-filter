@@ -206,8 +206,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     public String getHeader(String name) {
         List<String> list = headers.get(name);
         if (list != null) {
-            String join = CORSFilter.join(new HashSet<String>(list), ",");
-            return join;
+            return CORSFilter.join(new HashSet<String>(list), ",");
         }
         return null;
     }
