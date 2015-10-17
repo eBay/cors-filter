@@ -607,7 +607,7 @@ public final class CORSFilter implements Filter {
         if (originHeader != null) {
             if (originHeader.isEmpty()) {
                 requestType = CORSRequestType.INVALID_CORS;
-            } else if (!isValidOrigin(originHeader)) {
+            } else if ("null".equals(originHeader) == false && !isValidOrigin(originHeader)) {
                 requestType = CORSRequestType.INVALID_CORS;
             } else {
                 String method = request.getMethod();
