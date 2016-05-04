@@ -131,7 +131,6 @@ public final class CORSFilter implements Filter {
     }
 
     // --------------------------------------------------------- Public methods
-    @Override
     public void doFilter(final ServletRequest servletRequest,
             final ServletResponse servletResponse,
             final FilterChain filterChain) throws IOException,
@@ -178,7 +177,6 @@ public final class CORSFilter implements Filter {
         }
     }
 
-    @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
         // Initialize defaults
         parseAndStore(DEFAULT_ALLOWED_ORIGINS, DEFAULT_ALLOWED_HTTP_METHODS,
@@ -350,7 +348,7 @@ public final class CORSFilter implements Filter {
                 request.getHeader(CORSFilter.REQUEST_HEADER_ACCESS_CONTROL_REQUEST_HEADERS);
         List<String> accessControlRequestHeaders = new LinkedList<String>();
         if (accessControlRequestHeadersHeader != null
-                && !accessControlRequestHeadersHeader.trim().isEmpty()) {
+                && accessControlRequestHeadersHeader.trim().length() > 0) {
             String[] headers =
                     accessControlRequestHeadersHeader.trim().split(",");
             for (String header : headers) {
@@ -470,7 +468,6 @@ public final class CORSFilter implements Filter {
         log(message);
     }
 
-    @Override
     public void destroy() {
         // NOOP
     }
@@ -605,7 +602,7 @@ public final class CORSFilter implements Filter {
         String originHeader = request.getHeader(REQUEST_HEADER_ORIGIN);
         // Section 6.1.1 and Section 6.2.1
         if (originHeader != null) {
-            if (originHeader.isEmpty()) {
+            if (originHeader.length() == 0) {
                 requestType = CORSRequestType.INVALID_CORS;
             } else if (!isValidOrigin(originHeader)) {
                 requestType = CORSRequestType.INVALID_CORS;
@@ -616,10 +613,10 @@ public final class CORSFilter implements Filter {
                         String accessControlRequestMethodHeader =
                                 request.getHeader(REQUEST_HEADER_ACCESS_CONTROL_REQUEST_METHOD);
                         if (accessControlRequestMethodHeader != null
-                                && !accessControlRequestMethodHeader.isEmpty()) {
+                                && accessControlRequestMethodHeader.length() > 0) {
                             requestType = CORSRequestType.PRE_FLIGHT;
                         } else if (accessControlRequestMethodHeader != null
-                                && accessControlRequestMethodHeader.isEmpty()) {
+                                && accessControlRequestMethodHeader.length() == 0) {
                             requestType = CORSRequestType.INVALID_CORS;
                         } else {
                             requestType = CORSRequestType.ACTUAL;
@@ -746,7 +743,7 @@ public final class CORSFilter implements Filter {
 
         if (preflightMaxAge != null) {
             try {
-                if (!preflightMaxAge.isEmpty()) {
+                if (preflightMaxAge.length() > 0) {
                     this.preflightMaxAge = Long.parseLong(preflightMaxAge);
                 } else {
                     this.preflightMaxAge = 0L;
