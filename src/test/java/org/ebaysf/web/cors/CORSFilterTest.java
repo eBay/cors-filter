@@ -1301,6 +1301,16 @@ public class CORSFilterTest {
     public void testValidOrigin() {
         Assert.assertTrue(CORSFilter.isValidOrigin("http://www.w3.org"));
     }
+    
+    @Test
+    public void testValidOriginNull() {
+        Assert.assertTrue(CORSFilter.isValidOrigin("null"));
+    }
+    
+    @Test
+    public void testValidOriginFile() {
+        Assert.assertTrue(CORSFilter.isValidOrigin("file://"));
+    }
 
     @Test
     public void testInValidOriginCRLF() {

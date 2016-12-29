@@ -805,13 +805,24 @@ public final class CORSFilter implements Filter {
      * @return
      */
     public static boolean isValidOrigin(String origin) {
-        // Checks for encoded characters. Helps prevent CRLF injection.
+    	// Checks for encoded characters. Helps prevent CRLF injection.
         if (origin.contains("%")) {
             return false;
         }
 
-        URI originURI;
+        // "null" is a valid origin
+        if ("null".equals(origin)) {
+            return true;
+        }
 
+        // RFC6454, section 4. "If uri-scheme is file, the implementation MAY
+        // return an implementation-defined value.". No limits are placed on
+        // that value so treat all file URIs as valid origins.
+        if (origin.startsWith("file://")) {
+            return true;
+        }
+        
+        URI originURI;
         try {
             originURI = new URI(origin);
         } catch (URISyntaxException e) {
