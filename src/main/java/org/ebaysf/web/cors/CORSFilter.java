@@ -382,7 +382,7 @@ public final class CORSFilter implements Filter {
         } else {
             if (anyOriginAllowed) {
                 response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-                        origin);
+                        "*");
             } else {
                 response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                         origin);
