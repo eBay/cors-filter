@@ -267,24 +267,24 @@ public final class CORSFilter implements Filter {
             // If resource doesn't support credentials and if any origin is
             // allowed
             // to make CORS request, return header with '*'.
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+
         } else {
             // If the resource supports credentials add a single
             // Access-Control-Allow-Origin header, with the value of the Origin
             // header as value.
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                     origin);
+
         }
         // Section 6.1.3
         // If the resource supports credentials, add a single
         // Access-Control-Allow-Credentials header with the case-sensitive
         // string "true" as value.
         if (supportsCredentials) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
+
         }
 
         // Section 6.1.4
@@ -293,8 +293,7 @@ public final class CORSFilter implements Filter {
         // field names given in the list of exposed headers.
         if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
             String exposedHeadersString = join(exposedHeaders, ",");
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
                     exposedHeadersString);
         }
 
@@ -376,40 +375,33 @@ public final class CORSFilter implements Filter {
 
         // Section 6.2.7
         if (supportsCredentials) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                     origin);
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
                     "true");
         } else {
             if (anyOriginAllowed) {
-                response.addHeader(
-                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                         "*");
             } else {
-                response.addHeader(
-                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
                         origin);
             }
         }
 
         // Section 6.2.8
         if (preflightMaxAge > 0) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
                     String.valueOf(preflightMaxAge));
         }
 
         // Section 6.2.9
-        response.addHeader(
-                CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
+        response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
                 accessControlRequestMethod);
 
         // Section 6.2.10
         if ((allowedHttpHeaders != null) && (!allowedHttpHeaders.isEmpty())) {
-            response.addHeader(
-                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
                     join(allowedHttpHeaders, ","));
         }
 
