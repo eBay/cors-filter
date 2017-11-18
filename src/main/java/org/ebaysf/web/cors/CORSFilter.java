@@ -267,24 +267,14 @@ public final class CORSFilter implements Filter {
             // If resource doesn't support credentials and if any origin is
             // allowed
             // to make CORS request, return header with '*'.
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals("*")) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-            }
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+
         } else {
             // If the resource supports credentials add a single
             // Access-Control-Allow-Origin header, with the value of the Origin
             // header as value.
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(origin)) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-                        origin);
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-//                        origin);
-            }
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                    origin);
 
         }
         // Section 6.1.3
@@ -292,14 +282,8 @@ public final class CORSFilter implements Filter {
         // Access-Control-Allow-Credentials header with the case-sensitive
         // string "true" as value.
         if (supportsCredentials) {
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS).equals("true")) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
-                        "true");
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
-//                        "true");
-            }
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+                    "true");
 
         }
 
@@ -309,15 +293,8 @@ public final class CORSFilter implements Filter {
         // field names given in the list of exposed headers.
         if ((exposedHeaders != null) && (exposedHeaders.size() > 0)) {
             String exposedHeadersString = join(exposedHeaders, ",");
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS) == null ||
-                !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS).equals(exposedHeadersString)
-                    ) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
-                        exposedHeadersString);
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
-//                        exposedHeadersString);
-            }
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_EXPOSE_HEADERS,
+                    exposedHeadersString);
         }
 
         // Forward the request down the filter chain.
@@ -398,81 +375,34 @@ public final class CORSFilter implements Filter {
 
         // Section 6.2.7
         if (supportsCredentials) {
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(origin)) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-                        origin);
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-//                        origin);
-            }
-
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS).equals("true")) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
-                        "true");
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
-//                        "true");
-            }
-
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                    origin);
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_CREDENTIALS,
+                    "true");
         } else {
             if (anyOriginAllowed) {
-                if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN) == null ||
-                        !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(origin)) {
-                    response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-                            origin);
-//                    response.addHeader(
-//                            CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-//                            origin);
-                }
+                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                        origin);
             } else {
-                if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN) == null ||
-                        !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN).equals(origin)) {
-                    response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-                            origin);
-//                    response.addHeader(
-//                            CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
-//                            origin);
-                }
+                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_ORIGIN,
+                        origin);
             }
         }
 
         // Section 6.2.8
         if (preflightMaxAge > 0) {
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE).equals(String.valueOf(preflightMaxAge))) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
-                        String.valueOf(preflightMaxAge));
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
-//                        String.valueOf(preflightMaxAge));
-            }
-
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_MAX_AGE,
+                    String.valueOf(preflightMaxAge));
         }
 
         // Section 6.2.9
-        if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS) == null ||
-                !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS).equals(accessControlRequestMethod)) {
-            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
-                    accessControlRequestMethod);
-//            response.addHeader(
-//                    CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
-//                    accessControlRequestMethod);
-        }
-
+        response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_METHODS,
+                accessControlRequestMethod);
 
         // Section 6.2.10
         if ((allowedHttpHeaders != null) && (!allowedHttpHeaders.isEmpty())) {
-            if (request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS) == null ||
-                    !request.getHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS).equals(join(allowedHttpHeaders, ","))) {
-                response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
-                        join(allowedHttpHeaders, ","));
-//                response.addHeader(
-//                        CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
-//                        join(allowedHttpHeaders, ","));
-            }
-
+            response.setHeader(CORSFilter.RESPONSE_HEADER_ACCESS_CONTROL_ALLOW_HEADERS,
+                    join(allowedHttpHeaders, ","));
         }
 
         // Do not forward the request down the filter chain.
