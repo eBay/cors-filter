@@ -1041,16 +1041,17 @@ public final class CORSFilter implements Filter {
      * {@link Collection} of HTTP methods. Case sensitive.
      * 
      * @see http://tools.ietf.org/html/rfc2616#section-5.1.1
+     * @see https://tools.ietf.org/html/rfc5789 - PATCH specification
      */
     public static final Collection<String> HTTP_METHODS = new HashSet<String>(
             Arrays.asList("OPTIONS", "GET", "HEAD", "POST", "PUT", "DELETE",
-                    "TRACE", "CONNECT"));
+                    "TRACE", "CONNECT", "PATCH"));
     /**
      * {@link Collection} of non-simple HTTP methods. Case sensitive.
      */
     public static final Collection<String> COMPLEX_HTTP_METHODS =
             new HashSet<String>(
-                    Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT"));
+                    Arrays.asList("PUT", "DELETE", "TRACE", "CONNECT", "PATCH"));
     /**
      * {@link Collection} of Simple HTTP methods. Case sensitive.
      * 
